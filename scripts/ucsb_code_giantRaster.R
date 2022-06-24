@@ -10,13 +10,13 @@ library(rgdal)
 library(RColorBrewer)
 
 # get your first raster dataset
-# GDALinfo("source_data/greatercampusDEM/greatercampusDEM_1_1.tif")
+# GDALinfo("../source_data/greatercampusDEM/greatercampusDEM_1_1.tif")
 
 # this version of the file uses a different source raster than we are going 
 # to use in the workshop
 
-GDALinfo("source_data/USGS_one_meter_x23y382_CA_SoCal_Wildfires_B4_2018.tif")
-campus_DEM <- raster("source_data/USGS_one_meter_x23y382_CA_SoCal_Wildfires_B4_2018.tif")
+GDALinfo("../source_data/USGS_one_meter_x23y382_CA_SoCal_Wildfires_B4_2018.tif")
+campus_DEM <- raster("../source_data/USGS_one_meter_x23y382_CA_SoCal_Wildfires_B4_2018.tif")
 
 # units in feet. Because America.
 campus_DEM
