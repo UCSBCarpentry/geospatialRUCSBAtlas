@@ -12,8 +12,11 @@ signs <- st_read("source_data/Coal_Oil_Sign_Inventory/Inventory.shp")
 birds <- st_read("source_data/NCOS_Bird_Observations_20190619_web/NCOS_Bird_Observations_20190619_web.shp")
 habitat <- st_read("source_data/NCOS_Shorebird_Foraging_Habitat/NCOS_Shorebird_Foraging_Habitat.shp")
 
+# this is quite large, so we will downsample it
 campus_DEM <- raster("source_data/greatercampusDEM/greatercampusDEM_1_1.tif")
-campus_DEM_df <- as.data.frame(campus_DEM, xy=TRUE)
+campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4)
+
+campus_DEM_df <- as.data.frame(campus_DEM_downsampled, xy=TRUE)
 
 
 
@@ -28,18 +31,31 @@ fix_me <- signs %>%
 nrow(fix_me)
 
 
-
-# build the maps
+# plot the signs
 #  color by attribute
+# by default we get a graticule
 ggplot () +
   geom_sf(data = signs, aes(color = factor(Condition)), size = 1.5) +
   labs(color = 'Condition') +
-  coord_sf()
+  ggtitle("just the Signs")
+    coord_sf()
 
-# by default we get a graticule
+# plot the buildings
 ggplot() +
   geom_sf(data = buildings, size = 0.1, color = 'black', fill = "cyan1") +
-  ggtitle("Campus Buildings")
+  ggtitle("just the Campus Buildings")
+
+just the DEM
+ggplot() +
+  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = greatercampusDEM_1_1)) +
+  scale_fill_gradient2(na.value = "lightgrey", 
+                       low="black", 
+                       mid="azure1", 
+                       high="cornsilk3",
+                       midpoint=0) +
+  coord_quickmap() +
+  ggtitle("just the DEM")
+
 
 
 # Overview Map
@@ -61,15 +77,7 @@ ggplot() +
   labs(title="UCSB R Overview Map")
 
 
-# just the DEM
-ggplot() +
-  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = greatercampusDEM_1_1)) +
-  scale_fill_gradient2(na.value = "lightgrey", 
-                       low="black", 
-                       mid="azure1", 
-                       high="cornsilk3",
-                       midpoint=0) +
-  coord_quickmap()
+
 
 
 
