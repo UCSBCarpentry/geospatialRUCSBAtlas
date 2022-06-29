@@ -11,6 +11,8 @@ buildings <- st_read("source_data/Campus_Buildings/Campus_Buildings.shp")
 signs <- st_read("source_data/Coal_Oil_Sign_Inventory/Inventory.shp")
 birds <- st_read("source_data/NCOS_Bird_Observations_20190619_web/NCOS_Bird_Observations_20190619_web.shp")
 habitat <- st_read("source_data/NCOS_Shorebird_Foraging_Habitat/NCOS_Shorebird_Foraging_Habitat.shp")
+bike_paths <- st_read("source_data/bikes/bikes.shp")
+
 
 # this is quite large, so we will downsample it
 campus_DEM <- raster("source_data/greatercampusDEM/greatercampusDEM_1_1.tif")
@@ -67,6 +69,15 @@ ggplot() +
   coord_quickmap() +
   ggtitle("just the DEM")
 
+# just the bikes
+ggplot () +
+  geom_sf(data = bike_paths,
+          color = "red") +
+  ggtitle("just the Bike Paths") +
+  coord_sf()
+
+
+
 
 
 # Overview Map
@@ -85,6 +96,8 @@ ggplot() +
   geom_sf(data = birds, show.legend = FALSE, aes(color = factor(NCOS_Bird_), size = 1)) +
   geom_sf(data = habitat, show.legend = TRUE) +
   geom_sf(data = buildings, show.legend = TRUE) +
+  geom_sf(data = bike_paths,
+          color = "red") +
   coord_sf()
   
   
