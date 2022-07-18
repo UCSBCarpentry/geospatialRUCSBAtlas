@@ -97,7 +97,7 @@ ggplot() +
 # for us, let's highlight below 1m above sea level.
 ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = altitude)) +
-  scale_fill_gradient2(na.value = "lightgrey", 
+  scale_fill_gradient2(na.value = "lightgray", 
                        low="red", 
                        mid="white", 
                        high="cornsilk3",
@@ -119,16 +119,20 @@ length(which(has.neg))
 has.neg <- apply(campus_DEM_df, 1, function(campus_DEM_df) any(campus_DEM_df < 3.12))
 length(which(has.neg))
 
-# bonus challenge
-# can we map those?
+# 1561
+# that's still not that many. What about all the water?
+
+
 
 #############################################
 # ep. 2
 
 # look at the values in the DEM
-unique(campus_DEM_df$greatercampusDEM_1_1)
+str(campus_DEM_df)
+unique(campus_DEM_df$altitude)
 
 # that's too many. let's count them up tidily
 campus_DEM_df %>% 
-  group_by(greatercampusDEM_1_1) %>% 
+  group_by(altitude) %>% 
   count()
+# that's still too many. can I tighten the group?
