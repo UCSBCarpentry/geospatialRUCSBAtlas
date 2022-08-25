@@ -1,4 +1,7 @@
-# downsize the campus DEM
+# this script
+# downsizes the campus DEM so that it's more usable
+# on laptops
+
 library(tidyverse)
 library(rgdal)
 library(RColorBrewer)

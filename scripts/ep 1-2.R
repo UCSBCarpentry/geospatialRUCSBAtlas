@@ -18,7 +18,7 @@ library(RColorBrewer)
 # ep. 1
 
 # get info about your first raster dataset
-GDALinfo("source_data/greatercampusDEM/greatercampusDEM_1_1.tif")
+GDALinfo("output_data/campus_DEM.tiff")
 
 # make it into an object you can manipulate
 campus_DEM <- raster("source_data/greatercampusDEM/greatercampusDEM_1_1.tif")
@@ -46,7 +46,6 @@ campus_DEM_df <- as.data.frame(campus_DEM, xy = TRUE)
 # both summmaries and str of the dataframe
 # show you the name of the layer you'll need to 
 # refer to.
-
 str(campus_DEM_df)
 
 ggplot() +
@@ -62,7 +61,7 @@ plot(campus_DEM_df)
 
 
 # that's still slow as molasses, 
-# for instructional purposes, we need to downsample
+# for instructional purposes, we need to DOWNSAMPLE
 # so our maps draw faster
 # see episode 9 for 'aggregate'
 campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4)
@@ -70,33 +69,46 @@ campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4)
 # let's rename the column so we don't have to keep typing
 # greatercampusDEM_1_1
 campus_DEM_df <- as.data.frame(campus_DEM_downsampled, xy=TRUE) %>% 
-  rename(altitude = greatercampusDEM_1_1)
+  rename(elevation = greatercampusDEM_1_1)
 
-
-
-# this one doesn't work out. so leave it behind.
-#zoom_DEM <- raster("source_data/greatercampusDEM/DEMmosaic.tif")
-#plot(zoom_DEM)
-
-#zoom_df <- as.data.frame(zoom_DEM, xy=TRUE)
-#ggplot() +
-#  geom_raster(data = zoom_df, 
-#              aes(x=x, y=y, fill = DEMmosaic)) +
-#  scale_fill_viridis_c() +
-#  coord_quickmap()
-
+# now plot with that new name
+# our new, smaller DEM_df maps quicker.
+ggplot() +
+  geom_raster(data = campus_DEM_df, 
+              aes(x=x, y=y, fill = elevation)) +
+  scale_fill_viridis_c() +
+  coord_quickmap()
 
 # deal with no data
 ggplot() +
-  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = altitude)) +
+  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
   scale_fill_viridis_c(na.value = "deeppink") +
   coord_quickmap()
 
-
-# lesson example highlights Harvard Forest pixels > 400m.
-# for us, let's highlight below 1m above sea level.
+# that's not actually what we want. let's white it out.
 ggplot() +
-  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = altitude)) +
+  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
+  scale_fill_viridis_c(na.value = "white") +
+  coord_quickmap()
+
+
+# lesson example bins / highlights Harvard Forest pixels > 400m.
+# for us, let's highlight our holes.
+summary(campus_DEM_df)
+
+#############################
+# ARG!!
+custom_bins <- c(-3, -.01, .01, 1, 5)
+
+cut(campus_DEM_df, breaks = custom_bins)
+
+campus_holes_df <- mutate(binned_DEM = cut(campus_DEM_df, breaks = custom_bins))
+
+ggplot() +
+  geom_raster(data)
+
+ggplot() +
+  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
   scale_fill_gradient2(na.value = "lightgray", 
                        low="red", 
                        mid="white", 
@@ -129,10 +141,10 @@ length(which(has.neg))
 
 # look at the values in the DEM
 str(campus_DEM_df)
-unique(campus_DEM_df$altitude)
+unique(campus_DEM_df$elevation)
 
 # that's too many. let's count them up tidily
 campus_DEM_df %>% 
-  group_by(altitude) %>% 
+  group_by(elevation) %>% 
   count()
 # that's still too many. can I tighten the group?
