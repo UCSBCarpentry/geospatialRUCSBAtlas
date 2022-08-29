@@ -35,7 +35,7 @@ summary(campus_DEM)
 summary(campus_DEM, maxsamp = ncell(campus_DEM))
 
 # or do that the tidy way with pipes
-# and get different output
+# and get different format output
 campus_DEM %>% 
   ncell() %>% 
   summary()
@@ -43,7 +43,7 @@ campus_DEM %>%
 # summary plots require a dataframe
 campus_DEM_df <- as.data.frame(campus_DEM, xy = TRUE)
 
-# both summmaries and str of the dataframe
+# both summaries and str of the dataframe
 # show you the name of the layer you'll need to 
 # refer to.
 str(campus_DEM_df)
@@ -80,6 +80,7 @@ ggplot() +
   coord_quickmap()
 
 # deal with no data
+# that tends to be the part around the edges
 ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
   scale_fill_viridis_c(na.value = "deeppink") +
@@ -91,21 +92,92 @@ ggplot() +
   scale_fill_viridis_c(na.value = "white") +
   coord_quickmap()
 
+# histogram
+ggplot() +
+  geom_histogram(data = campus_DEM_df, aes(elevation), bins = 5)
 
+ggplot() +
+  geom_histogram(data = campus_DEM_df, aes(elevation), bins = 50)
+
+
+
+
+# this essentially begins ep. 2
+#################################
 # lesson example bins / highlights Harvard Forest pixels > 400m.
 # for us, let's highlight our holes.
 summary(campus_DEM_df)
 
+
+
 #############################
-# ARG!!
-custom_bins <- c(-3, -.01, .01, 1, 5)
+custom_bins <- c(-3, -.01, .01, 2, 3, 4, 5, 10, 40, 200)
 
-cut(campus_DEM_df, breaks = custom_bins)
+campus_DEM_df <- campus_DEM_df %>% 
+  mutate(binned_DEM = cut(elevation, breaks = custom_bins))
 
-campus_holes_df <- mutate(binned_DEM = cut(campus_DEM_df, breaks = custom_bins))
+unique(campus_DEM_df$binned_DEM)
 
+# there's sooooo few
 ggplot() +
-  geom_raster(data)
+  geom_bar(data = campus_DEM_df, aes(binned_DEM))
+
+# log scale works better
+# this shows that there's nothing at zero.
+ggplot() +
+  geom_bar(data = campus_DEM_df, aes(binned_DEM)) +
+  scale_y_continuous(trans='log10')
+
+ggplot() + 
+  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
+  coord_quickmap()
+
+
+# let's go again with what we've learned
+custom_bins <- c(-3, 2, 3, 4, 5, 10, 25, 40, 70, 100, 200)
+
+campus_DEM_df <- campus_DEM_df %>% 
+  mutate(binned_DEM = cut(elevation, breaks = custom_bins))
+
+ggplot() + 
+  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
+  coord_quickmap()
+
+# that's 10 bins. let's see what natural color looks like
+terrain.colors(10)
+
+# yuck! we can seize more control over this
+# later
+ggplot() + 
+  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
+  scale_fill_manual(values = terrain.colors(10))
+    coord_quickmap()
+
+
+# hillshade layer
+
+campus_hillshade_df <- 
+  raster("output_data/hillshade.tiff") %>% 
+  as.data.frame(xy = TRUE)
+
+# plot the hillshade
+ggplot() + 
+  geom_raster(data = campus_hillshade_df, 
+              aes(x=x, y=y, alpha = hillshade)) +
+  scale_alpha(range = c(0.15, 0.65), guide = "none") +
+  coord_quickmap()
+
+# overlay
+ggplot() + 
+    geom_raster(data=campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
+    geom_raster(data = campus_hillshade_df, 
+              aes(x=x, y=y, alpha = hillshade)) +
+    scale_fill_viridis_c() + 
+  scale_alpha(range = c(0.15, 0.65), guide = "none") +
+  ggtitle("Elevation and Hillshade")
+  coord_quickmap()
+
+
 
 ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
