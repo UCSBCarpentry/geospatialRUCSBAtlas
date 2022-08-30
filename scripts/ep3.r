@@ -3,7 +3,7 @@
 # set up objects from previous episodes
 
 # read the campus DEM
-campus_DEM_df <- raster("output_data/campus_DEM.tiff") %>% 
+campus_DEM_df <- raster("output_data/campus_DEM.tif") %>% 
   as.data.frame(xy=TRUE) %>% 
   rename(elevation = campus_DEM)
 
@@ -33,20 +33,20 @@ summary(bath_df)
 # so that's a clear indication these won't overlay.
 summary(campus_DEM_df)
 
-# as in the lesson
-# again, the initial plot makes no sense because of all the values around 180
+# as in lesson 1
 ggplot() +
   geom_raster(data = bath_df) +
   aes(x=x, y=y, fill=depth) +
   scale_fill_viridis_c() +
   coord_quickmap()
 
-# the solution is similar to ep. 1. Make some custom bins:
-# the 179-180 bin shows us a cable.
-custom_bath_bins <- c(0, 150, 170, 175, 177.5, 179, 180, 225, 250)
+# we can also make some custom bins:
+custom_bath_bins <- c(1, -5, -15, -35, -45, -55, -65, -100, -105, -125, -180)
 
 bath_df <- bath_df %>% 
   mutate(binned_bath = cut(depth, breaks=custom_bath_bins))
+
+summary(bath_df)
 
 ggplot() + 
   geom_raster(data = bath_df, aes(x=x, y=y, fill = binned_bath)) +
@@ -71,20 +71,25 @@ projection(bath)
 # I didn't make that initial raster object, so 
 # I need to get a projection object somewhere.
 
-my_projection <- raster("output_data/campus_DEM.tiff") %>%
- crs() 
+my_projection <- raster("output_data/campus_DEM.tif") %>%
+  crs() 
 
-my_res <- raster("output_data/campus_DEM.tiff") 
+# I don't remember why I made my_res.
+my_res <- raster("output_data/campus_DEM.tif") 
+# this doesn't tell me anything
+res(my_res)
+# nor does thi
+resolution(my_res)
 
 # motherfucker my campus_DEM appears not to have resolution.
 crs(my_res)
 
 reprojected_bath <- projectRaster(bath, 
-                                  crs = my_projection, 
-                                  res = 
-                                  alignOnly = TRUE,
-                                  filename = "bath_utm.tif",
-                                  overwrite = TRUE)
+                      crs = my_projection, 
+                      res = my_res,
+                      alignOnly = TRUE,
+                      filename = "bath_utm.tif",
+                      overwrite = TRUE)
 
 
 
