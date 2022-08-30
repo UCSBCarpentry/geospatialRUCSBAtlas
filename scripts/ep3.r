@@ -54,6 +54,53 @@ ggplot() +
 coord_quickmap()
 
 
+# so now I am ready to overlay the two files
+# this reproduces the '2 rasters with mismatched projections'
+# part of the lesson
+ggplot() +
+  geom_raster(data = bath_df, aes(x=x, y=y, fill = binned_bath)) +
+  geom_raster(data = campus_DEM_df, aes(x=x, y=y, alpha = elevation)) +
+  scale_alpha(range = c(0.15, 0.65), guide = "none") +
+  coord_quickmap()
 
 
+# let's remake bath_df with a re-projected raster
+bath <- raster("output_data/SB_bath.tif", xy=TRUE)
+projection(bath)
+
+# I didn't make that initial raster object, so 
+# I need to get a projection object somewhere.
+
+my_projection <- raster("output_data/campus_DEM.tiff") %>%
+ crs() 
+
+my_res <- raster("output_data/campus_DEM.tiff") 
+
+# motherfucker my campus_DEM appears not to have resolution.
+crs(my_res)
+
+reprojected_bath <- projectRaster(bath, 
+                                  crs = my_projection, 
+                                  res = 
+                                  alignOnly = TRUE,
+                                  filename = "bath_utm.tif",
+                                  overwrite = TRUE)
+
+
+
+# remake bath_df
+bath_df <- as.data.frame(reprojected_bath, xy=TRUE) %>% 
+  rename(depth = bath_utm)
+
+# add the binned column
+bath_df <- bath_df %>% 
+  mutate(binned_bath = cut(depth, breaks=custom_bath_bins))
+
+# so now they are in the same crs, but their extents
+# and resolutions remain fucked up
+ggplot() +
+  geom_raster(data = bath_df, aes(x=x, y=y, fill = binned_bath)) +
+  geom_raster(data = campus_DEM_df, aes(x=x, y=y, alpha = elevation)) +
+  scale_alpha(range = c(0.15, 0.65), guide = "none") +
+  coord_quickmap()
 
