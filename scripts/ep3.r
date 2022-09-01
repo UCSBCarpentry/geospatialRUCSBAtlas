@@ -14,9 +14,6 @@ campus_DEM_df <- campus_DEM_df %>%
 
 
 
-
-
-
 # ep3 is reprojections. We need a raster in a different projection.
 # how about bathymetry?
 
@@ -69,43 +66,41 @@ bath <- raster("output_data/SB_bath.tif", xy=TRUE)
 projection(bath)
 
 # I didn't make that initial raster object, so 
-# I need to get a projection object somewhere.
-
+# I need to get projection and reolution objects somewhere.
 my_projection <- raster("output_data/campus_DEM.tif") %>%
   crs() 
+my_res <- res(raster("output_data/campus_DEM.tif") )
 
-# I don't remember why I made my_res.
-my_res <- raster("output_data/campus_DEM.tif") 
-# this doesn't tell me anything
-res(my_res)
-# nor does thi
-resolution(my_res)
-
-# motherfucker my campus_DEM appears not to have resolution.
-crs(my_res)
 
 reprojected_bath <- projectRaster(bath, 
                       crs = my_projection, 
-                      res = my_res,
-                      alignOnly = TRUE,
-                      filename = "bath_utm.tif",
-                      overwrite = TRUE)
+                      res = my_res)
 
-
+plot(reprojected_bath)
 
 # remake bath_df
-bath_df <- as.data.frame(reprojected_bath, xy=TRUE) %>% 
-  rename(depth = bath_utm)
+bath_df <- as.data.frame(reprojected_bath, xy=TRUE) 
+str(bath_df)
 
 # add the binned column
 bath_df <- bath_df %>% 
-  mutate(binned_bath = cut(depth, breaks=custom_bath_bins))
+  mutate(binned_bath = cut(SB_bath, breaks = custom_bath_bins))
 
-# so now they are in the same crs, but their extents
-# and resolutions remain fucked up
+campus_DEM_df <- campus_DEM_df %>% 
+  mutate(binned_DEM = cut(elevation, breaks = custom_bins))
+
+
+# so now they are in the same crs, and overlay!
 ggplot() +
   geom_raster(data = bath_df, aes(x=x, y=y, fill = binned_bath)) +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, alpha = elevation)) +
   scale_alpha(range = c(0.15, 0.65), guide = "none") +
+  coord_quickmap()
+
+# hide the NA's again
+# scale_alpha doesn't seem to like na.value
+ggplot() +
+  geom_raster(data = bath_df, aes(x=x, y=y, fill = binned_bath)) +
+  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
   coord_quickmap()
 
