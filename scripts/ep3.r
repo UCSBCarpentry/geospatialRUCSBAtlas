@@ -16,7 +16,7 @@ campus_DEM_df <- campus_DEM_df %>%
 
 # ep3 is reprojections. We need a raster in a different projection.
 # how about bathymetry?
-
+# SB_bath came out of data_prep.r
 # make it the tidy way, so that there's not an extra object
 bath_df <- raster("output_data/SB_bath.tif", xy=TRUE) %>% 
   as.data.frame(xy=TRUE) %>% 
@@ -99,8 +99,12 @@ ggplot() +
 
 # hide the NA's again
 # scale_alpha doesn't seem to like na.value
+# plot 2 custom binned maps for the sake of the overlay
 ggplot() +
   geom_raster(data = bath_df, aes(x=x, y=y, fill = binned_bath)) +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
   coord_quickmap()
 
+# after that, you will want to jump to the part of the lesson that
+# covers clipping. get a bounding box out of campus DEM to clip
+# the bathymetry.
