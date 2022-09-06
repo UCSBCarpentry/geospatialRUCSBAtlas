@@ -10,7 +10,7 @@
 library(tidyverse)
 library(raster)
 library(rgdal)
-library(RColorBrewer)
+# library(RColorBrewer)
 
 # setwd("C:/users/your_file_path")
 
@@ -187,10 +187,9 @@ ggplot() +
 # how few?
 summary(campus_DEM_df)
 
-# find only negative numbers in the column.
-# 701000! pixels below sea level
-# we should be able to see them
-has.neg <- apply(campus_DEM_df, 1, function(campus_DEM_df) any(campus_DEM_df < 0))
+# this attempts to find only negative elevations,
+# but it doesn't work.
+has.neg <- apply(campus_DEM_df, 1, function(campus_DEM_df) any(campus_DEM_df$elevation < 0))
 length(which(has.neg))
 
 # challenge:
@@ -212,4 +211,6 @@ unique(campus_DEM_df$elevation)
 campus_DEM_df %>% 
   group_by(elevation) %>% 
   count()
-# that's still too many. can I tighten the group?
+# that's still too many. this is part
+# of why bins are handy
+plot(campus_DEM_df$binned_DEM)
