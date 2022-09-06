@@ -30,8 +30,14 @@ hillShade(slope, aspect, angle=260, direction=0,
 
 
 # ep 3 needs a raster in a different projection. let's try this
+
+download.file("https://pubs.usgs.gov/ds/781/OffshoreCoalOilPoint/data/Bathymetry_OffshoreCoalOilPoint.zip", "source_data/Bathymetry_OffshoreCoalOilPoint.zip")
+
+# unz("source_data/Bathymetry_OffshoreCoalOilPoint.zip")
+
 bathymetry <- 
-  raster("source_data/bathymetry/Bathymetry_OffshoreCoalOilPoint/Bathymetry_2m_OffshoreCoalOilPoint.tif")
+  raster("source_data/Bathymetry_OffshoreCoalOilPoint/Bathymetry_2m_OffshoreCoalOilPoint.tif")
 
 bathymetry_downsample <- aggregate(bathymetry, fact = 4)
 writeRaster(bathymetry_downsample, "output_data/SB_bath.tif", format="GTiff", overwrite=TRUE)
+

@@ -18,10 +18,10 @@ library(RColorBrewer)
 # ep. 1
 
 # get info about your first raster dataset
-GDALinfo("output_data/campus_DEM.tiff")
+GDALinfo("output_data/campus_DEM.tif")
 
 # make it into an object you can manipulate
-campus_DEM <- raster("source_data/greatercampusDEM/greatercampusDEM_1_1.tif")
+campus_DEM <- raster("output_data/campus_DEM.tif")
 
 # run the object, units are in feet
 # 5 feet x 5 feet pixels
@@ -36,7 +36,7 @@ summary(campus_DEM, maxsamp = ncell(campus_DEM))
 
 # or do that the tidy way with pipes
 # and get different format output
-campus_DEM %>% 
+campus_DEM %>%  
   ncell() %>% 
   summary()
 
@@ -50,7 +50,7 @@ str(campus_DEM_df)
 
 ggplot() +
   geom_raster(data = campus_DEM_df, 
-              aes(x=x, y=y, fill = greatercampusDEM_1_1)) +
+              aes(x=x, y=y, fill = campus_DEM)) +
   scale_fill_viridis_c() +
   coord_quickmap()
 
@@ -60,11 +60,6 @@ ggplot() +
 plot(campus_DEM_df)
 
 
-# that's still slow as molasses, 
-# for instructional purposes, we need to DOWNSAMPLE
-# so our maps draw faster
-# see episode 9 for 'aggregate'
-campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4)
 
 # let's rename the column so we don't have to keep typing
 # greatercampusDEM_1_1
