@@ -57,17 +57,16 @@ ggplot() +
 # faster base R plot
 # also doesn't force you to remember the name of
 # the data layer
-plot(campus_DEM_df)
+plot(campus_DEM)
 
 
 
 # let's rename the column so we don't have to keep typing
 # greatercampusDEM_1_1
-campus_DEM_df <- as.data.frame(campus_DEM_downsampled, xy=TRUE) %>% 
-  rename(elevation = greatercampusDEM_1_1)
+campus_DEM_df <- as.data.frame(campus_DEM_df, xy=TRUE) %>% 
+  rename(elevation = campus_DEM)
 
 # now plot with that new name
-# our new, smaller DEM_df maps quicker.
 ggplot() +
   geom_raster(data = campus_DEM_df, 
               aes(x=x, y=y, fill = elevation)) +
@@ -145,7 +144,7 @@ terrain.colors(10)
 # later
 ggplot() + 
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
-  scale_fill_manual(values = terrain.colors(10))
+  scale_fill_manual(values = terrain.colors(10)) +
     coord_quickmap()
 
 
@@ -169,11 +168,11 @@ ggplot() +
               aes(x=x, y=y, alpha = hillshade)) +
     scale_fill_viridis_c() + 
   scale_alpha(range = c(0.15, 0.65), guide = "none") +
-  ggtitle("Elevation and Hillshade")
+  ggtitle("Elevation and Hillshade") +
   coord_quickmap()
 
 
-
+# I'm not sure this graph does anything for us anymore
 ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
   scale_fill_gradient2(na.value = "lightgray", 
@@ -189,17 +188,16 @@ ggplot() +
 summary(campus_DEM_df)
 
 # find only negative numbers in the column.
-# only 12 lonely pixels below sea level
+# 701000! pixels below sea level
+# we should be able to see them
 has.neg <- apply(campus_DEM_df, 1, function(campus_DEM_df) any(campus_DEM_df < 0))
 length(which(has.neg))
 
 # challenge:
 # how many below 3.1 feet (1 m)?
-has.neg <- apply(campus_DEM_df, 1, function(campus_DEM_df) any(campus_DEM_df < 3.12))
-length(which(has.neg))
+below_3 <- apply(campus_DEM_df, 1, function(campus_DEM_df) any(campus_DEM_df < 3.12))
+length(which(below_3))
 
-# 1561
-# that's still not that many. What about all the water?
 
 
 
