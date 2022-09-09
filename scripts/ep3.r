@@ -1,5 +1,10 @@
 # ep3.r
 
+# libraries for this episode:
+library(tidyverse)
+library(raster)
+library(rgdal)
+
 # set up objects from previous episodes
 
 # read the campus DEM
@@ -16,19 +21,20 @@ campus_DEM_df <- campus_DEM_df %>%
 
 # ep3 is reprojections. We need a raster in a different projection.
 # how about bathymetry?
-# SB_bath came out of data_prep.r
+# SB_bath.tif came out of data_prep.r
 # make it the tidy way, so that there's not an extra object
 bath_df <- raster("output_data/SB_bath.tif", xy=TRUE) %>% 
   as.data.frame(xy=TRUE) %>% 
   rename(depth = SB_bath)
 
-summary(bath_df)  
-# ^^ remember, those are negative numbers  
-# summary also tells us we need to emphasize 180 range
 
-# the summary view shows the pixel coordinates are different--
+summary(bath_df, maxsamp = ncell(bath_df))
+# ^^ remember, those are negative numbers  
+# summary also gives us a hint on ranges
+# for custom bins
+
+# the summary view also shows the pixel coordinates are different--
 # so that's a clear indication these won't overlay.
-summary(campus_DEM_df)
 
 # as in lesson 1
 ggplot() +
@@ -37,8 +43,12 @@ ggplot() +
   scale_fill_viridis_c() +
   coord_quickmap()
 
-# we can also make some custom bins:
-custom_bath_bins <- c(1, -5, -15, -35, -45, -55, -65, -100, -105, -125, -180)
+# histogram helps determine good bins
+ggplot() +
+  geom_histogram(data = bath_df, aes(depth), bins = 10)
+
+# these should work:
+custom_bath_bins <- c(1, -5, -15, -35, -45, -55, -60, -65, -75, -100, -125)
 
 bath_df <- bath_df %>% 
   mutate(binned_bath = cut(depth, breaks=custom_bath_bins))
@@ -62,13 +72,14 @@ ggplot() +
 
 
 # let's remake bath_df with a re-projected raster
+# get the original:
 bath <- raster("output_data/SB_bath.tif", xy=TRUE)
 projection(bath)
 
-# I didn't make that initial raster object, so 
 # I need to get projection and reolution objects somewhere.
 my_projection <- raster("output_data/campus_DEM.tif") %>%
   crs() 
+
 my_res <- res(raster("output_data/campus_DEM.tif") )
 
 
@@ -93,18 +104,26 @@ campus_DEM_df <- campus_DEM_df %>%
 # so now they are in the same crs, and overlay!
 ggplot() +
   geom_raster(data = bath_df, aes(x=x, y=y, fill = binned_bath)) +
-  geom_raster(data = campus_DEM_df, aes(x=x, y=y, alpha = elevation)) +
-  scale_alpha(range = c(0.15, 0.65), guide = "none") +
+  scale_alpha_binned(range = c(0.15, 0.65), guide = "none") +
+  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
   coord_quickmap()
 
 # hide the NA's again
 # scale_alpha doesn't seem to like na.value
 # plot 2 custom binned maps for the sake of the overlay
 ggplot() +
-  geom_raster(data = bath_df, aes(x=x, y=y, fill = binned_bath)) +
+  geom_raster(data = bath_df, aes(x=x, y=y, fill = SB_bath)) +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
+  scale_fill_viridis_c(na.value="white") +
   coord_quickmap()
 
-# after that, you will want to jump to the part of the lesson that
+  ggplot() +
+    geom_raster(data = bath_df, aes(x=x, y=y, fill = SB_bath)) +
+    geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
+    scale_fill_viridis_c(na.value="alpha") +
+  coord_quickmap()
+  
+  
+  # after that, you will want to jump to the part of the lesson that
 # covers clipping. get a bounding box out of campus DEM to clip
 # the bathymetry.
