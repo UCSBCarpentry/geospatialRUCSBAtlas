@@ -10,7 +10,7 @@ have these datasets in source_data:
 - NCOS_Shorebird_Foraging_Habitat
 - Coal_Oil_Sign_Inventory       
 - NCOS_Bird_Observations_20190619_web
-- greatercampusDEM
+- [greatercampusDEM](https://drive.google.com/drive/folders/1E51xno3-Qp0WDPvDjK6ZyQHn2K50zo42?usp=share_link)
 
 Next, run the data_prep.r script. From there, each episode
 script will load libraries and re-create any objects

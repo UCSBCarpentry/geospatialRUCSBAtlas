@@ -1,8 +1,6 @@
 # graphics for local examples for 
 # R geospatial
-
-# when you finish developing this, you should output all the figs
-# to named files.
+# episodes 1 and 2
 
 #############################################
 # setup for each episode
@@ -63,6 +61,7 @@ plot(campus_DEM)
 
 # let's rename the column so we don't have to keep typing
 # greatercampusDEM_1_1
+# and it's a meaningful name
 campus_DEM_df <- as.data.frame(campus_DEM_df, xy=TRUE) %>% 
   rename(elevation = campus_DEM)
 
@@ -118,6 +117,7 @@ ggplot() +
 
 # log scale works better
 # this shows that there's nothing at zero.
+# and a little bit of negative
 ggplot() +
   geom_bar(data = campus_DEM_df, aes(binned_DEM)) +
   scale_y_continuous(trans='log10')
@@ -137,15 +137,23 @@ ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
   coord_quickmap()
 
-# that's 10 bins. let's see what natural color looks like
-terrain.colors(10)
-
-# yuck! we can seize more control over this
-# later
+# this isn't so nice
 ggplot() + 
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
   scale_fill_manual(values = terrain.colors(10)) +
-    coord_quickmap()
+  coord_quickmap()
+
+# let's seize control of our bins
+coast_pallette <- terrain.colors(10)
+
+# set 4-5 ft a nice sea blue
+coast_pallette[4] <- "#1d95b3"
+coast_pallette
+
+ggplot() + 
+  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
+  scale_fill_manual(values = coast_pallette) +
+  coord_quickmap()
 
 
 # hillshade layer
