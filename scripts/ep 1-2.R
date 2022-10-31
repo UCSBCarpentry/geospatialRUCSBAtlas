@@ -48,7 +48,7 @@ str(campus_DEM_df)
 
 ggplot() +
   geom_raster(data = campus_DEM_df, 
-              aes(x=x, y=y, fill = campus_DEM)) +
+              aes(x=x, y=y, fill = layer)) +
   scale_fill_viridis_c() +
   coord_quickmap()
 
@@ -63,7 +63,7 @@ plot(campus_DEM)
 # greatercampusDEM_1_1
 # and it's a meaningful name
 campus_DEM_df <- as.data.frame(campus_DEM_df, xy=TRUE) %>% 
-  rename(elevation = campus_DEM)
+  rename(elevation = layer)
 
 # now plot with that new name
 ggplot() +
@@ -162,20 +162,21 @@ campus_hillshade_df <-
   raster("output_data/hillshade.tiff") %>% 
   as.data.frame(xy = TRUE)
 
+str(campus_hillshade_df)
+
 # plot the hillshade
 ggplot() + 
   geom_raster(data = campus_hillshade_df, 
-              aes(x=x, y=y, alpha = hillshade)) +
-  scale_alpha(range = c(0.15, 0.65), guide = "none") +
+              aes(x=x, y=y, fill = layer)) +
   coord_quickmap()
 
 # overlay
+# not sure if this is displaying as desired
 ggplot() + 
     geom_raster(data=campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
     geom_raster(data = campus_hillshade_df, 
-              aes(x=x, y=y, alpha = hillshade)) +
+              aes(x=x, y=y, alpha = layer)) +
     scale_fill_viridis_c() + 
-  scale_alpha(range = c(0.15, 0.65), guide = "none") +
   ggtitle("Elevation and Hillshade") +
   coord_quickmap()
 
@@ -198,11 +199,11 @@ summary(campus_DEM_df)
 # this attempts to find only negative elevations,
 # but it doesn't work.
 has.neg <- apply(campus_DEM_df, 1, function(campus_DEM_df) any(campus_DEM_df$elevation < 0))
-length(which(has.neg))
 
 # challenge:
-# how many below 3.1 feet (1 m)?
+# how many pixels are below 3.1 feet (1 m)?
 below_3 <- apply(campus_DEM_df, 1, function(campus_DEM_df) any(campus_DEM_df < 3.12))
+
 length(which(below_3))
 
 
@@ -222,3 +223,4 @@ campus_DEM_df %>%
 # that's still too many. this is part
 # of why bins are handy
 plot(campus_DEM_df$binned_DEM)
+

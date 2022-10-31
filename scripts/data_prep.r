@@ -9,6 +9,8 @@ library(raster)
 
 # downsizing the campus DEM so that it's more usable
 campus_DEM <- raster("source_data/greatercampusDEM/greatercampusDEM_1_1.tif")
+
+#this produces errors, but the output gets made
 campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4,
                                     filename = "output_data/campus_DEM.tif",
                                     overwrite = TRUE)
