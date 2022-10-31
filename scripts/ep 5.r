@@ -1,5 +1,6 @@
 # episode 5
-
+# multi-band rasters
+# grab a landsat scene?
 
 
 # bring in an overview map 

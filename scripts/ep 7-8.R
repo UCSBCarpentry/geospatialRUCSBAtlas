@@ -20,7 +20,7 @@ plot(buildings)
 # do it pretty
 # by default we get a graticule
 ggplot() +
-  geom_sf(data = buildings, size = 0.1, color = 'black', fill = "cyan1") +
+  geom_sf(data = buildings, size = 0.1, color = 'black', fill = "gray") +
   ggtitle("Campus Buildings")
 
 # setting variables
