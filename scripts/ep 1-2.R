@@ -126,16 +126,30 @@ ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
   coord_quickmap()
 
-
 # let's go again with what we've learned
-custom_bins <- c(-3, 2, 3, 4, 5, 10, 25, 40, 70, 100, 200)
+custom_bins <- c(-3, 0, 2, 5, 10, 25, 40, 70, 100, 150, 200)
 
 campus_DEM_df <- campus_DEM_df %>% 
   mutate(binned_DEM = cut(elevation, breaks = custom_bins))
 
+# this shows sea level at 2-5 ft
 ggplot() + 
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
   coord_quickmap()
+
+
+# challenge
+# use custom bins to figure out a good place to put sea level
+custom_bins <- c(-3, 4, 4.8, 5, 10, 25, 40, 70, 100, 150, 200)
+custom_bins <- c(-3, 4.9, 5, 7.5, 10, 25, 40, 70, 100, 150, 200)
+
+campus_DEM_df <- campus_DEM_df %>% 
+  mutate(binned_DEM = cut(elevation, breaks = custom_bins))
+ggplot() + 
+  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
+  coord_quickmap()
+
+
 
 # this isn't so nice
 ggplot() + 

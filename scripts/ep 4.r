@@ -8,6 +8,7 @@
 
 # UCSB version:
 # do raster math on the bathymetry later to make sea level zero
+# or is it the DEM that has sea level at 4ft?
 
 
 
@@ -16,3 +17,61 @@ library(raster)
 library(rgdal)
 
 # reload DEM's
+# from output folder
+campus_DEM <- raster("output_data/campus_DEM.tif")
+SB_bath <- raster("output_data/SB_bath.tif")
+
+# do they have the same projections?
+GDALinfo("output_data/campus_DEM.tif")
+GDALinfo("output_data/SB_bath.tif")
+# yes.
+
+campus_DEM %>%  
+  ncell()
+
+summary(campus_DEM)
+str(campus_DEM)
+
+campus_DEM_df <- as.data.frame(campus_DEM, xy=TRUE)
+str(campus_DEM_df)
+
+SB_bath_df <- as.data.frame(campus_DEM, xy=TRUE)
+str(campus_DEM_df)
+
+
+# best coast line bins from ep 2
+# from ep 2, these are best sea level bins:
+custom_bins <- c(-3, 4.9, 5, 7.5, 10, 25, 40, 70, 100, 150, 200)
+
+campus_DEM_df <- campus_DEM_df %>% 
+  mutate(binned = cut(layer, breaks=custom_bins))
+
+
+ggplot() + 
+  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned)) +
+  coord_quickmap()
+
+# this sea level doesn't make much sense, so let's do 
+# raster math
+
+# to make our scale make sense, we can do 
+# raster math 
+# how would I do this with overlay?
+sea_level <- campus_DEM - 4.9
+
+sea_level_df <- as.data.frame(sea_level, xy=TRUE)
+
+summary(sea_level_df)
+custom_sea_bins <- c(-8, -.1, .1, 3, 5, 7.5, 10, 25, 40, 70, 100, 150, 200)
+
+sea_level_df <- sea_level_df %>% 
+  mutate(binned = cut(layer, breaks=custom_sea_bins))
+
+
+length(custom_bath_bins)
+
+ggplot() + 
+  geom_raster(data = sea_level_df, aes(x=x, y=y, fill = binned)) +
+  coord_quickmap()
+
+# in ep 11 we will put the two maps back together.
