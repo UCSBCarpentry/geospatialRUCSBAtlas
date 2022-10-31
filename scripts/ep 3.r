@@ -78,7 +78,8 @@ ggplot() +
 
 # let's remake bath_df with a re-projected raster
 # get the original:
-bath <- raster("output_data/SB_bath.tif", xy=TRUE)
+bath <- raster("output_data/SB_bath.tif", xy=TRUE) 
+
 projection(bath)
 
 # I need to get projection and reolution objects somewhere.
@@ -95,12 +96,14 @@ reprojected_bath <- projectRaster(bath,
 plot(reprojected_bath)
 
 # remake bath_df
-bath_df <- as.data.frame(reprojected_bath, xy=TRUE) 
+bath_df <- as.data.frame(reprojected_bath, 
+                         xy=TRUE) %>% 
+  rename(depth = layer) 
 str(bath_df)
 
 # add the binned column to both dataframes
 bath_df <- bath_df %>% 
-  mutate(binned_bath = cut(layer, breaks = custom_bath_bins))
+  mutate(binned_bath = cut(depth, breaks = custom_bath_bins))
 
 campus_DEM_df <- campus_DEM_df %>% 
   mutate(binned_DEM = cut(elevation, breaks = custom_bins))
@@ -117,13 +120,13 @@ ggplot() +
 # scale_alpha doesn't seem to like na.value
 # plot 2 custom binned maps for the sake of the overlay
 ggplot() +
-  geom_raster(data = bath_df, aes(x=x, y=y, fill = layer)) +
+  geom_raster(data = bath_df, aes(x=x, y=y, fill = depth)) +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
   scale_fill_viridis_c(na.value="white") +
   coord_quickmap()
 
   ggplot() +
-    geom_raster(data = bath_df, aes(x=x, y=y, fill = layer)) +
+    geom_raster(data = bath_df, aes(x=x, y=y, fill = depth)) +
     geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
     scale_fill_viridis_c(na.value="NA") +
   coord_quickmap()
