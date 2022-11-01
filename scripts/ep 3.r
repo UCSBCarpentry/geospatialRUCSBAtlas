@@ -1,4 +1,7 @@
 # ep3.r
+# re-project data
+# overlays
+
 
 # libraries for this episode:
 library(tidyverse)
@@ -82,7 +85,7 @@ bath <- raster("output_data/SB_bath.tif", xy=TRUE)
 
 projection(bath)
 
-# I need to get projection and reolution objects somewhere.
+# I need to get projection and resolution objects somewhere.
 my_projection <- raster("output_data/campus_DEM.tif") %>%
   crs() 
 

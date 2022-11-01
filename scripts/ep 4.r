@@ -15,6 +15,7 @@
 # setup environment
 library(raster)
 library(rgdal)
+library(tidyverse)
 
 # reload DEM's
 # from output folder
@@ -24,13 +25,14 @@ SB_bath <- raster("output_data/SB_bath.tif")
 # do they have the same projections?
 GDALinfo("output_data/campus_DEM.tif")
 GDALinfo("output_data/SB_bath.tif")
-# yes.
+# maybe.
 
 campus_DEM %>%  
   ncell()
 
 summary(campus_DEM)
 str(campus_DEM)
+crs(campus_DEM)
 
 campus_DEM_df <- as.data.frame(campus_DEM, xy=TRUE)
 str(campus_DEM_df)
@@ -51,7 +53,8 @@ ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned)) +
   coord_quickmap()
 
-# this sea level doesn't make much sense, so let's do 
+# this sea level doesn't make much sense, 
+# why is it 4 ft? so let's do 
 # raster math
 
 # to make our scale make sense, we can do 
@@ -68,8 +71,9 @@ sea_level_df <- sea_level_df %>%
   mutate(binned = cut(layer, breaks=custom_sea_bins))
 
 
-length(custom_bath_bins)
+length(custom_sea_bins)
 
+# now sea level is zero.
 ggplot() + 
   geom_raster(data = sea_level_df, aes(x=x, y=y, fill = binned)) +
   coord_quickmap()
