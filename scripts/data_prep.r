@@ -46,3 +46,15 @@ bathymetry <-
 bathymetry_downsample <- aggregate(bathymetry, fact = 4)
 writeRaster(bathymetry_downsample, "output_data/SB_bath.tif", format="GTiff", overwrite=TRUE)
 
+# ep 5
+# downsample the West Campus CIRGIS multi-band image
+natural_color <- brick("source_data/cirgis2020/w_campus.tif")
+nbands(natural_color)
+x <- nrow(natural_color) / 10
+y <- ncol(natural_color) / 10
+new_res <- raster(nrow = x, ncol = y)
+extent(new_res) <- extent(natural_color)
+natural_color_down <- resample(natural_color, new_res, method="bilinear") 
+nbands(natural_color_down)
+writeRaster(natural_color_down, "output_data/w_campus.tif", format="GTiff", overwrite=TRUE)
+                          
