@@ -33,7 +33,7 @@ hillShade(slope, aspect, angle=260, direction=0,
 
 # needs a raster in a different projection. let's try this
 
-download.file("https://pubs.usgs.gov/ds/781/OffshoreCoalOilPoint/data/Bathymetry_OffshoreCoalOilPoint.zip", "source_data/Bathymetry_OffshoreCoalOilPoint.zip")
+# download.file("https://pubs.usgs.gov/ds/781/OffshoreCoalOilPoint/data/Bathymetry_OffshoreCoalOilPoint.zip", "source_data/Bathymetry_OffshoreCoalOilPoint.zip")
 
 unzip("source_data/Bathymetry_OffshoreCoalOilPoint.zip",
       overwrite = TRUE, 
@@ -48,13 +48,14 @@ writeRaster(bathymetry_downsample, "output_data/SB_bath.tif", format="GTiff", ov
 
 # ep 5
 # downsample the West Campus CIRGIS multi-band image
-natural_color <- brick("source_data/cirgis2020/w_campus.tif")
-nbands(natural_color)
-x <- nrow(natural_color) / 10
-y <- ncol(natural_color) / 10
-new_res <- raster(nrow = x, ncol = y)
-extent(new_res) <- extent(natural_color)
-natural_color_down <- resample(natural_color, new_res, method="bilinear") 
-nbands(natural_color_down)
-writeRaster(natural_color_down, "output_data/w_campus.tif", format="GTiff", overwrite=TRUE)
-                          
+# natural_color <- brick("source_data/cirgis2020/w_campus.tif")
+# nbands(natural_color)
+# x <- nrow(natural_color) / 10
+# y <- ncol(natural_color) / 10
+# new_res <- raster(nrow = x, ncol = y)
+# extent(new_res) <- extent(natural_color)
+# natural_color_down <- resample(natural_color, new_res, method="bilinear") 
+# nbands(natural_color_down)
+# writeRaster(natural_color_down, "output_data/w_campus.tif", format="GTiff", overwrite=TRUE)
+# I made this in ArcGIS because SLOWWWWWWWWW.....
+# w_campus_1ft.tif

@@ -37,6 +37,11 @@ natural_color_stack <- stack("source_data/cirgis2020/w_campus_1ft.tif")
 natural_color_stack
 
 plotRGB(natural_color_stack)
+
+plotRGB(natural_color_stack, stretch = "lin")
+plotRGB(natural_color_stack, stretch = "hist")
+
+
 plotRGB(natural_color_stack,
         r = 1,
         g = 2, 
@@ -59,9 +64,4 @@ plotRGB(natural_color_stack,
 
 # point to metadata here
 
-# plot it!
-natural_color_df <- as.data.frame(natural_color_brick, xy=TRUE)
-str(natural_color_df)
-# plotRGB(natural_color_df,
-#        r = w_campus_1ft_1, g = w_campus_1ft_2, b = w_campus_1ft_3)
 
