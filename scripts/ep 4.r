@@ -17,14 +17,16 @@ library(raster)
 library(rgdal)
 library(tidyverse)
 
-# reload DEM's
+# reload rasters
 # from output folder
 campus_DEM <- raster("output_data/campus_DEM.tif")
-SB_bath <- raster("output_data/SB_bath.tif")
+
+# remember: this is the one we cropped, so the 2 extents are the same.
+campus_bath <- raster("output_data/campus_bath.tif")
 
 # do they have the same projections?
 GDALinfo("output_data/campus_DEM.tif")
-GDALinfo("output_data/SB_bath.tif")
+GDALinfo("output_data/campus_bath.tif")
 # maybe.
 
 campus_DEM %>%  
@@ -37,7 +39,7 @@ crs(campus_DEM)
 campus_DEM_df <- as.data.frame(campus_DEM, xy=TRUE)
 str(campus_DEM_df)
 
-SB_bath_df <- as.data.frame(campus_DEM, xy=TRUE)
+campus_bath_df <- as.data.frame(campus_bath, xy=TRUE)
 str(campus_DEM_df)
 
 
@@ -78,4 +80,14 @@ ggplot() +
   geom_raster(data = sea_level_df, aes(x=x, y=y, fill = binned)) +
   coord_quickmap()
 
-# in ep 11 we will put the two maps back together.
+# if we overlay, we should get the same result as at the 
+# end of the previous episode:
+ggplot() +
+  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = layer)) +
+  geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = layer)) +
+  scale_fill_viridis_c(na.value="NA") +
+  coord_quickmap()
+
+# end of ep. 4:
+# write a new geoTIFF with the new 
+# sea level = 0 version of the data
