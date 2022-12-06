@@ -57,13 +57,8 @@ ggplot() +
 # the data layer
 plot(campus_DEM)
 
+colnames(campus_DEM_df)
 
-
-# let's rename the column so we don't have to keep typing
-# greatercampusDEM_1_1
-# and it's a meaningful name
-campus_DEM_df <- as.data.frame(campus_DEM_df, xy=TRUE) %>% 
-  rename(elevation = layer)
 
 # now plot with that new name
 ggplot() +
@@ -164,6 +159,7 @@ coast_pallette <- terrain.colors(10)
 coast_pallette[4] <- "#1d95b3"
 coast_pallette
 
+# where's my nice blue?
 ggplot() + 
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
   scale_fill_manual(values = coast_pallette) +

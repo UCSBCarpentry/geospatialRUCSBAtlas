@@ -59,3 +59,4 @@ writeRaster(bathymetry_downsample, "output_data/SB_bath.tif", format="GTiff", ov
 # writeRaster(natural_color_down, "output_data/w_campus.tif", format="GTiff", overwrite=TRUE)
 # I made this in ArcGIS because SLOWWWWWWWWW.....
 # w_campus_1ft.tif
+
