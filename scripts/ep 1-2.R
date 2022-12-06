@@ -59,7 +59,10 @@ plot(campus_DEM)
 
 colnames(campus_DEM_df)
 
+# rename the column so it makes more sense.
+colnames(campus_DEM_df) <- c('x', 'y', 'elevation')
 
+str(campus_DEM_df)
 # now plot with that new name
 ggplot() +
   geom_raster(data = campus_DEM_df, 
