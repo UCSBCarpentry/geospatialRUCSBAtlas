@@ -91,7 +91,7 @@ my_projection <- raster("output_data/campus_DEM.tif") %>%
 
 my_res <- res(raster("output_data/campus_DEM.tif") )
 
-
+# there's an error here.
 reprojected_bath <- projectRaster(bath, 
                       crs = my_projection, 
                       res = my_res)
@@ -128,13 +128,23 @@ ggplot() +
   scale_fill_viridis_c(na.value="white") +
   coord_quickmap()
 
-  ggplot() +
+ggplot() +
     geom_raster(data = bath_df, aes(x=x, y=y, fill = depth)) +
     geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
     scale_fill_viridis_c(na.value="NA") +
   coord_quickmap()
   
   
-# after that, you will want to jump to the part of the lesson that
-# covers clipping. get a bounding box out of campus DEM to clip
+# get a bounding box out of campus DEM to clip
 # the bathymetry.
+# later on we will clip to extend, but for now we will leave it at this:
+
+# extent object
+campus_border <- extent(campus_DEM_df)
+str(campus_border)
+
+#can be turned into a spatial object
+campus_border_poly <- as(campus_border, 'SpatialPolygons')
+
+# and written out to a file:
+shapefile(campus_border_poly, 'output_data/campus_borderline.shp')
