@@ -148,3 +148,29 @@ campus_border_poly <- as(campus_border, 'SpatialPolygons')
 
 # and written out to a file:
 shapefile(campus_border_poly, 'output_data/campus_borderline.shp')
+
+# from ep 11: crop the bathymetry to the extent
+# of campus_DEM
+bath_clipped <-crop(x=reprojected_bath, y=campus_border)
+
+# now we can make a big, slow overview map, and save the clipped bathymetry
+# for overlaying goodness:
+
+# save the file:
+# ep 4:
+writeRaster(bath_clipped, "output_data/campus_bath.tif",
+            format="GTiff",
+            overwrite=TRUE)
+
+campus_bath_df <- as.data.frame(bath_clipped, xy=TRUE)
+str(campus_bath_df)
+colnames(campus_bath_df)
+
+# now we have a smaller campus bathymetry file:
+ggplot() +
+  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
+  geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = layer)) +
+      scale_fill_viridis_c(na.value="NA") +
+  coord_quickmap()
+
+
