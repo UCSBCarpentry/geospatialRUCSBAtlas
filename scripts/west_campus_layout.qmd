@@ -1,0 +1,51 @@
+---
+title: "NCOS Pages"
+format: pdf
+editor: visual
+---
+
+## NCOS Open Space Transformation
+
+Between 2018 and 2023, UCSB's CCBER transformed a dis-used golf course into a set of rare California coastal habitats.
+
+## Prepare our graphics
+
+```{r}
+library(terra)
+library(tidyverse)
+```
+
+The code for the graphics will go here:
+
+```{r}
+before <- rast("source_data/WestCampus_skysatcollect_panchromatic_dn_udm2/files/20161210_185631_ssc3_u0001_panchromatic_dn_clip.tif")
+
+before
+```
+
+Oh shot, that's a monochrome raster. But we can use it for overlay. EPSG: 32611
+
+```{r}
+# get a comparison image. One we made earlier
+bath <- rast("output_data/campus_bath.tif")
+bath
+```
+
+These definitely should not overlay. As in Episode 3
+
+```{r}
+# make dataframes
+before_df <- as.data.frame(before, , xy = TRUE)
+bath_df <- as.data.frame(bath, , xy = TRUE)
+
+str(before_df)
+
+```
+
+```{r}
+overlay_plot <- ggplot() %>%
+  geom_raster(data = before_df, 
+              aes(x=x, y=y, fill = 20161210_185631_ssc3_u0001_panchromatic_dn_clip))+ 
+  geom_raster(data = bath_df, 
+              aes(x=x, y=y, alpha = campus_bath))
+```
