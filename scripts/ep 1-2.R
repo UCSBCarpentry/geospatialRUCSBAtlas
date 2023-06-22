@@ -8,6 +8,7 @@
 library(tidyverse)
 library(raster)
 library(rgdal)
+library(terra)
 # library(RColorBrewer)
 
 # setwd("C:/users/your_file_path")
