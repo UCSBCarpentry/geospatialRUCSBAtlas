@@ -1,21 +1,71 @@
-# this script
+# this script sets up data that will be used
+# for 2 purposes:
+# An episode-by-episode, task-by-task duplication of the
+# GeoSpatial R lesson
+# and
+# A markdown atlas of the UCSB campus.
 
-library(tidyverse)
-library(rgdal)
-library(RColorBrewer)
-library(raster)
+library(terra)
 
-# ep 1.
+# Get Campus Rasters
+# **********************
+# ep 1: Starting with rasters
+# find another one with NA's if this one doesn't have any
+# eventually get this from an elevation layer on AGO
+download.file("https://drive.google.com/drive/folders/1_NWRIonW03jm5MdP9tq-zJjkfDjFCWEm?usp=drive_link", 
+              "source_data/campus_DEM.zip")
 
-# downsizing the campus DEM so that it's more usable
-campus_DEM <- raster("source_data/greatercampusDEM/greatercampusDEM_1_1.tif")
+# ep 3: Reprojecting Rasters
+download.file("https://pubs.usgs.gov/ds/781/OffshoreCoalOilPoint/data/Bathymetry_OffshoreCoalOilPoint.zip", 
+              "source_data/Bathymetry_OffshoreCoalOilPoint.zip")
 
-#this produces errors, but the output gets made
-campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4,
-                                    filename = "output_data/campus_DEM.tif",
-                                    overwrite = TRUE)
+# Get Campus Imagery
+# *********************
+# ep 5
+# CIRGIS 1ft Campus
+download.file("https://drive.google.com/drive/folders/1XoOOD3xcTaSevQZGtwB9ndIwaYoUbwIU?usp=drive_link",
+  "w_campus_1ft.tif")
+
+# Planet 50cm WCOS?
+# with arc.open()
+# the planet will have a funny band combo
+# when it first opens
+
+# Get Campus Vectors
+# **********************
+# Episode 6
+# POLYGONS
+# Foraging Habitat?
+# Buildings (good extent example?)
+# AOI's (Can be used later for clipping extents)
+#       (You should create them in this script)
+# LINES
+# X-drive?
+# ("source_data/bike_paths/bikelanescollapsedv8.shp")
+# AGO?
+# ("source_data/bike_paths/cgis_2014003_ICM_BikePath.shp")
+# POINTS
+# Birds
 
 
+# Global vectors for insets
+# NED raster
+# kelp shapefile?
+# would be episode 9
+
+# episode 10
+# csv of lat-long pairs
+# NCOS photo points
+# might have to backwards engineer this
+# https://ucsb.maps.arcgis.com/apps/webappviewer/index.html?id=52f2fb744eb549289bed20adf34edfd7
+
+
+
+
+# manipulations start here
+
+
+# ep 2: Hillshade
 # create a hillshade for our area of an appropriate resolution
 aspect <- terrain(campus_DEM_downsampled, 
         opt="aspect", unit="radians", neighbors=8, 
@@ -29,16 +79,12 @@ hillShade(slope, aspect, angle=260, direction=0,
           normalize=FALSE)
 
 
-# ep 3 
-
-# needs a raster in a different projection. let's try this
-
-# download.file("https://pubs.usgs.gov/ds/781/OffshoreCoalOilPoint/data/Bathymetry_OffshoreCoalOilPoint.zip", "source_data/Bathymetry_OffshoreCoalOilPoint.zip")
 
 unzip("source_data/Bathymetry_OffshoreCoalOilPoint.zip",
       overwrite = TRUE, 
       exdir = "source_data/Bathymetry_OffshoreCoalOilPoint")
 
+# Ep 3: Reprojecting Rasters
 bathymetry <- 
   raster("source_data/Bathymetry_OffshoreCoalOilPoint/Bathymetry_2m_OffshoreCoalOilPoint.tif")
 
@@ -60,3 +106,10 @@ writeRaster(bathymetry_downsample, "output_data/SB_bath.tif", format="GTiff", ov
 # I made this in ArcGIS because SLOWWWWWWWWW.....
 # w_campus_1ft.tif
 
+# downsizing the campus DEM so that it's more usable
+campus_DEM <- raster("source_data/greatercampusDEM/greatercampusDEM_1_1.tif")
+
+#this produces errors, but the output gets made
+campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4,
+                                    filename = "output_data/campus_DEM.tif",
+                                    overwrite = TRUE)

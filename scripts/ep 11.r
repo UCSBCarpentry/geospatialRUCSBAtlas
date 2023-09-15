@@ -83,3 +83,6 @@ ggplot() +
               aes(x=x, y=y, alpha=depth)) +
   coord_sf()
   
+# still need:
+# selecting pixels with a buffer
+# look for photos under water?

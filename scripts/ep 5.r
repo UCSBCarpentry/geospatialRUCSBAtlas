@@ -41,6 +41,8 @@ plotRGB(natural_color_stack)
 plotRGB(natural_color_stack, stretch = "lin")
 plotRGB(natural_color_stack, stretch = "hist")
 
+# the planet will have a funny band combo
+# when it first opens
 
 plotRGB(natural_color_stack,
         r = 1,

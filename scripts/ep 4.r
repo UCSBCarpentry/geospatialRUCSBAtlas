@@ -91,3 +91,8 @@ ggplot() +
 # end of ep. 4:
 # write a new geoTIFF with the new 
 # sea level = 0 version of the data
+
+# ep 4 challenge to add:
+# bare earth vs canopy for 2 different sources?
+# necessarily up in the hills? Or for buildings
+# on campus?

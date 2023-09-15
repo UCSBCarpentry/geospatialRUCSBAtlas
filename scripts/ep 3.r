@@ -174,3 +174,7 @@ ggplot() +
   coord_quickmap()
 
 
+## to do
+# there should be a 3rd and 4th raster in here to replicate
+# the challenges.
+# Is there a before-and-after DEM of WCOS?
