@@ -6,17 +6,23 @@
 # A markdown atlas of the UCSB campus.
 
 library(terra)
+# curl is going to be better than download.file
+library(curl)
 
 # Get Campus Rasters
 # **********************
 # ep 1: Starting with rasters
 # find another one with NA's if this one doesn't have any
 # eventually get this from an elevation layer on AGO
+# this isn't a valid zip file!!!
 download.file("https://drive.google.com/drive/folders/1_NWRIonW03jm5MdP9tq-zJjkfDjFCWEm?usp=drive_link", 
               "source_data/campus_DEM.zip")
+unzip("source_data/campus_DEM.zip", exdir = "source_data/DEM")
+
 
 # ep 3: Reprojecting Rasters
-download.file("https://pubs.usgs.gov/ds/781/OffshoreCoalOilPoint/data/Bathymetry_OffshoreCoalOilPoint.zip", 
+# here's where we need curl: so it doesn't time out
+curl_download("https://pubs.usgs.gov/ds/781/OffshoreCoalOilPoint/data/Bathymetry_OffshoreCoalOilPoint.zip", 
               "source_data/Bathymetry_OffshoreCoalOilPoint.zip")
 
 # Get Campus Imagery
@@ -24,7 +30,7 @@ download.file("https://pubs.usgs.gov/ds/781/OffshoreCoalOilPoint/data/Bathymetry
 # ep 5
 # CIRGIS 1ft Campus
 download.file("https://drive.google.com/drive/folders/1XoOOD3xcTaSevQZGtwB9ndIwaYoUbwIU?usp=drive_link",
-  "w_campus_1ft.tif")
+  "source_data/w_campus_1ft.tif")
 
 # Planet 50cm WCOS?
 # with arc.open()
@@ -34,18 +40,23 @@ download.file("https://drive.google.com/drive/folders/1XoOOD3xcTaSevQZGtwB9ndIwa
 # Get Campus Vectors
 # **********************
 # Episode 6
+## Part of repo:
+# POINTS
+# Bird Observations
+# LINES:
+
 # POLYGONS
-# Foraging Habitat?
 # Buildings (good extent example?)
+# Foraging Habitat?
 # AOI's (Can be used later for clipping extents)
 #       (You should create them in this script)
+
 # LINES
 # X-drive?
 # ("source_data/bike_paths/bikelanescollapsedv8.shp")
 # AGO?
 # ("source_data/bike_paths/cgis_2014003_ICM_BikePath.shp")
 # POINTS
-# Birds
 
 
 # Global vectors for insets
@@ -67,6 +78,8 @@ download.file("https://drive.google.com/drive/folders/1XoOOD3xcTaSevQZGtwB9ndIwa
 
 # ep 2: Hillshade
 # create a hillshade for our area of an appropriate resolution
+campus_DEM <- rast("")
+
 aspect <- terrain(campus_DEM_downsampled, 
         opt="aspect", unit="radians", neighbors=8, 
         filename="output_data/aspect.tiff", overwrite = TRUE)
