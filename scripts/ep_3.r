@@ -11,7 +11,7 @@ library(rgdal)
 # set up objects from previous episodes
 
 # read the campus DEM
-campus_DEM_df <- raster("../output_data/campus_DEM.tif") %>% 
+campus_DEM_df <- raster("output_data/campus_DEM.tif") %>% 
   as.data.frame(xy=TRUE) %>% 
   rename(elevation = layer)
 
@@ -28,7 +28,7 @@ campus_DEM_df <- campus_DEM_df %>%
 # how about bathymetry?
 # SB_bath.tif came out of data_prep.r
 # make it the tidy way, so that there's not an extra object
-bath_df <- raster("../output_data/SB_bath.tif", xy=TRUE) %>% 
+bath_df <- raster("output_data/SB_bath.tif", xy=TRUE) %>% 
   as.data.frame(xy=TRUE) %>% 
   rename(depth = layer)
 
@@ -81,15 +81,15 @@ ggplot() +
 
 # let's remake bath_df with a re-projected raster
 # get the original:
-bath <- raster("../output_data/SB_bath.tif", xy=TRUE) 
+bath <- raster("output_data/SB_bath.tif", xy=TRUE) 
 
 projection(bath)
 
 # I need to get projection and resolution objects somewhere.
-my_projection <- raster("../output_data/campus_DEM.tif") %>%
+my_projection <- raster("output_data/campus_DEM.tif") %>%
   crs() 
 
-my_res <- res(raster("../output_data/campus_DEM.tif") )
+my_res <- res(raster("output_data/campus_DEM.tif") )
 
 # there's an error here.
 reprojected_bath <- projectRaster(bath, 
@@ -102,7 +102,6 @@ plot(reprojected_bath)
 bath_df <- as.data.frame(reprojected_bath, 
                          xy=TRUE) %>% 
   rename(depth = layer) 
-
 str(bath_df)
 
 # add the binned column to both dataframes
@@ -148,7 +147,7 @@ str(campus_border)
 campus_border_poly <- as(campus_border, 'SpatialPolygons')
 
 # and written out to a file:
-shapefile(campus_border_poly, '../output_data/campus_borderline.shp', overwrite=TRUE)
+shapefile(campus_border_poly, 'output_data/campus_borderline.shp')
 
 # from ep 11: crop the bathymetry to the extent
 # of campus_DEM
@@ -159,7 +158,7 @@ bath_clipped <-crop(x=reprojected_bath, y=campus_border)
 
 # save the file:
 # ep 4:
-writeRaster(bath_clipped, "../output_data/campus_bath.tif",
+writeRaster(bath_clipped, "output_data/campus_bath.tif",
             format="GTiff",
             overwrite=TRUE)
 
@@ -175,3 +174,7 @@ ggplot() +
   coord_quickmap()
 
 
+## to do
+# there should be a 3rd and 4th raster in here to replicate
+# the challenges.
+# Is there a before-and-after DEM of WCOS?
