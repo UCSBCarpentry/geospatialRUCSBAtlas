@@ -8,16 +8,15 @@
 library(terra)
 # curl is going to be better than download.file
 library(curl)
+library(googledrive)
 
 # Get Campus Rasters
 # **********************
 # ep 1: Starting with rasters
 # find another one with NA's if this one doesn't have any
-# eventually get this from an elevation layer on AGO
-# this isn't a valid zip file!!!
-download.file("https://drive.google.com/drive/folders/1_NWRIonW03jm5MdP9tq-zJjkfDjFCWEm?usp=drive_link", 
-              "source_data/campus_DEM.zip")
-unzip("source_data/campus_DEM.zip", exdir = "source_data/DEM")
+drive_download("https://drive.google.com/file/d/1bkIVwJESL99Kd5N9_0QqwctgmpXYFbR8/view?usp=sharing",
+                "source_data/campus_DEM.zip", overwrite=TRUE)
+unzip("source_data/campus_DEM.zip", exdir = "source_data/campus_DEM")
 
 
 # ep 3: Reprojecting Rasters
