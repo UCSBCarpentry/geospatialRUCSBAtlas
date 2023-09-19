@@ -1,5 +1,5 @@
 # geospatialRUCSBAtlas
-A repo to keep track of a set of examples for an R for GeoSpatial workshop.
+A repo that uses local UCSB examples from the R for GeoSpatial workshop.
 
 Scripts run parallel to the episodes of Raster and Vector Data with R Data Carpentry.
 The goal is to produce several nice atlas pages of campus that use all the techniques
