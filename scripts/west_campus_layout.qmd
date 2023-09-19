@@ -15,37 +15,47 @@ library(terra)
 library(tidyverse)
 ```
 
-The code for the graphics will go here:
+Make the objects:
 
 ```{r}
-before <- rast("source_data/WestCampus_skysatcollect_panchromatic_dn_udm2/files/20161210_185631_ssc3_u0001_panchromatic_dn_clip.tif")
+before <- rast("../source_data/SkySatCollect/20161210_185631_ssc3_u0001_pansharpened_clip.tif")
 
 before
 ```
 
-Oh shot, that's a monochrome raster. But we can use it for overlay. EPSG: 32611
-
 ```{r}
 # get a comparison image. One we made earlier
-bath <- rast("output_data/campus_bath.tif")
-bath
+after <- rast("../source_data/SkySatCollect/20220627_214052_ssc7_u0001_pansharpened_clip.tif")
+after
 ```
 
-These definitely should not overlay. As in Episode 3
+```{r}
+# it didn't come with the values calculated, so this takes care of that
+# it won't plot without it.
+setMinMax(after)
+```
+
+Both are EPSG: 32611, so they would overlay. But we want a side-by-side:
+
+```{r}
+after
+```
 
 ```{r}
 # make dataframes
-before_df <- as.data.frame(before, , xy = TRUE)
-bath_df <- as.data.frame(bath, , xy = TRUE)
+before_df <- as.data.frame(before, xy = TRUE)
+after_df <- as.data.frame(after, xy = TRUE)
 
 str(before_df)
 
 ```
 
 ```{r}
-overlay_plot <- ggplot() %>%
-  geom_raster(data = before_df, 
-              aes(x=x, y=y, fill = 20161210_185631_ssc3_u0001_panchromatic_dn_clip))+ 
-  geom_raster(data = bath_df, 
-              aes(x=x, y=y, alpha = campus_bath))
+plotRGB(before, scale=1932, stretch="lin")
+```
+
+```{r}
+plotRGB(after, scale=6385, stretch="lin")
+label2022 <- "2022 Image"
+text(after)
 ```

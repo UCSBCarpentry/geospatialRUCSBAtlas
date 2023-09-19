@@ -20,34 +20,90 @@ st_bbox((bikes_b))
 # here in the lesson there's lots of comparisons of metadata
 # in sf it lets you know point, line, polygon
 
-# ep 7 is mapping by individual attributes.
-# for now I'm skipping to ep 8: overlays'
+# shapefiles generally overlay automagically
+# but that's handled in detal in ep 8
 
+# LINES
 str(bikes_a)
 
+
+# this example might be more striking if there
+# were new west campus bike paths
 ggplot() +
   geom_sf(data=bikes_b, color = "red") +
   coord_sf() + warnings()
 
-
-
-
-  
 ggplot() +
   geom_sf(data=bikes_b, color = "blue", size = 1.5) +
   geom_sf(data=bikes_a, color = "red", size = .75)
 
 
-# get more data
-buildings <- st_read("source_data/Campus_Buildings/Campus_Buildings.shp")
+# CHALLENGE ###############################
+# Load and inspect:
 
+# POLYGONS
+# buildings shapefile
+buildings <- st_read("source_data/Campus_Buildings/Campus_Buildings.shp")
+ggplot() +
+  geom_sf(data=buildings, color = "red") +
+  coord_sf() + warnings()
+
+# campus Areas of Interest (AOIs) as geojson
+greatercampus <- st_read("source_data/greater-UCSB-campus-aoi.geojson")
+ggplot() +
+  geom_sf(data=greatercampus, color = "red") +
+  coord_sf() + warnings()
+
+# if I tell you these are a zoom, how would you confirm?
+westcampus <- st_read("source_data/UCSB-west-campus-aoi.geojson")
+maincampus <- st_read("source_data/UCSB-campus-aoi.geojson")
+
+# you could tell visually!
+ggplot() +
+  geom_sf(data=greatercampus, color = "red") +
+  geom_sf(data=maincampus, color = "green") +
+  geom_sf(data=westcampus, color = "blue") +
+  coord_sf() + warnings()
+
+
+# POINTS
+# bird observations
+birds <- st_read("source_data/NCOS_Bird_Observations_20190619_web/NCOS_Bird_Observations_20190619_web.shp")
+ggplot() +
+  geom_sf(data=birds, color = "red") +
+  coord_sf() + warnings()
+
+
+# all together
+# intentional error: wrong order
 ggplot() +
   geom_sf(data=bikes_b, color = "blue", size = 1.5) +
   geom_sf(data=bikes_a, color = "red", size = .75) +
-  geom_sf(data=buildings, color = "gray")
+  geom_sf(data=buildings, color = "gray") +
+  geom_sf(data=greatercampus, color = "red") +
+  geom_sf(data=maincampus, color = "green") +
+  geom_sf(data=westcampus, color = "blue") 
 
 
-# For the challenge, load and inspect:
-# campus zoom AOI's
-# buildings
-# bird obervations
+# filled polygons need to go on the bottom
+ggplot() +
+  geom_sf(data=greatercampus, color = "red", size = 2) +
+  geom_sf(data=maincampus, color = "green") +
+  geom_sf(data=westcampus, color = "blue") +
+  geom_sf(data=bikes_b, color = "blue", size = 1.5) +
+  geom_sf(data=bikes_a, color = "red", size = .75) +
+  geom_sf(data=buildings, color = "gray") +
+  coord_sf()
+
+
+# keep adding. 
+# where should birds go in the stack?
+ggplot() +
+  geom_sf(data=greatercampus, color = "red", size = 2) +
+  geom_sf(data=maincampus, color = "green") +
+  geom_sf(data=westcampus, color = "blue") +
+  geom_sf(data=bikes_b, color = "blue", size = 2) +
+  geom_sf(data=bikes_a, color = "red", size = .75) +
+  geom_sf(data=buildings, color = "gray") +
+  geom_sf(data=birds, color = "red", size = 2) +
+      coord_sf()
