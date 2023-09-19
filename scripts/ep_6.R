@@ -1,10 +1,12 @@
 # episode 6: vector data
 
 library(sf)
+library(tidyverse)
 
 # compare extents of 2 bike path files
-bikes_a <- st_read("source_data/bike_paths/bikelanescollapsedv8.shp")
-bikes_b <- st_read("source_data/bike_paths/cgis_2014003_ICM_BikePath.shp")
+# these will give a warning message about projections
+bikes_a <- st_read("source_data/bike_paths/bike_paths/bikelanescollapsedv8.shp")
+bikes_b <- st_read("source_data/bike_paths/bike_paths/cgis_2014003_ICM_BikePath.shp")
 
 # you can see when you create the object that the CRS's
 # and bounding boxes are different
@@ -16,13 +18,20 @@ st_bbox((bikes_b))
 
 
 # here in the lesson there's lots of comparisons of metadata
+# in sf it lets you know point, line, polygon
 
 # ep 7 is mapping by individual attributes.
 # for now I'm skipping to ep 8: overlays'
 
+str(bikes_a)
+
 ggplot() +
   geom_sf(data=bikes_b, color = "red") +
-  geom_sf(data=bikes_a, color = "blue") 
+  coord_sf() + warnings()
+
+
+
+
   
 ggplot() +
   geom_sf(data=bikes_b, color = "blue", size = 1.5) +
@@ -36,3 +45,9 @@ ggplot() +
   geom_sf(data=bikes_b, color = "blue", size = 1.5) +
   geom_sf(data=bikes_a, color = "red", size = .75) +
   geom_sf(data=buildings, color = "gray")
+
+
+# For the challenge, load and inspect:
+# campus zoom AOI's
+# buildings
+# bird obervations
