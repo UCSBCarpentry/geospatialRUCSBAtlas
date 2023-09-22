@@ -20,6 +20,26 @@ any data that's required for the Atlas.
 3: now each episode should run nicely
 
 
+The goal will be to produce a number of well formatted maps.
+All with a 3 tall x 4 wide aspect ratio
 
+7 to be exact:
+* A wide view of campus with
+ * NCOS
+ * Water
+ * Bathymentry and elevation
+ * hillshade
+ * walkways
+ * buildings
+
+* A stylized thematic map with trees, water, and bikeways
+
+* An atlas page layout with 4 insets:
+ * California
+ * The Bite of California
+ * Extended Campus
+   * extended campus will have maptiles background
+
+["images/complicated_thematic_map.jpg"]
 
 [UCSB Carpentry](https://ucsbcarpentry.github.io)
