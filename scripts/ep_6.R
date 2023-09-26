@@ -1,12 +1,16 @@
 # episode 6: vector data
 
 library(sf)
+library(terra)
 library(tidyverse)
 
 # compare extents of 2 bike path files
 # these will give a warning message about projections
-bikes_a <- st_read("source_data/bike_paths/bike_paths/bikelanescollapsedv8.shp")
-bikes_b <- st_read("source_data/bike_paths/bike_paths/cgis_2014003_ICM_BikePath.shp")
+bikes_a <- st_read("source_data/bike_paths/bikelanescollapsedv8.shp")
+bikes_b <- st_read("source_data/bike_paths/cgis_2014003_ICM_BikePath.shp")
+birds <- st_read("source_data/NCOS_Bird_Observations_20190619_web/NCOS_Bird_Observations_20190619_web.shp")
+
+
 
 # you can see when you create the object that the CRS's
 # and bounding boxes are different
@@ -21,11 +25,12 @@ st_bbox((bikes_b))
 # in sf it lets you know point, line, polygon
 
 # shapefiles generally overlay automagically
-# but that's handled in detal in ep 8
+# but that's handled in detail in ep 8
 
 # LINES
 str(bikes_a)
-
+# POINTS
+str(birds)
 
 # this example might be more striking if there
 # were new west campus bike paths
@@ -68,7 +73,6 @@ ggplot() +
 
 # POINTS
 # bird observations
-birds <- st_read("source_data/NCOS_Bird_Observations_20190619_web/NCOS_Bird_Observations_20190619_web.shp")
 ggplot() +
   geom_sf(data=birds, color = "red") +
   coord_sf() + warnings()

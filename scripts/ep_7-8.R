@@ -4,13 +4,14 @@
 # and 8 : overlays
 
 library(tidyverse)
-library(rgdal)
 library(RColorBrewer)
-library(sf)
-
+library(terra)
 
 # do we need to remake our objects?
 buildings <- st_read("source_data/Campus_Buildings/Campus_Buildings.shp")
+# trees 
+birds <- st_read("source_data/NCOS_Bird_Observations_20190619_web/NCOS_Bird_Observations_20190619_web.shp")
+
 
 # check out the attributes
 st_geometry_type(buildings)
@@ -62,6 +63,7 @@ ggplot() +
 
 # We will want to bin that somehow, just like we
 # binned the campus elevation dataset
+# decade by decade?
 
 # an example more analagous to the lesson would be 
 # bird types as a categorical variable.
@@ -70,6 +72,12 @@ ggplot() +
 # more objects to map
 birds <- st_read("source_data/NCOS_Bird_Observations_20190619_web/NCOS_Bird_Observations_20190619_web.shp")
 habitat <- st_read("source_data/NCOS_Shorebird_Foraging_Habitat/NCOS_Shorebird_Foraging_Habitat.shp")
+
+colnames(birds)
+plot(birds)
+
+# make a composite bird column: all the types of birds
+birds_df <- as.data.frame(birds)
 
 
 # hey, something to explore
@@ -85,11 +93,7 @@ levels(habitat$Elev_Range)
 # filter on attributes
 names(birds)
 
-# 9 signs need to be fixed.
-unique(signs$Condition)
-fix_me <- signs %>% 
-  filter(Condition == "Poor")
-nrow(fix_me)
+
 
 #  color by attribute
 ggplot () +
