@@ -36,7 +36,7 @@ All with a 3 tall x 4 wide aspect ratio
 
 
 ### 2 A stylized thematic map with trees, water, and bikeways
-![Stylized, minimalistic](/images/limited_thematic_map.jpg "Sketch" | width = 300)
+![Stylized, minimalistic](/images/limited_thematic_map.jpg "Sketch")
 
 ### An atlas page layout with 4 insets:
 #### 4 California
@@ -51,6 +51,6 @@ Landscape
 Landscape
   * A stripped down version of #1
 
-![Overview map](/images/overview_map.jpg "Sketch" " | width = 300)
+![Overview map](/images/overview_map.jpg "Sketch")
 
 [UCSB Carpentry](https://ucsbcarpentry.github.io)
