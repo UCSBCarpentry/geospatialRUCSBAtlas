@@ -31,12 +31,12 @@ All with a 3 tall x 4 wide aspect ratio
   * hillshade
   * walkways
   * buildings
-![](/images/complicated_thematic_map.jpg | width = 300)
+![](/images/complicated_thematic_map.jpg)
 
 
 
 ### 2 A stylized thematic map with trees, water, and bikeways
-![Stylized, minimalistic](/images/limited_thematic_map.jpg "Sketch" " | width = 300)
+![Stylized, minimalistic](/images/limited_thematic_map.jpg "Sketch" | width = 300)
 
 ### An atlas page layout with 4 insets:
 #### 4 California
