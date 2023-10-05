@@ -31,7 +31,7 @@ All with a 3 tall x 4 wide aspect ratio
   * hillshade
   * walkways
   * buildings
-![The grand finale](/images/complicated_thematic_map.jpg "Sketch" | width = 300)
+![](/images/complicated_thematic_map.jpg | width = 300)
 
 
 
