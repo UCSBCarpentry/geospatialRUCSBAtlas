@@ -24,24 +24,33 @@ The goal will be to produce a number of well formatted maps.
 All with a 3 tall x 4 wide aspect ratio
 
 7 to be exact:
-1. A wide view of campus with
+###  1. A wide view of campus with
   * NCOS
   * Water
   * Bathymentry and elevation
   * hillshade
   * walkways
   * buildings
+![The grand finale](/images/complicated_thematic_map.jpg "Sketch" | width = 300)
 
-1. A stylized thematic map with trees, water, and bikeways
 
-1. An atlas page layout with 4 insets:
-  1. California
-  1. The Bite of California
-  1. Extended Campus
-  1. extended campus will have maptiles background
 
-![The grand finale](/images/complicated_thematic_map.jpg "Sketch")
-![Stylized, minimalistic](/images/limited_thematic_map.jpg "Sketch")
-![Overview map](/images/overview_map.jpg "Sketch")
+### 2 A stylized thematic map with trees, water, and bikeways
+![Stylized, minimalistic](/images/limited_thematic_map.jpg "Sketch" " | width = 300)
+
+### An atlas page layout with 4 insets:
+#### 4 California
+Vertical
+#### 5 The Bite of California
+Vertical
+#### 6 Extended Campus
+Landscape
+  * extended campus will have maptiles background
+  * Bacara(?) or El Capitan to Modoc/State
+#### 7 
+Landscape
+  * A stripped down version of #1
+
+![Overview map](/images/overview_map.jpg "Sketch" " | width = 300)
 
 [UCSB Carpentry](https://ucsbcarpentry.github.io)
