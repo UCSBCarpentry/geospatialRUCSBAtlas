@@ -38,7 +38,7 @@ All with a 3 tall x 4 wide aspect ratio
 ### 2 A stylized thematic map with trees, water, and bikeways
 ![Stylized, minimalistic](/images/limited_thematic_map.jpg "Sketch")
 
-### An atlas page layout with 4 insets:
+### 3 An atlas page layout with 4 insets:
 #### 4 California
 Vertical
 #### 5 The Bite of California
