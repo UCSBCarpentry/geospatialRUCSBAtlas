@@ -25,9 +25,9 @@ All with a 3 tall x 4 wide aspect ratio
 
 7 to be exact:
 * A wide view of campus with
-  * NCOS
-  * Water
-  * Bathymentry and elevation
+  1. NCOS
+  1. Water
+  1. Bathymentry and elevation
   * hillshade
   * walkways
   * buildings
