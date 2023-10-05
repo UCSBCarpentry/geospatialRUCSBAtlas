@@ -40,6 +40,6 @@ All with a 3 tall x 4 wide aspect ratio
   1. Extended Campus
   1. extended campus will have maptiles background
 
-!(images/complicated_thematic_map.jpg "Sketch")
+![Jon's whiteboard sketch](images/complicated_thematic_map.jpg "Sketch")
 
 [UCSB Carpentry](https://ucsbcarpentry.github.io)
