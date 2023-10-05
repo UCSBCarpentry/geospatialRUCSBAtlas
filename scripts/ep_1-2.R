@@ -5,9 +5,9 @@
 #############################################
 # setup for each episode
 
+#library(raster)
+#library(rgdal)
 library(tidyverse)
-library(raster)
-library(rgdal)
 library(terra)
 # library(RColorBrewer)
 
@@ -17,10 +17,10 @@ library(terra)
 # ep. 1
 
 # get info about your first raster dataset
-GDALinfo("output_data/campus_DEM.tif")
+describe("source_data/greatercampusDEM/greatercampusDEM_1_1.tif")
 
 # make it into an object you can manipulate
-campus_DEM <- raster("output_data/campus_DEM.tif")
+campus_DEM <- rast("source_data/greatercampusDEM/greatercampusDEM_1_1.tif")
 
 # run the object, units are in feet
 # 5 feet x 5 feet pixels
@@ -46,6 +46,9 @@ campus_DEM_df <- as.data.frame(campus_DEM, xy = TRUE)
 # show you the name of the layer you'll need to 
 # refer to.
 str(campus_DEM_df)
+
+#do we want to change the layer name from greater...to layer?
+names(campus_DEM_df)[names(campus_DEM_df) == 'greatercampusDEM_1_1'] <- 'layer'
 
 ggplot() +
   geom_raster(data = campus_DEM_df, 
