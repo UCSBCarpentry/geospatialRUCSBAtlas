@@ -74,6 +74,7 @@ ggplot() +
   scale_fill_viridis_c() +
   coord_quickmap()
 
+#I dont think we have any NAs 
 # deal with no data
 # that tends to be the part around the edges
 ggplot() +
@@ -160,7 +161,7 @@ ggplot() +
   coord_quickmap()
 
 # let's seize control of our bins
-coast_pallette <- terrain.colors(10)
+coast_palette <- terrain.colors(10)
 
 # set 4-5 ft a nice sea blue
 coast_pallette[4] <- "#1d95b3"
@@ -169,14 +170,16 @@ coast_pallette
 # where's my nice blue?
 ggplot() + 
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
-  scale_fill_manual(values = coast_pallette) +
+  scale_fill_manual(values = coast_palette) +
   coord_quickmap()
 
 
 # hillshade layer
+#ok we have to do something here to make a hillshade
+#since one doesn't exist
 
 campus_hillshade_df <- 
-  raster("output_data/hillshade.tiff") %>% 
+  rast("source_data/hillshade.tiff") %>% 
   as.data.frame(xy = TRUE)
 
 str(campus_hillshade_df)
