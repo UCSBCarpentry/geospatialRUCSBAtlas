@@ -17,10 +17,10 @@ library(terra)
 # ep. 1
 
 # get info about your first raster dataset
-describe("source_data/greatercampusDEM/greatercampusDEM_1_1.tif")
+describe("source_data/campus_DEM.tif")
 
 # make it into an object you can manipulate
-campus_DEM <- rast("source_data/greatercampusDEM/greatercampusDEM_1_1.tif")
+campus_DEM <- rast("source_data/campus_DEM.tif")
 
 # run the object, units are in feet
 # 5 feet x 5 feet pixels
@@ -48,7 +48,7 @@ campus_DEM_df <- as.data.frame(campus_DEM, xy = TRUE)
 str(campus_DEM_df)
 
 #do we want to change the layer name from greater...to layer?
-names(campus_DEM_df)[names(campus_DEM_df) == 'greatercampusDEM_1_1'] <- 'layer'
+names(campus_DEM_df)[names(campus_DEM_df) == 'campus_DEM'] <- 'layer'
 
 ggplot() +
   geom_raster(data = campus_DEM_df, 
@@ -164,8 +164,8 @@ ggplot() +
 coast_palette <- terrain.colors(10)
 
 # set 4-5 ft a nice sea blue
-coast_pallette[4] <- "#1d95b3"
-coast_pallette
+coast_palette[4] <- "#1d95b3"
+coast_palette
 
 # where's my nice blue?
 ggplot() + 
@@ -178,8 +178,11 @@ ggplot() +
 #ok we have to do something here to make a hillshade
 #since one doesn't exist
 
+#10:30PM musings told kristi to do it, 
+# need rename the fill to layer tho
+
 campus_hillshade_df <- 
-  rast("source_data/hillshade.tiff") %>% 
+  rast("source_data/campus_hillshade.tif") %>% 
   as.data.frame(xy = TRUE)
 
 str(campus_hillshade_df)
@@ -187,7 +190,7 @@ str(campus_hillshade_df)
 # plot the hillshade
 ggplot() + 
   geom_raster(data = campus_hillshade_df, 
-              aes(x=x, y=y, fill = layer)) +
+              aes(x=x, y=y, fill = campus_hillshade)) +
   coord_quickmap()
 
 # overlay
@@ -195,12 +198,12 @@ ggplot() +
 ggplot() + 
     geom_raster(data=campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
     geom_raster(data = campus_hillshade_df, 
-              aes(x=x, y=y, alpha = layer)) +
+              aes(x=x, y=y, alpha = campus_hillshade)) +
     scale_fill_viridis_c() + 
   ggtitle("Elevation and Hillshade") +
   coord_quickmap()
 
-
+#kristi had enough stopped here
 # I'm not sure this graph does anything for us anymore
 ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
