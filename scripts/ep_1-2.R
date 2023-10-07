@@ -54,7 +54,8 @@ ggplot() +
   geom_raster(data = campus_DEM_df, 
               aes(x=x, y=y, fill = layer)) +
   scale_fill_viridis_c() +
-  coord_quickmap()
+  coord_quickmap() +
+  #coord_flip()
 
 # faster base R plot
 # also doesn't force you to remember the name of
