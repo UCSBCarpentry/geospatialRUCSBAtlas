@@ -52,9 +52,9 @@ names(campus_DEM_df)[names(campus_DEM_df) == 'campus_DEM'] <- 'layer'
 
 ggplot() +
   geom_raster(data = campus_DEM_df, 
-              aes(x=x, y=y, fill = layer)) +
+              aes(x=x, y=y, fill = campus_DEM)) +
   scale_fill_viridis_c() +
-  coord_quickmap() +
+  coord_quickmap()
   #coord_flip()
 
 # faster base R plot
@@ -127,8 +127,8 @@ ggplot() +
   scale_y_continuous(trans='log10')
 
 ggplot() + 
-  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
-  coord_quickmap()
+  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) 
+  #coord_quickmap()
 
 # let's go again with what we've learned
 custom_bins <- c(-3, 0, 2, 5, 10, 25, 40, 70, 100, 150, 200)
@@ -138,8 +138,8 @@ campus_DEM_df <- campus_DEM_df %>%
 
 # this shows sea level at 2-5 ft
 ggplot() + 
-  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
-  coord_quickmap()
+  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) 
+  + coord_quickmap()
 
 
 # challenge
@@ -150,16 +150,16 @@ custom_bins <- c(-3, 4.9, 5, 7.5, 10, 25, 40, 70, 100, 150, 200)
 campus_DEM_df <- campus_DEM_df %>% 
   mutate(binned_DEM = cut(elevation, breaks = custom_bins))
 ggplot() + 
-  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
-  coord_quickmap()
+  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) 
+  #coord_quickmap()
 
 
 
 # this isn't so nice
 ggplot() + 
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
-  scale_fill_manual(values = terrain.colors(10)) +
-  coord_quickmap()
+  scale_fill_manual(values = terrain.colors(10)) 
+  #coord_quickmap()
 
 # let's seize control of our bins
 coast_palette <- terrain.colors(10)
@@ -171,8 +171,8 @@ coast_palette
 # where's my nice blue?
 ggplot() + 
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
-  scale_fill_manual(values = coast_palette) +
-  coord_quickmap()
+  scale_fill_manual(values = coast_palette)
+  #coord_quickmap()
 
 
 # hillshade layer
@@ -181,6 +181,8 @@ ggplot() +
 
 #10:30PM musings told kristi to do it, 
 # need rename the fill to layer tho
+
+describe("source_data/campus_hillshade.tif")
 
 campus_hillshade_df <- 
   rast("source_data/campus_hillshade.tif") %>% 
@@ -191,8 +193,8 @@ str(campus_hillshade_df)
 # plot the hillshade
 ggplot() + 
   geom_raster(data = campus_hillshade_df, 
-              aes(x=x, y=y, fill = campus_hillshade)) +
-  coord_quickmap()
+              aes(x=x, y=y, fill = campus_hillshade)) 
+  #coord_quickmap()
 
 # overlay
 # not sure if this is displaying as desired
@@ -201,8 +203,8 @@ ggplot() +
     geom_raster(data = campus_hillshade_df, 
               aes(x=x, y=y, alpha = campus_hillshade)) +
     scale_fill_viridis_c() + 
-  ggtitle("Elevation and Hillshade") +
-  coord_quickmap()
+  ggtitle("Elevation and Hillshade") 
+  #coord_quickmap()
 
 #kristi had enough stopped here
 # I'm not sure this graph does anything for us anymore
@@ -213,8 +215,8 @@ ggplot() +
                        mid="white", 
                        high="cornsilk3",
                        guide = "colourbar",
-                        midpoint = 3.12, aesthetics = "fill") +
-  coord_quickmap()
+                        midpoint = 3.12, aesthetics = "fill") 
+  #coord_quickmap()
 
 # we can't see them, because there are too few.
 # how few?
