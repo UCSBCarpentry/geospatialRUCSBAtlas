@@ -4,3 +4,4 @@
 .Ruserdata
 *.zip
 source_data/**
+downloaded_data/**
