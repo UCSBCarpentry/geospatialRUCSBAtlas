@@ -10,11 +10,10 @@ library(rgdal)
 
 # set up objects from previous episodes
 
-# read the campus DEM
+# create the campus DEM
 campus_DEM_df <- raster("output_data/campus_DEM.tif") %>% 
   as.data.frame(xy=TRUE) %>% 
   rename(elevation = layer)
-
 
 
 # add the custom bins to the dataframe
@@ -137,7 +136,7 @@ ggplot() +
   
 # get a bounding box out of campus DEM to clip
 # the bathymetry.
-# later on we will clip to extend, but for now we will leave it at this:
+# later on we will clip to extent, but for now we will leave it at this:
 
 # extent object
 campus_border <- extent(campus_DEM_df)
