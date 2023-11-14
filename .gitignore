@@ -5,3 +5,4 @@
 *.zip
 source_data/**
 downloaded_data/**
+output_data/**
