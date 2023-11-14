@@ -14,15 +14,22 @@ library(googledrive)
 # **********************
 # ep 1: Starting with rasters
 # find another one with NA's if this one doesn't have any
+
+# Download the data from the Google Drive
 drive_download("https://drive.google.com/file/d/1bkIVwJESL99Kd5N9_0QqwctgmpXYFbR8/view?usp=sharing",
-                "source_data/campus_DEM.zip", overwrite=TRUE)
-unzip("source_data/campus_DEM.zip", exdir = "source_data/campus_DEM")
+                "downloaded_data/campus_DEM.zip", overwrite=TRUE)
+# Unzip the archive
+unzip("downloaded_data/campus_DEM.zip", exdir = "downloaded_data") # The zip archive on the GDrive has one extra level of nesting
+
 
 
 # ep 3: Reprojecting Rasters
 # here's where we need curl: so it doesn't time out
 curl_download("https://pubs.usgs.gov/ds/781/OffshoreCoalOilPoint/data/Bathymetry_OffshoreCoalOilPoint.zip", 
-              "source_data/Bathymetry_OffshoreCoalOilPoint.zip")
+              "downloaded_data/Bathymetry_OffshoreCoalOilPoint.zip")
+
+# Unzip the archive
+unzip("downloaded_data/Bathymetry_OffshoreCoalOilPoint.zip", exdir = "downloaded_data/bathymery") # The zip archive on the GDrive has one extra level of nesting
 
 # Get Campus Imagery
 # *********************
@@ -77,7 +84,7 @@ download.file("https://drive.google.com/drive/folders/1XoOOD3xcTaSevQZGtwB9ndIwa
 
 # ep 2: Hillshade
 # create a hillshade for our area of an appropriate resolution
-campus_DEM <- rast("")
+campus_DEM <- rast("source_data/greatercampusDEM/greatercampusDEM_1_1.tif")
 
 aspect <- terrain(campus_DEM_downsampled, 
         opt="aspect", unit="radians", neighbors=8, 
