@@ -21,7 +21,12 @@ drive_download("https://drive.google.com/file/d/1bkIVwJESL99Kd5N9_0QqwctgmpXYFbR
 # Unzip the archive
 unzip("downloaded_data/campus_DEM.zip", exdir = "downloaded_data") # The zip archive on the GDrive has one extra level of nesting
 
+# Rename the file and put it in the source_data folder
+file.rename(from='downloaded_data/greatercampusDEM/greatercampusDEM/greatercampusDEM_1_1.tif', 
+            to='source_data/campus_DEM.tif')
 
+# Delete the zip archive
+file.remove("downloaded_data/campus_DEM.zip")
 
 # ep 3: Reprojecting Rasters
 # here's where we need curl: so it doesn't time out
