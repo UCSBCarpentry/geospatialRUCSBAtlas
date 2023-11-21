@@ -4,7 +4,7 @@ we need to knw where we are going. Therefore, we need to build
 the finished maps. 
 
 This is a list of all the data required for the 7 maps 
-described on the (Read Me)[../README.md]
+described on the [Read Me](../README.md])
 
 * Hillshades at 3 scales and extents:
   * The Bite of California
