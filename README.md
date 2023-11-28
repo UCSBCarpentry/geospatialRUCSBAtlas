@@ -54,3 +54,6 @@ Landscape
 ![Overview map](/images/overview_map.jpg "Sketch")
 
 [UCSB Carpentry](https://ucsbcarpentry.github.io)
+
+[Original lesson --  Introduction to Geospatial Raster and Vector Data with R](https://datacarpentry.org/r-raster-vector-geospatial/)
+
