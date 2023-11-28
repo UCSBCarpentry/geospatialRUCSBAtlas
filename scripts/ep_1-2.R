@@ -9,7 +9,7 @@
 #library(rgdal)
 library(tidyverse)
 library(terra)
-# library(RColorBrewer)
+library(RColorBrewer)
 
 # setwd("C:/users/your_file_path")
 
@@ -52,10 +52,10 @@ names(campus_DEM_df)[names(campus_DEM_df) == 'campus_DEM'] <- 'layer'
 
 ggplot() +
   geom_raster(data = campus_DEM_df, 
-              aes(x=x, y=y, fill = campus_DEM)) +
+              aes(x=x, y=y, fill = layer)) +
   scale_fill_viridis_c() +
   coord_quickmap()
-  #coord_flip()
+  
 
 # faster base R plot
 # also doesn't force you to remember the name of
