@@ -12,7 +12,8 @@ library(googledrive)
 
 # Get Campus Rasters
 # **********************
-# ep 1: Starting with rasters
+
+#### ep 1: Starting with rasters ####
 # find another one with NA's if this one doesn't have any
 
 # Download the data from the Google Drive
@@ -28,13 +29,16 @@ file.rename(from='downloaded_data/greatercampusDEM/greatercampusDEM/greatercampu
 # Delete the zip archive
 file.remove("downloaded_data/campus_DEM.zip")
 
-# ep 3: Reprojecting Rasters
+#### ep 3: Reprojecting Rasters ####
 # here's where we need curl: so it doesn't time out
 curl_download("https://pubs.usgs.gov/ds/781/OffshoreCoalOilPoint/data/Bathymetry_OffshoreCoalOilPoint.zip", 
               "downloaded_data/Bathymetry_OffshoreCoalOilPoint.zip")
 
 # Unzip the archive
 unzip("downloaded_data/Bathymetry_OffshoreCoalOilPoint.zip", exdir = "downloaded_data/bathymery") # The zip archive on the GDrive has one extra level of nesting
+
+
+
 
 # Get Campus Imagery
 # *********************
