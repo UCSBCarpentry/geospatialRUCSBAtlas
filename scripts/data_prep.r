@@ -13,6 +13,7 @@ library(googledrive)
 # Get Campus Rasters
 # **********************
 
+
 #### ep 1: Starting with rasters ####
 # find another one with NA's if this one doesn't have any
 
@@ -23,13 +24,16 @@ drive_download("https://drive.google.com/file/d/1bkIVwJESL99Kd5N9_0QqwctgmpXYFbR
 unzip("downloaded_data/campus_DEM.zip", exdir = "downloaded_data") # The zip archive on the GDrive has one extra level of nesting
 
 # Rename the file and put it in the source_data folder
-file.rename(from='downloaded_data/greatercampusDEM/greatercampusDEM/greatercampusDEM_1_1.tif', 
+file.copy(from='downloaded_data/greatercampusDEM/greatercampusDEM/greatercampusDEM_1_1.tif', 
             to='source_data/campus_DEM.tif')
 
 # Delete the zip archive
 file.remove("downloaded_data/campus_DEM.zip")
 
+
+
 #### ep 3: Reprojecting Rasters ####
+
 # here's where we need curl: so it doesn't time out
 curl_download("https://pubs.usgs.gov/ds/781/OffshoreCoalOilPoint/data/Bathymetry_OffshoreCoalOilPoint.zip", 
               "downloaded_data/Bathymetry_OffshoreCoalOilPoint.zip")
@@ -37,7 +41,12 @@ curl_download("https://pubs.usgs.gov/ds/781/OffshoreCoalOilPoint/data/Bathymetry
 # Unzip the archive
 unzip("downloaded_data/Bathymetry_OffshoreCoalOilPoint.zip", exdir = "downloaded_data/bathymery") # The zip archive on the GDrive has one extra level of nesting
 
+# copy the file needed for episode 3
+file.copy(from='downloaded_data/bathymery/Bathymetry_2m_OffshoreCoalOilPoint.tif', 
+            to='source_data/SB_bath_2m.tif')
 
+# Delete the zip archive
+file.remove("downloaded_data/Bathymetry_OffshoreCoalOilPoint.zip")
 
 
 # Get Campus Imagery
