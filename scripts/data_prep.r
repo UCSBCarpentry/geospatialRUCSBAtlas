@@ -33,6 +33,16 @@ curl_download("https://www.naturalearthdata.com/http//www.naturalearthdata.com/d
 unzip("downloaded_data/global_raster.zip", exdir="downloaded_data", overwrite = TRUE)
 
 
+# Elevation in the Western United States 90m DEM
+# to prep for SLO/SB/VEN/LA/OC/SD region extent 
+# https://www.sciencebase.gov/catalog/item/542aebf9e4b057766eed286a
+
+curl_download("https://www.sciencebase.gov/catalog/file/get/542aebf9e4b057766eed286a", 
+              "downloaded_data/dem90_hf.zip")
+unzip("downloaded_data/dem90_hf.zip", exdir="downloaded_data", overwrite = TRUE)
+
+
+
 # Get Campus Imagery
 # *********************
 # ep 5
