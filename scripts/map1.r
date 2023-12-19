@@ -3,22 +3,45 @@
 
 
 library(tidyverse)
-library(raster)
-library(rgdal)
+# library(raster)
+# library(rgdal)
+library(terra)
 
 # set up objects
 # the basic setup is bathymetry and topography
 # mashed together
 # libraries for this episode:
 
+campus_DEM <- rast("output_data/campus_DEM.tif") 
+crs(campus_DEM)
+
+# does bathymetry still needs to be re-projected in order to overlay?
+bath <- rast("output_data/SB_bath.tif") 
+crs(bath)
+
+# can't overlay them because they are different CRS's
+plot(campus_DEM)
+plot(bath)
+plot(bath + campus_DEM, na.rm=TRUE)
+
+cali_projection <- crs(campus_DEM)
+
+project(bath, cali_projection)
+plot(campus_DEM)
+plot(bath)
+
+plot(bath + campus_DEM, na.rm=TRUE)
+
+
 # create those two dataframes
-campus_DEM_df <- raster("output_data/campus_DEM.tif") %>% 
+campus_DEM_df <- campus_DEM %>% 
   as.data.frame(xy=TRUE) %>% 
   rename(elevation = layer)
+crs(campus_DEM_df)
 
-# bathymetry needs to be re-projected in order to overlay
-bath <- raster("output_data/SB_bath.tif", xy=TRUE) 
-projection(bath)
+
+
+
 
 # I need to get projection and resolution objects somewhere.
 # so I 'copy' the one that I already have:

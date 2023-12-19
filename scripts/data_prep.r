@@ -24,6 +24,13 @@ unzip("source_data/campus_DEM.zip", exdir = "source_data/campus_DEM")
 curl_download("https://pubs.usgs.gov/ds/781/OffshoreCoalOilPoint/data/Bathymetry_OffshoreCoalOilPoint.zip", 
               "source_data/Bathymetry_OffshoreCoalOilPoint.zip")
 
+# largest extent raster
+# global shaded relief from NaturalEarth
+# https://www.naturalearthdata.com/downloads/50m-raster-data/50m-gray-earth/
+curl_download("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/raster/GRAY_50M_SR_OB.zip",
+              "downloaded_data/global_raster.zip")
+unzip("downloaded_data/global_raster.zip", exdir="downloaded_data")
+
 # Get Campus Imagery
 # *********************
 # ep 5
