@@ -26,17 +26,14 @@ curl_download("https://pubs.usgs.gov/ds/781/OffshoreCoalOilPoint/data/Bathymetry
 
 # largest extent raster
 # global shaded relief from NaturalEarth
-# https://www.naturalearthdata.com/downloads/50m-raster-data/50m-gray-earth/
-
 curl_download("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/raster/GRAY_HR_SR_OB.zip",
               "downloaded_data/global_raster.zip")
 unzip("downloaded_data/global_raster.zip", exdir="downloaded_data", overwrite = TRUE)
 
 
 # Elevation in the Western United States 90m DEM
-# to prep for SLO/SB/VEN/LA/OC/SD region extent 
+# to prep for SLO/SB/VEN/LA/OC/SD region extent on map 7 
 # https://www.sciencebase.gov/catalog/item/542aebf9e4b057766eed286a
-
 curl_download("https://www.sciencebase.gov/catalog/file/get/542aebf9e4b057766eed286a", 
               "downloaded_data/dem90_hf.zip")
 unzip("downloaded_data/dem90_hf.zip", exdir="downloaded_data", overwrite = TRUE)
