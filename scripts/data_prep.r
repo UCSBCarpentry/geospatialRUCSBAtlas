@@ -27,9 +27,11 @@ curl_download("https://pubs.usgs.gov/ds/781/OffshoreCoalOilPoint/data/Bathymetry
 # largest extent raster
 # global shaded relief from NaturalEarth
 # https://www.naturalearthdata.com/downloads/50m-raster-data/50m-gray-earth/
-curl_download("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/raster/GRAY_50M_SR_OB.zip",
+
+curl_download("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/raster/GRAY_HR_SR_OB.zip",
               "downloaded_data/global_raster.zip")
-unzip("downloaded_data/global_raster.zip", exdir="downloaded_data")
+unzip("downloaded_data/global_raster.zip", exdir="downloaded_data", overwrite = TRUE)
+
 
 # Get Campus Imagery
 # *********************

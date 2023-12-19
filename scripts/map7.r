@@ -2,6 +2,8 @@
 # the zoom to Cali
 
 library(terra)
+library(geojsonsf)
+library(sf)
 
 # full campus extent hillshade made from 
 # campus_DEM
@@ -15,7 +17,8 @@ campusExtent <- ext(campus_DEM)
 
 # crop this to a generous California 
 # and figure out the color scale
-world <- rast("downloaded_data/GRAY_50M_SR_OB.tif")
-plot(world, col="gray")
-
-
+world <- rast("downloaded_data/GRAY_HR_SR_OB.tif")
+plot(world)
+caliExtent <- geojson_sf("downloaded_data/cali.geojson")
+world_cropped <- crop(x=world, y=caliExtent)
+plot(world_cropped)
