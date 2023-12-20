@@ -182,7 +182,6 @@ ggplot() +
   geom_spatraster(data = cali_zoom_2,
               aes(fill=dem90_hf))
   
-(cali_zoom_2)
 
 par(mfrow = c(1,3))
 
