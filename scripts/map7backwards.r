@@ -7,6 +7,9 @@
 library(terra)
 library(geojsonsf)
 library(sf)
+library(ggplot2)
+library(tidyterra)
+library(dplyr)
 
 # geojson AOI's are used to clip source DEM's
 # they are first re-projected to match the source
@@ -117,7 +120,10 @@ polys(socalExtent, col="red")
 # zoom 2
 # zoom 3
 
+
 # page layout start
+# ##########################
+# 3 hillshades
 par(mfrow = c(1,3))
 
 plot(cali_zoom_1, col=grays)
@@ -127,6 +133,58 @@ plot(socal_hillshade, col=grays)
 polys(campusExtent, col="red")
 
 plot(campus_hillshade, col=grays)
+
+# reset par when you're done
+par(mfrow = c(1,1))
+
+
+# turn the 2 new hillshades (zooms 2 & 3)
+# into elevation over hillshade
+# remember: zoom1 started as a hillshade.
+
+# zoom3
+# figure out the layer names
+(campus_DEM)
+(campus_hillshade)
+
+ggplot() +
+  geom_raster(data = campus_DEM,
+              aes(x=x, y=y, fill=layer)) +
+  geom_raster(data=campus_hillshade,
+              aes(x=x, y=y, alpha = hillshade)) +
+  scale_fill_viridis_c() +
+  scale_alpha(range = c(0.15, 0.65), guide="none")
+
+# zoom2
+# figure out the layer names
+(cali_zoom_2)
+(socal_hillshade)
+
+# polygons
+places <- vect("downloaded_data/tl_2023_06_place.shp")
+plot(places)
+
+ggplot() + 
+  geom_spatvector(data=places)
+
+# how can I get a vector overlay into here?
+# right now you are doing geom_raster, but I 
+# think I should be using geom_spatraster
+ggplot() +
+  geom_raster(data = cali_zoom_2,
+              aes(x=x, y=y, fill=dem90_hf)) +
+  geom_raster(data=socal_hillshade,
+              aes(x=x, y=y, alpha = hillshade)) +
+  scale_fill_viridis_c() +
+  scale_alpha(range = c(0.15, 0.65), guide="none")
+
+ggplot() +
+  geom_spatraster(data = cali_zoom_2,
+              aes(fill=dem90_hf))
+  
+(cali_zoom_2)
+
+par(mfrow = c(1,3))
 
 # reset par when you're done
 par(mfrow = c(1,1))
