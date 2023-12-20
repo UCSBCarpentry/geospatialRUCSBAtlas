@@ -23,6 +23,9 @@ unzip("source_data/campus_DEM.zip", exdir = "source_data/campus_DEM")
 # here's where we need curl: so it doesn't time out
 curl_download("https://pubs.usgs.gov/ds/781/OffshoreCoalOilPoint/data/Bathymetry_OffshoreCoalOilPoint.zip", 
               "source_data/Bathymetry_OffshoreCoalOilPoint.zip")
+unzip("source_data/Bathymetry_offshoreCoalOilPoint.zip", 
+      exdir = "source_data/Bathymetry_OffshoreCoalOilPoint", 
+      overwrite = TRUE)
 
 # largest extent raster
 # global shaded relief from NaturalEarth
@@ -114,7 +117,7 @@ unzip("source_data/Bathymetry_OffshoreCoalOilPoint.zip",
 
 # Ep 3: Reprojecting Rasters
 bathymetry <- 
-  raster("source_data/Bathymetry_OffshoreCoalOilPoint/Bathymetry_2m_OffshoreCoalOilPoint.tif")
+  rast("source_data/Bathymetry_OffshoreCoalOilPoint/Bathymetry_2m_OffshoreCoalOilPoint.tif")
 
 # downsample it so it's runnable
 bathymetry_downsample <- aggregate(bathymetry, fact = 4)
@@ -135,7 +138,7 @@ writeRaster(bathymetry_downsample, "output_data/SB_bath.tif", format="GTiff", ov
 # w_campus_1ft.tif
 
 # downsizing the campus DEM so that it's more usable
-campus_DEM <- raster("source_data/greatercampusDEM/greatercampusDEM_1_1.tif")
+campus_DEM <- rast("source_data/greatercampusDEM/greatercampusDEM_1_1.tif")
 
 #this produces errors, but the output gets made
 campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4,
