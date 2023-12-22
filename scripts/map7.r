@@ -88,7 +88,7 @@ plot(socal_hillshade, col=grays)
 
 # overlay the extent of campus_DEM as a locator
 plot(cali_zoom_2, col=grays)
-polys(campusExtent, color="red")
+polys(campusExtent, col="red")
 
 
 
@@ -147,7 +147,7 @@ par(mfrow = c(1,1))
 (campus_DEM)
 (campus_hillshade)
 
-ggplot() +
+zoom3 <- ggplot() +
   geom_raster(data = campus_DEM,
               aes(x=x, y=y, fill=layer)) +
   geom_raster(data=campus_hillshade,
@@ -156,9 +156,73 @@ ggplot() +
   scale_alpha(range = c(0.15, 0.65), guide="none")
 
 # zoom2
+socal_hillshade
+cali_zoom_2
+
+ggplot() +
+  geom_raster(data = cali_zoom_2,
+              aes(x=x, y=y, fill=dem90_hf)) +
+  geom_raster(data=socal_hillshade,
+              aes(x=x, y=y, alpha = hillshade)) +
+  scale_fill_viridis_c() +
+  scale_alpha(range = c(0.15, 0.65), guide="none")
+
+# zoom1
 # figure out the layer names
-(cali_zoom_2)
-(socal_hillshade)
+
+
+ggplot() +
+  geom_raster(data = cali_zoom_1,
+              aes(x=x, y=y, fill=dem90_hf)) +
+  geom_raster(data=socal_hillshade,
+              aes(x=x, y=y, alpha = hillshade)) +
+  scale_fill_viridis_c() +
+  scale_alpha(range = c(0.15, 0.65), guide="none")
+
+
+cali_zoom_1
+ggplot() +
+  geom_raster(data = cali_zoom_1,
+              aes(x=x, y=y, fill=GRAY_HR_SR_OB)) +
+  scale_fill_viridis_c() 
+
+
+
+
+# add the AOI polygons
+# ########################
+
+
+# zoom2
+socal_hillshade
+cali_zoom_2
+
+summary(campusExtent)
+plot(campusExtent)
+
+zoom2 <- ggplot() +
+  geom_raster(data = cali_zoom_2,
+              aes(x=x, y=y, fill=dem90_hf)) +
+  geom_raster(data=socal_hillshade,
+              aes(x=x, y=y, alpha = hillshade)) +
+  geom_sf(data=campusExtent, fill="NA") +
+  scale_fill_viridis_c() +
+  scale_alpha(range = c(0.15, 0.65), guide="none")
+
+# zoom1
+str(cali_zoom_1)
+zoom1 <- ggplot() +
+  geom_raster(data = cali_zoom_1,
+              aes(x=x, y=y, fill=GRAY_HR_SR_OB)) +
+  geom_spatvector(data=socalExtent, fill="NA") +
+    scale_fill_viridis_c() 
+
+# end of 2023 work
+# I guess par doesn't work with ggplot outputs
+par(mfrow = c(1,3))
+zoom3
+zoom2
+zoom1
 
 # polygons
 places <- vect("downloaded_data/tl_2023_06_place.shp")
