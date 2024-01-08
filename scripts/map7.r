@@ -1,4 +1,4 @@
-# map 7 in reverse
+# map 7 
 # the zoom to Cali locator sheet
 
 # we crop the rasters before reprojecting them.
@@ -124,6 +124,7 @@ polys(socalExtent, col="red")
 # page layout start
 # ##########################
 # 3 hillshades
+
 par(mfrow = c(1,3))
 
 plot(cali_zoom_1, col=grays)
@@ -133,6 +134,21 @@ plot(socal_hillshade, col=grays)
 polys(campusExtent, col="red")
 
 plot(campus_hillshade, col=grays)
+
+
+# now do that to a file
+png("images/3-zoom.png", width=1900)
+par(mfrow = c(1,3))
+
+plot(cali_zoom_1, col=grays)
+polys(socalExtent, col="red")
+
+plot(socal_hillshade, col=grays)
+polys(campusExtent, col="red")
+
+plot(campus_hillshade, col=grays)
+
+dev.off()
 
 # reset par when you're done
 par(mfrow = c(1,1))
