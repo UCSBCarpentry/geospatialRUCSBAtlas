@@ -52,5 +52,8 @@ Landscape
   * A stripped down version of #1
 
 ![Overview map](/images/overview_map.jpg "Sketch")
+Here's the beginning of a piece:
+![Triplet zoom in](/images/3-zoom.png "Draft zoom.")
+
 
 [UCSB Carpentry](https://ucsbcarpentry.github.io)
