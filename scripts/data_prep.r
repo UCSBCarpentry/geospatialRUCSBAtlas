@@ -96,8 +96,17 @@ download.file("https://drive.google.com/drive/folders/1XoOOD3xcTaSevQZGtwB9ndIwa
 
 # ep 2: Hillshade
 # create a hillshade for our area of an appropriate resolution
+# downsizing the campus DEM so that it's more usable
+campus_DEM <- rast("source_data/campus_DEM/greatercampusDEM/
+                   greatercampusDEM/greatercampusDEM_1_1.tif")
 campus_DEM <- rast("")
 
+#this produces errors, but the output gets made
+campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4,
+                                    filename = "output_data/campus_DEM.tif",
+                                    overwrite = TRUE)
+
+#uh why are we downsampling here?
 aspect <- terrain(campus_DEM_downsampled, 
         opt="aspect", unit="radians", neighbors=8, 
         filename="output_data/aspect.tiff", overwrite = TRUE)
@@ -137,10 +146,3 @@ writeRaster(bathymetry_downsample, "output_data/SB_bath.tif", format="GTiff", ov
 # I made this in ArcGIS because SLOWWWWWWWWW.....
 # w_campus_1ft.tif
 
-# downsizing the campus DEM so that it's more usable
-campus_DEM <- rast("source_data/greatercampusDEM/greatercampusDEM_1_1.tif")
-
-#this produces errors, but the output gets made
-campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4,
-                                    filename = "output_data/campus_DEM.tif",
-                                    overwrite = TRUE)
