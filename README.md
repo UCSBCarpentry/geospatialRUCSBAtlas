@@ -1,9 +1,10 @@
 # geospatialRUCSBAtlas
-A repo that uses local UCSB examples from the R for GeoSpatial workshop.
+A repo that uses local UCSB examples applied to all of the steps of the Carpentries' R for GeoSpatial workshop.
 
 Scripts run parallel to the episodes of Raster and Vector Data with R Data Carpentry.
 The goal is to produce several nice atlas pages of campus that use all the techniques
-covered in the Intro to GeoSpatial R Carpentry lesson.
+covered in the Intro to GeoSpatial R Carpentry lesson. (Maybe not the NDVI over time, 
+since we've never ever done that episode.)
 
 1: The repo is set up with a `source_data` folder
 
@@ -11,14 +12,15 @@ covered in the Intro to GeoSpatial R Carpentry lesson.
 get made automatically.
 
 2: Run data_prep.r
-The goal is for this script to download, unzip, and prep
-any data that's required for the Atlas. Its outputs
+The goal is for this script to download (into a 
+data_downloads directory), unzips, and preps
+any data that's required for the rAtlas. Its outputs
 go into source_data
 
 3: now each episode and map should run nicely
 
 
-The goal will be to produce a number of well formatted maps.
+The goal is to produce a number of well formatted maps.
 All with a 3 tall x 4 wide aspect ratio
 
 7 to be exact:
@@ -57,3 +59,6 @@ Here's the beginning of a piece:
 
 
 [UCSB Carpentry](https://ucsbcarpentry.github.io)
+
+[Original lesson --  Introduction to Geospatial Raster and Vector Data with R](https://datacarpentry.org/r-raster-vector-geospatial/)
+
