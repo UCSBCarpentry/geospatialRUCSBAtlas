@@ -50,6 +50,7 @@ Landscape
 #### 7 
 Landscape
   * A stripped down version of #1
+  * Include a Planet feed. (Issue #15)
 
 ![Overview map](/images/overview_map.jpg "Sketch")
 Here's the beginning of a piece:
