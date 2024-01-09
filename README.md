@@ -59,3 +59,6 @@ Here's the beginning of a piece:
 
 
 [UCSB Carpentry](https://ucsbcarpentry.github.io)
+
+[Original lesson --  Introduction to Geospatial Raster and Vector Data with R](https://datacarpentry.org/r-raster-vector-geospatial/)
+

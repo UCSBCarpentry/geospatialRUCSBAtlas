@@ -12,20 +12,41 @@ library(googledrive)
 
 # Get Campus Rasters
 # **********************
-# ep 1: Starting with rasters
+
+
+#### ep 1: Starting with rasters ####
 # find another one with NA's if this one doesn't have any
+
+# Download the data from the Google Drive
 drive_download("https://drive.google.com/file/d/1bkIVwJESL99Kd5N9_0QqwctgmpXYFbR8/view?usp=sharing",
-                "source_data/campus_DEM.zip", overwrite=TRUE)
-unzip("source_data/campus_DEM.zip", exdir = "source_data/campus_DEM")
+                "downloaded_data/campus_DEM.zip", overwrite=TRUE)
+# Unzip the archive
+unzip("downloaded_data/campus_DEM.zip", exdir = "downloaded_data") # The zip archive on the GDrive has one extra level of nesting
+
+# Rename the file and put it in the source_data folder
+file.copy(from='downloaded_data/greatercampusDEM/greatercampusDEM/greatercampusDEM_1_1.tif', 
+            to='source_data/campus_DEM.tif')
+
+# Delete the zip archive
+file.remove("downloaded_data/campus_DEM.zip")
 
 
-# ep 3: Reprojecting Rasters
+
+#### ep 3: Reprojecting Rasters ####
+
 # here's where we need curl: so it doesn't time out
 curl_download("https://pubs.usgs.gov/ds/781/OffshoreCoalOilPoint/data/Bathymetry_OffshoreCoalOilPoint.zip", 
-              "source_data/Bathymetry_OffshoreCoalOilPoint.zip")
-unzip("source_data/Bathymetry_offshoreCoalOilPoint.zip", 
-      exdir = "source_data/Bathymetry_OffshoreCoalOilPoint", 
-      overwrite = TRUE)
+              "downloaded_data/Bathymetry_OffshoreCoalOilPoint.zip")
+
+# Unzip the archive
+unzip("downloaded_data/Bathymetry_OffshoreCoalOilPoint.zip", exdir = "downloaded_data/bathymery") # The zip archive on the GDrive has one extra level of nesting
+
+# copy the file needed for episode 3
+file.copy(from='downloaded_data/bathymery/Bathymetry_2m_OffshoreCoalOilPoint.tif', 
+            to='source_data/SB_bath_2m.tif')
+
+# Delete the zip archive
+file.remove("downloaded_data/Bathymetry_OffshoreCoalOilPoint.zip")
 
 # largest extent raster
 # global shaded relief from NaturalEarth
@@ -89,17 +110,12 @@ download.file("https://drive.google.com/drive/folders/1XoOOD3xcTaSevQZGtwB9ndIwa
 # https://ucsb.maps.arcgis.com/apps/webappviewer/index.html?id=52f2fb744eb549289bed20adf34edfd7
 
 
-
-
 # manipulations start here
-
 
 # ep 2: Hillshade
 # create a hillshade for our area of an appropriate resolution
-# downsizing the campus DEM so that it's more usable
-campus_DEM <- rast("source_data/campus_DEM/greatercampusDEM/
-                   greatercampusDEM/greatercampusDEM_1_1.tif")
-campus_DEM <- rast("")
+campus_DEM <- rast("source_data/greatercampusDEM/greatercampusDEM_1_1.tif")
+
 
 #this produces errors, but the output gets made
 campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4,

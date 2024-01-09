@@ -6,3 +6,8 @@
 source_data/**
 downloaded_data/**
 output_data/**
+
+# Mac stuff
+.DS_Store
+.AppleDouble
+.LSOverride

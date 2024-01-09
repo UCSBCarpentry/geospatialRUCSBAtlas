@@ -48,48 +48,56 @@ campus_DEM_df <- as.data.frame(campus_DEM, xy = TRUE)
 str(campus_DEM_df)
 
 #do we want to change the layer name from greater...to layer?
-names(campus_DEM_df)[names(campus_DEM_df) == 'campus_DEM'] <- 'layer'
+# names(campus_DEM_df)[names(campus_DEM_df) == 'campus_DEM'] <- 'layer'
 
 ggplot() +
   geom_raster(data = campus_DEM_df, 
-              aes(x=x, y=y, fill = layer)) +
-  scale_fill_viridis_c() +
-  coord_quickmap()
-  
+              aes(x=x, y=y, fill = campus_DEM)) +
+  scale_fill_viridis_c() 
+
 
 # faster base R plot
 # also doesn't force you to remember the name of
 # the data layer
 plot(campus_DEM)
 
+# Check CRS ####
+# https://epsg.io/2874
+crs(campus_DEM, proj = TRUE)
+
+
+# If you want to rename the columns
 colnames(campus_DEM_df)
 
 # rename the column so it makes more sense.
 colnames(campus_DEM_df) <- c('x', 'y', 'elevation')
 
 str(campus_DEM_df)
+
 # now plot with that new name
 ggplot() +
   geom_raster(data = campus_DEM_df, 
               aes(x=x, y=y, fill = elevation)) +
-  scale_fill_viridis_c() +
-  coord_quickmap()
+  scale_fill_viridis_c()
 
 #I dont think we have any NAs 
 # deal with no data
 # that tends to be the part around the edges
 ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
-  scale_fill_viridis_c(na.value = "deeppink") +
-  coord_quickmap()
+  scale_fill_viridis_c(na.value = "deeppink") 
+
+# We don't
+sum(is.na(campus_DEM_df$elevation))
+#> 0
+
 
 # that's not actually what we want. let's white it out.
 ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
-  scale_fill_viridis_c(na.value = "white") +
-  coord_quickmap()
+  scale_fill_viridis_c(na.value = "white") 
 
-# histogram
+# histogram to look at the elevation distribution
 ggplot() +
   geom_histogram(data = campus_DEM_df, aes(elevation), bins = 5)
 
