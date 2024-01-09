@@ -99,7 +99,7 @@ download.file("https://drive.google.com/drive/folders/1XoOOD3xcTaSevQZGtwB9ndIwa
 # downsizing the campus DEM so that it's more usable
 campus_DEM <- rast("source_data/campus_DEM/greatercampusDEM/
                    greatercampusDEM/greatercampusDEM_1_1.tif")
-campus_DEM <- rast("")
+campus_DEM <- rast("source_data/campus_DEM.tif")
 
 #this produces errors, but the output gets made
 campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4,
