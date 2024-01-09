@@ -9,7 +9,7 @@
 #library(rgdal)
 library(tidyverse)
 library(terra)
-# library(RColorBrewer)
+library(RColorBrewer)
 
 # setwd("C:/users/your_file_path")
 
@@ -54,6 +54,7 @@ ggplot() +
   geom_raster(data = campus_DEM_df, 
               aes(x=x, y=y, fill = campus_DEM)) +
   scale_fill_viridis_c() 
+
 
 # faster base R plot
 # also doesn't force you to remember the name of

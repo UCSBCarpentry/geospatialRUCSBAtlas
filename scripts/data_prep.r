@@ -48,6 +48,21 @@ file.copy(from='downloaded_data/bathymery/Bathymetry_2m_OffshoreCoalOilPoint.tif
 # Delete the zip archive
 file.remove("downloaded_data/Bathymetry_OffshoreCoalOilPoint.zip")
 
+# largest extent raster
+# global shaded relief from NaturalEarth
+curl_download("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/raster/GRAY_HR_SR_OB.zip",
+              "downloaded_data/global_raster.zip")
+unzip("downloaded_data/global_raster.zip", exdir="downloaded_data", overwrite = TRUE)
+
+
+# Elevation in the Western United States 90m DEM
+# to prep for SLO/SB/VEN/LA/OC/SD region extent on map 7 
+# https://www.sciencebase.gov/catalog/item/542aebf9e4b057766eed286a
+curl_download("https://www.sciencebase.gov/catalog/file/get/542aebf9e4b057766eed286a", 
+              "downloaded_data/dem90_hf.zip")
+unzip("downloaded_data/dem90_hf.zip", exdir="downloaded_data", overwrite = TRUE)
+
+
 
 # Get Campus Imagery
 # *********************
@@ -95,15 +110,19 @@ download.file("https://drive.google.com/drive/folders/1XoOOD3xcTaSevQZGtwB9ndIwa
 # https://ucsb.maps.arcgis.com/apps/webappviewer/index.html?id=52f2fb744eb549289bed20adf34edfd7
 
 
-
-
 # manipulations start here
-
 
 # ep 2: Hillshade
 # create a hillshade for our area of an appropriate resolution
 campus_DEM <- rast("source_data/greatercampusDEM/greatercampusDEM_1_1.tif")
 
+
+#this produces errors, but the output gets made
+campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4,
+                                    filename = "output_data/campus_DEM.tif",
+                                    overwrite = TRUE)
+
+#uh why are we downsampling here?
 aspect <- terrain(campus_DEM_downsampled, 
         opt="aspect", unit="radians", neighbors=8, 
         filename="output_data/aspect.tiff", overwrite = TRUE)
@@ -123,7 +142,7 @@ unzip("source_data/Bathymetry_OffshoreCoalOilPoint.zip",
 
 # Ep 3: Reprojecting Rasters
 bathymetry <- 
-  raster("source_data/Bathymetry_OffshoreCoalOilPoint/Bathymetry_2m_OffshoreCoalOilPoint.tif")
+  rast("source_data/Bathymetry_OffshoreCoalOilPoint/Bathymetry_2m_OffshoreCoalOilPoint.tif")
 
 # downsample it so it's runnable
 bathymetry_downsample <- aggregate(bathymetry, fact = 4)
@@ -143,10 +162,3 @@ writeRaster(bathymetry_downsample, "output_data/SB_bath.tif", format="GTiff", ov
 # I made this in ArcGIS because SLOWWWWWWWWW.....
 # w_campus_1ft.tif
 
-# downsizing the campus DEM so that it's more usable
-campus_DEM <- raster("source_data/greatercampusDEM/greatercampusDEM_1_1.tif")
-
-#this produces errors, but the output gets made
-campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4,
-                                    filename = "output_data/campus_DEM.tif",
-                                    overwrite = TRUE)
