@@ -25,6 +25,7 @@ All with a 3 tall x 4 wide aspect ratio
 
 7 to be exact:
 ###  1. A wide view of campus with
+  * Extent should be the same as #3 inset of map 7.
   * NCOS
   * Water
   * Bathymentry and elevation
