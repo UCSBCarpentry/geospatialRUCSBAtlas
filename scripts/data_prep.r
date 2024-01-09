@@ -116,9 +116,11 @@ download.file("https://drive.google.com/drive/folders/1XoOOD3xcTaSevQZGtwB9ndIwa
 # create a hillshade for our area of an appropriate resolution
 
 # downsizing the campus DEM so that it's more usable
+# this nested folder structure, r does not like
 campus_DEM <- rast("source_data/campus_DEM/greatercampusDEM/
                    greatercampusDEM/greatercampusDEM_1_1.tif")
 
+#when I pulled ..._1_1.tif into the source_data folder it added it to the env
 campus_DEM <- rast("source_data/greatercampusDEM/greatercampusDEM_1_1.tif")
 
 
