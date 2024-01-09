@@ -58,6 +58,7 @@ west_us <- rast("downloaded_data/dem90_hf/dem90_hf.tif")
 plot(west_us)
 
 # this geojson is the extent we want to crop to.
+# extent geojson came from planet
 socalExtent <- geojson_sf("scripts/socal_aoi.geojson")
 socalExtent <- vect(socalExtent)
 
