@@ -3,14 +3,13 @@
 
 
 library(tidyverse)
-# library(raster)
+library(raster)
 # library(rgdal)
 library(terra)
 
 # set up objects
 # the basic setup is bathymetry and topography
 # mashed together
-# libraries for this episode:
 
 campus_DEM <- rast("output_data/campus_DEM.tif") 
 crs(campus_DEM)
@@ -20,17 +19,44 @@ bath <- rast("output_data/SB_bath.tif")
 crs(bath)
 
 # can't overlay them because they are different CRS's
+# that's part of the narrative of the lesson.
 plot(campus_DEM)
 plot(bath)
 plot(bath + campus_DEM, na.rm=TRUE)
 
-cali_projection <- crs(campus_DEM)
+campus_projection <- crs(campus_DEM)
 
-project(bath, cali_projection)
+bath <- project(bath, campus_projection)
 plot(campus_DEM)
 plot(bath)
 
-plot(bath + campus_DEM, na.rm=TRUE)
+crs(campus_DEM) == crs(bath)
+
+#################################
+# this still won't work because the extents are different.
+plot(bath + campus_DEM)
+
+
+
+
+
+# I need to get projection and resolution objects somewhere.
+# so I 'copy' the one that I already have:
+(my_projection <- raster("output_data/campus_DEM.tif") %>%
+  crs()) 
+
+# same with resolution:
+my_res <- res(raster("output_data/campus_DEM.tif") )
+
+str(bath)
+# reproject the bathymetry data using the
+# projection of the DEM:
+reprojected_bath <- projectRaster(bath, 
+                                  crs = my_projection)
+
+bath_df <- as.data.frame(reprojected_bath, 
+                         xy=TRUE) %>% 
+  rename(depth = layer) 
 
 
 # create those two dataframes
@@ -39,27 +65,9 @@ campus_DEM_df <- campus_DEM %>%
   rename(elevation = layer)
 crs(campus_DEM_df)
 
+bath_df <- as.data.frame(bath, xy=TRUE)
 
 
-
-
-# I need to get projection and resolution objects somewhere.
-# so I 'copy' the one that I already have:
-my_projection <- raster("output_data/campus_DEM.tif") %>%
-  crs() 
-
-# same with resolution:
-my_res <- res(raster("output_data/campus_DEM.tif") )
-
-# reproject the bathymetry data using the
-# projection of the DEM:
-reprojected_bath <- projectRaster(bath, 
-                                  crs = my_projection, 
-                                  res = my_res)
-
-bath_df <- as.data.frame(reprojected_bath, 
-                         xy=TRUE) %>% 
-  rename(depth = layer) 
 
 # add custom bins to each.
 # these were based on experimentation
@@ -67,14 +75,19 @@ custom_DEM_bins <- c(-3, -.01, .01, 2, 3, 4, 5, 10, 40, 200)
 campus_DEM_df <- campus_DEM_df %>% 
   mutate(binned_DEM = cut(elevation, breaks = custom_DEM_bins))
 
+str(campus_DEM_df)
+
 custom_bath_bins <- c(1, -5, -15, -35, -45, -55, -60, -65, -75, -100, -125)
 
+str(bath_df)
 bath_df <- bath_df %>% 
-  mutate(binned_bath = cut(depth, breaks=custom_bath_bins))
+  mutate(binned_bath = cut(layer, breaks=custom_bath_bins))
+
+str(bath_df)
 
 str(campus_DEM_df)
 
-# overlays work.
+# overlays works!!!!!
 ggplot() + 
   geom_raster(data = bath_df, aes(x=x, y=y, fill = binned_bath)) +
   scale_fill_manual(values = terrain.colors(10)) +
