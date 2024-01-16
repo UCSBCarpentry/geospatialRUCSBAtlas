@@ -11,9 +11,7 @@ library(ggplot2)
 library(tidyterra)
 library(dplyr)
 
-# geojson AOI's are used to clip source DEM's
-# they are first re-projected to match the source
-# DEM's CRS. 
+
 
 # We'll need a grayscale palette later
 grays <- colorRampPalette(c("black", "white"))(255)
@@ -43,6 +41,9 @@ campus_hillshade <- shade(campus_slope, campus_aspect,
 plot(campus_hillshade, col=grays)
 
 
+# geojson AOI's are used to clip source DEM's
+# they are first re-projected to match the source
+# DEM's CRS. 
 # we'll need a polygon that's the extent
 # of campus
 campusExtent <- ext(campus_DEM)
