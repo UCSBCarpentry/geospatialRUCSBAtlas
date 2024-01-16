@@ -64,17 +64,18 @@ plot(west_us)
 
 # this geojson is the extent we want to crop to.
 # extent geojson came from planet
-socalExtent <- geojson_sf("scripts/cali.geojson")
-socalExtent <- vect(socalExtent)
+socal_extent <- geojson_sf("scripts/cali.geojson")
+socal_extent <- vect(socal_extent)
+plot(socal_extent)
 
 # project it to match west_us
-socalExtent <- project(socalExtent, crs(west_us))
-crs(socalExtent)
-cali_zoom_2 <- crop(x=west_us, y=socalExtent)
+socal_extent <- project(socal_extent, crs(west_us))
+crs(socal_extent)
+cali_zoom_2 <- crop(x=west_us, y=socal_extent)
 plot(cali_zoom_2, col=grays)
 
 # put the extent back into the default projection
-socalExtent <- project(socalExtent, my_crs)
+socal_extent <- project(socal_extent, my_crs)
 
 # project my cropped DEM into my standard crs
 # this is slow!!
@@ -117,10 +118,10 @@ plot(cali_zoom_1)
 cali_zoom_1 <- project(cali_zoom_1, my_crs)
 
 plot(cali_zoom_1)
-polys(socalExtent)
+polys(socal_extent)
 
 plot(cali_zoom_1, col=grays)
-polys(socalExtent, col="red")
+polys(socal_extent, col="red")
 
 # save the 3 graphics
 # write out the new files for later use.
@@ -136,7 +137,7 @@ polys(socalExtent, col="red")
 par(mfrow = c(1,3))
 
 plot(cali_zoom_1, col=grays)
-polys(socalExtent, col="red")
+polys(socal_extent, col="red")
 
 plot(socal_hillshade, col=grays)
 polys(campus_extent, col="red")
@@ -149,7 +150,7 @@ png("images/3-zoom.png", width=1900)
 par(mfrow = c(1,3))
 
 plot(cali_zoom_1, col=grays)
-polys(socalExtent, col="red")
+polys(socal_extent, col="red")
 
 plot(socal_hillshade, col=grays)
 polys(campus_extent, col="red")
@@ -238,7 +239,7 @@ str(cali_zoom_1)
 zoom1 <- ggplot() +
   geom_raster(data = cali_zoom_1,
               aes(x=x, y=y, fill=GRAY_HR_SR_OB)) +
-  geom_spatvector(data=socalExtent, fill="NA") +
+  geom_spatvector(data=socal_extent, fill="NA") +
     scale_fill_viridis_c() 
 
 # end of 2023 work
