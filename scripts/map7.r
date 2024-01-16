@@ -59,7 +59,7 @@ plot(west_us)
 
 # this geojson is the extent we want to crop to.
 # extent geojson came from planet
-socalExtent <- geojson_sf("scripts/socal_aoi.geojson")
+socalExtent <- geojson_sf("scripts/cali.geojson")
 socalExtent <- vect(socalExtent)
 
 # project it to match west_us
