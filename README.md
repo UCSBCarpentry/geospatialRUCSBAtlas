@@ -11,13 +11,13 @@ since we've never ever done that episode.)
 `source_data` is *.* git ignored, so it's probably not going to
 get made automatically.
 
-2: Run data_prep.r
-The goal is for this script to download (into a 
-data_downloads directory), unzips, and preps
+2: Run `data_prep.r`
+The goal is for this script to download raw data (into a 
+`downloaded_data` directory), unzips, and preps
 any data that's required for the rAtlas. Its outputs
-go into source_data
+go into `source_data`
 
-3: now each episode and map should run nicely
+3: now each episode and map should run nicely, sroucing input data from the `source_data` directory
 
 
 The goal is to produce a number of well formatted maps.
