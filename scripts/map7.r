@@ -46,9 +46,13 @@ plot(campus_hillshade, col=grays)
 # DEM's CRS. 
 # we'll need a polygon that's the extent
 # of campus
-campusExtent <- ext(campus_DEM)
-campusExtent <- vect(campusExtent)
-plot(campusExtent)
+campus_extent <- ext(campus_DEM)
+campus_extent <- vect(campus_extent)
+plot(campus_extent)
+
+# so we have
+# campus_hillshade and
+# campus_extent
 
 # ############################
 # Zoom 2
@@ -71,7 +75,9 @@ plot(cali_zoom_2, col=grays)
 
 # put the extent back into the default projection
 socalExtent <- project(socalExtent, my_crs)
-# project my cropped DEM
+
+# project my cropped DEM into my standard crs
+# this is slow!!
 cali_zoom_2 <- project(cali_zoom_2, my_crs)
 
 # hillshades are made of slopes and aspects
@@ -89,8 +95,8 @@ plot(socal_hillshade, col=grays)
 
 
 # overlay the extent of campus_DEM as a locator
-plot(cali_zoom_2, col=grays)
-polys(campusExtent, col="red")
+plot(socal_hillshade, col=grays)
+polys(campus_extent, col="red")
 
 
 
@@ -133,7 +139,7 @@ plot(cali_zoom_1, col=grays)
 polys(socalExtent, col="red")
 
 plot(socal_hillshade, col=grays)
-polys(campusExtent, col="red")
+polys(campus_extent, col="red")
 
 plot(campus_hillshade, col=grays)
 
@@ -146,7 +152,7 @@ plot(cali_zoom_1, col=grays)
 polys(socalExtent, col="red")
 
 plot(socal_hillshade, col=grays)
-polys(campusExtent, col="red")
+polys(campus_extent, col="red")
 
 plot(campus_hillshade, col=grays)
 
@@ -215,15 +221,15 @@ ggplot() +
 socal_hillshade
 cali_zoom_2
 
-summary(campusExtent)
-plot(campusExtent)
+summary(campus_extent)
+plot(campus_extent)
 
 zoom2 <- ggplot() +
   geom_raster(data = cali_zoom_2,
               aes(x=x, y=y, fill=dem90_hf)) +
   geom_raster(data=socal_hillshade,
               aes(x=x, y=y, alpha = hillshade)) +
-  geom_sf(data=campusExtent, fill="NA") +
+  geom_sf(data=campus_extent, fill="NA") +
   scale_fill_viridis_c() +
   scale_alpha(range = c(0.15, 0.65), guide="none")
 
