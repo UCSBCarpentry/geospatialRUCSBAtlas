@@ -5,7 +5,6 @@
 *.zip
 source_data/**
 downloaded_data/**
-output_data/**
 *.qgz
 
 # Mac stuff

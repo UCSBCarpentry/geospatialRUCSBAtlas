@@ -79,7 +79,7 @@ socal_extent <- project(socal_extent, my_crs)
 
 # project my cropped DEM into my standard crs
 # this is slow!!
-cali_zoom_2 <- project(cali_zoom_2, my_crs)
+#nvm downsample - I dont think I got this code right. 
 
 # hillshades are made of slopes and aspects
 socal_slope <- terrain(cali_zoom_2, "slope", unit="radians")

@@ -138,7 +138,7 @@ campus_DEM <- rast("source_data/campus_DEM/greatercampusDEM/
                    greatercampusDEM/greatercampusDEM_1_1.tif")
 
 #when I pulled ..._1_1.tif into the source_data folder it added it to the env
-campus_DEM <- rast("source_data/greatercampusDEM/greatercampusDEM_1_1.tif")
+campus_DEM <- rast("source_data/greatercampusDEM_1_1.tif")
 
 
 #this produces errors, but the output gets made
@@ -149,12 +149,12 @@ campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4,
 #uh why are we downsampling here?
 aspect <- terrain(campus_DEM_downsampled, 
         opt="aspect", unit="radians", neighbors=8, 
-        filename="output_data/aspect.tiff", overwrite = TRUE)
+        filename="output_data/aspect.tif", overwrite = TRUE)
 slope <- terrain(campus_DEM_downsampled, 
         opt="slope", neighbors=8, 
         filename="output_data/slope.tiff", overwrite = TRUE)
 
-hillShade(slope, aspect, angle=260, direction=0, 
+hillShade <- terrain(slope, aspect, angle=260, direction=0, 
           filename="output_data/hillshade.tiff", overwrite = TRUE, 
           normalize=FALSE)
 
