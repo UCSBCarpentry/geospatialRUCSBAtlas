@@ -149,13 +149,13 @@ campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4,
 
 #uh why are we downsampling here?
 aspect <- terrain(campus_DEM_downsampled, 
-        opt="aspect", unit="radians", neighbors=8, 
+        v="aspect", unit="radians", neighbors=8, 
         filename="output_data/aspect.tif", overwrite = TRUE)
 slope <- terrain(campus_DEM_downsampled, 
-        opt="slope", neighbors=8, 
+        v="slope", neighbors=8, 
         filename="output_data/slope.tiff", overwrite = TRUE)
 
-hillShade <- terrain(slope, aspect, angle=260, direction=0, 
+hillShade <- shade(slope, aspect, angle=260, direction=0, 
           filename="output_data/hillshade.tiff", overwrite = TRUE, 
           normalize=FALSE)
 

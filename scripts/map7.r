@@ -162,17 +162,16 @@ par(mfrow = c(1,1))
 # figure out the layer names
 # kristi stuck here, cant get hillshades to load 
 (campus_DEM)
-#campus_hillshade <- rast("source_data/campus_hillshade.tif")
 (campus_hillshade)
 
 zoom3 <- ggplot() +
   geom_raster(data = campus_DEM,
-              aes(x=x, y=y, fill=layer) +
+              aes(x=x, y=y, fill=layer)) +
   geom_raster(data=campus_hillshade,
-              aes(x=x, y=y, alpha = hillshade)) +
+              aes(x=x, y=y, alpha = 'hillshade')) +
   scale_fill_viridis_c() +
   scale_alpha(range = c(0.15, 0.65), guide="none")
-plot(zoom3)
+
 
 # zoom2
 # isn't zoom 2 already a hillshade and should we be loading the cropped? 
