@@ -11,7 +11,9 @@ library(ggplot2)
 library(tidyterra)
 library(dplyr)
 
-
+# make sure output window is 1x1
+# because you muck with it a lot
+par(mfrow = c(1,1))
 
 # We'll need a grayscale palette later
 grays <- colorRampPalette(c("black", "white"))(255)
@@ -19,7 +21,7 @@ grays <- colorRampPalette(c("black", "white"))(255)
 
 
 # ###########################
-# Zoom 3
+# Zoom 3: campus
 # campus_DEM in episode 2
 campus_DEM <- rast("output_data/campus_DEM.tif") 
 
@@ -30,7 +32,7 @@ plot(campus_DEM, col=grays)
 
 # we'll need a polygon that's the extent
 # of campus
-# will we need this?
+# will we really need this?
 campus_extent <- ext(campus_DEM)
 campus_extent <- vect(campus_extent)
 plot(campus_extent)
@@ -40,13 +42,14 @@ plot(campus_extent)
 # Zoom 2
 # Bite of California
 
-#Crop western region DEM to local area defined by geojson
+# Crop western region DEM to local area defined by 
+# socal_aoi.geojson
 zoom_2 <- rast("downloaded_data/dem90_hf/dem90_hf.tif")
 
 
 # this geojson is the extent we want to crop to
 # extent geojson came from planet
-zoom_2_extent <- geojson_sf("scripts/cali.geojson")
+zoom_2_extent <- geojson_sf("scripts/socal_aoi.geojson")
 zoom_2_extent <- vect(zoom_2_extent)
 
 # project it to match west_us
@@ -54,45 +57,44 @@ zoom_2_extent <- project(zoom_2_extent, crs(zoom_2))
 crs(zoom_2_extent)
 
 # now you can plot them together
+# to confirm that's the correct extent
+# that you want to crop to
 plot(zoom_2)
 polys(zoom_2_extent)
 
 # and crop to that extent
-# is this slow?
-cali_zoom_2 <- crop(x=zoom_2, y=zoom_2_extent)
-plot(cali_zoom_2, col=grays)
+# is this slow? --not at all on JJ's mac
+zoom_2_cropped <- crop(x=zoom_2, y=zoom_2_extent)
+plot(zoom_2_cropped, col=grays)
 
 # put the extent back into the default projection
 zoom_2_extent <- project(zoom_2_extent, my_crs)
 
-# project my cropped DEM --cali_zoom_2-- into my standard crs
+# project --cali_zoom_2-- into my standard crs
 # downsample before projecting:
-cali_zoom_2_downsample <- aggregate(cali_zoom_2, fact=2,
-                                    fun=mean)
+#zoom_2_downsample <- aggregate(zoom_2_cropped, fact=2,
+#                                    fun=mean)
 
 # now project and test the overlay:
-fake_zoom_3_aoi <- vect("scripts/socal_aoi.geojson")
+zoom_3_fake_aoi <- vect("scripts/socal_aoi.geojson")
 
-# overlay that vector as a fake extent of campus
-plot(cali_zoom_2_downsample, col=grays)
-polys(fake_zoom_3_aoi, col="red")
-
+# need make the projections match
 # the above didn't work because the crs's don't match:
-crs(cali_zoom_2_downsample) == crs(fake_zoom_3_aoi)
+crs(zoom_2_cropped) == crs(zoom_3_fake_aoi)
 
-# so make them match
-fake_zoom_3_aoi <- project(fake_zoom_3_aoi, crs(my_crs))
-cali_zoom_2_downsample <- project(cali_zoom_2_downsample, my_crs)
+zoom_3_fake_aoi <- project(zoom_3_fake_aoi, crs(my_crs))
+zoom_2_cropped <- project(zoom_2_cropped, my_crs)
 
-
-plot(cali_zoom_2_downsample, col=grays)
-polys(fake_zoom_3_aoi, col="red")
+# aesthetically, at this point
+# we can start to use the extent of campus
+plot(zoom_2_cropped, col=grays)
+polys(campus_extent, col="red")
 
 
 
 # #####################
 # Zoom 1
-# California overview
+# overview
 # this one arrived as a hillshade.
 # maybe this should actually be made from the west_us?
 world <- rast("downloaded_data/GRAY_HR_SR_OB.tif")
@@ -100,34 +102,38 @@ plot(world)
 
 # world <- project(world, my_crs)
 # clip first instead
-zoom_1_extent <- geojson_sf("scripts/cali.geojson")
+zoom_1_extent <- geojson_sf("scripts/cali_overview.geojson")
 zoom_1_extent <- vect(zoom_1_extent)
 zoom_1_extent <- project(zoom_1_extent, crs(world))
-cali_zoom_1 <- crop(x=world, y=zoom_1_extent)
+
+plot(world)
+polys(zoom_1_extent)
+
+zoom_1 <- crop(x=world, y=zoom_1_extent)
 
 zoom_1_extent <- project(zoom_1_extent, my_crs)
-cali_zoom_1 <- project(cali_zoom_1, my_crs)
+zoom_1 <- project(zoom_1, my_crs)
 
-plot(cali_zoom_1, col=grays)
-polys(fake_zoom_3_aoi, border="red")
+plot(zoom_1, col=grays)
+polys(zoom_3_fake_aoi, border="red")
 
 
 
 
 # page layout start
 # ##########################
-# 3 hillshades
 
 par(mfrow = c(1,3))
 
-plot(cali_zoom_1, col=grays)
-polys(fake_zoom_3_aoi, col="red")
+plot(zoom_1, col=grays)
+polys(zoom_3_fake_aoi, col="red")
 
-plot(cali_zoom_2_downsample, col=grays)
-polys(fake_zoom_3_aoi, col="red")
+plot(zoom_2_cropped, col=grays)
+polys(campus_extent, col="red")
 
 plot(campus_DEM, col=grays)
 
+par(mfrow = c(1,1))
 
 # now do that to a file
 png("images/3-zoom.png", width=1900)
@@ -215,9 +221,9 @@ plot(campus_hillshade, col=grays)
 
 # zoom 2 ##################################
 # hillshades are made of slopes and aspects
-socal_slope <- terrain(cali_zoom_2_downsample, "slope", unit="radians")
+socal_slope <- terrain(zoom_2_downsample, "slope", unit="radians")
 plot(socal_slope)
-socal_aspect <- terrain(cali_zoom_2_downsample, "aspect", unit="radians")
+socal_aspect <- terrain(zoom_2_downsample, "aspect", unit="radians")
 plot(socal_aspect)
 socal_hillshade <- shade(socal_slope, socal_aspect,
                          angle = 15,
