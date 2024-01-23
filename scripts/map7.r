@@ -32,7 +32,6 @@ plot(campus_DEM, col=grays)
 
 # we'll need a polygon that's the extent
 # of campus
-# will we really need this?
 campus_extent <- ext(campus_DEM)
 campus_extent <- vect(campus_extent)
 plot(campus_extent)
@@ -153,12 +152,11 @@ dev.off()
 par(mfrow = c(1,1))
 
 
-# now make zoom 2 into a hillshade
 ####################################
 # zoom 1 came as a hillshade
-# zoom 3 hillshade gets made in data prep
+# zoom 3 hillshade gets made in data_prep.r as hillshade.tiff
 
-# zoom 2 hillshade
+# we need to make zoom 2 into a hillshade
 # hillshades are made of slopes and aspects
 zoom_2_slope <- terrain(zoom_2_cropped, "slope", unit="radians")
 plot(zoom_2_slope)
@@ -171,14 +169,22 @@ zoom_2_hillshade <- shade(zoom_2_slope, zoom_2_aspect,
 plot(zoom_2_hillshade, col=grays)
 
 
+# ##########################
 # add the AOI polygons
-# 
+# and output a tryptic of hillshades
+# via ggplot
 
+# zoom 1: 
+plot(zoom_1, col = grays)
 
-# zoom2
-zoom_2_hillshade
-cali_zoom_2
+# zoom 2:
+plot(zoom_2_hillshade, col = grays)
 
+# zoom 3:
+zoom_3 <- rast("source_data/hillshade.tiff")
+plot(zoom_3, col = grays)
+
+#################################################
 summary(campus_extent)
 plot(campus_extent)
 

@@ -135,19 +135,17 @@ map2(files_bind$id, files_bind$name, ~drive_download(as_id(.x), path = file.path
 
 # downsizing the campus DEM so that it's more usable
 # this nested folder structure, r does not like
-campus_DEM <- rast("source_data/campus_DEM/greatercampusDEM/
-                   greatercampusDEM/greatercampusDEM_1_1.tif")
-
-#when I pulled ..._1_1.tif into the source_data folder it added it to the env
-campus_DEM <- rast("source_data/greatercampusDEM_1_1.tif")
+   # ^^ because you had the path wrong
+campus_DEM <- rast("downloaded_data/greatercampusDEM/greatercampusDEM/greatercampusDEM_1_1.tif")
 
 
 #this produces errors, but the output gets made
 campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4,
-                                    filename = "output_data/campus_DEM.tif",
+                                    filename = "source_data/campus_DEM.tif",
                                     overwrite = TRUE)
 
 #uh why are we downsampling here?
+# above or below here?
 aspect <- terrain(campus_DEM_downsampled, 
         v="aspect", unit="radians", neighbors=8, 
         filename="output_data/aspect.tif", overwrite = TRUE)
@@ -156,7 +154,7 @@ slope <- terrain(campus_DEM_downsampled,
         filename="output_data/slope.tiff", overwrite = TRUE)
 
 hillShade <- shade(slope, aspect, angle=260, direction=0, 
-          filename="output_data/hillshade.tiff", overwrite = TRUE, 
+          filename="source_data/hillshade.tiff", overwrite = TRUE, 
           normalize=FALSE)
 
 
