@@ -135,17 +135,17 @@ plot(campus_DEM, col=grays)
 
 par(mfrow = c(1,1))
 
-# now do that to a file
-png("images/3-zoom.png", width=1900)
+# now save this tryptic to an intermediate file
+png("images/zoom_in_first_results.png", width=1900)
 par(mfrow = c(1,3))
 
-plot(cali_zoom_1, col=grays)
-polys(socal_extent, col="red")
+plot(zoom_1, col=grays)
+polys(zoom_3_fake_aoi, col="red")
 
-plot(socal_hillshade, col=grays)
+plot(zoom_2_cropped, col=grays)
 polys(campus_extent, col="red")
 
-plot(campus_hillshade, col=grays)
+plot(campus_DEM, col=grays)
 
 dev.off()
 
@@ -153,9 +153,10 @@ dev.off()
 par(mfrow = c(1,1))
 
 
-# turn the 2 new hillshades (zooms 2 & 3)
-# into elevation over hillshade
-# remember: zoom1 started as a hillshade.
+# now make them all into hillshades
+####################################
+
+
 
 # zoom3
 # figure out the layer names
