@@ -165,7 +165,7 @@ zoom_2_slope <- terrain(zoom_2_cropped, "slope", unit="radians")
 plot(zoom_2_slope)
 zoom_2_aspect <- terrain(zoom_2_cropped, "aspect", unit="radians")
 plot(zoom_2_aspect)
-zoom_2_hillshade <- shade(zoom_2_cropped, zoom_2_aspect,
+zoom_2_hillshade <- shade(zoom_2_slope, zoom_2_aspect,
                          angle = 15,
                          direction = 270,
                          normalize = TRUE)
