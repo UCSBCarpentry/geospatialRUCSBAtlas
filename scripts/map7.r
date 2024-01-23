@@ -41,7 +41,7 @@ plot(campus_extent)
 # Bite of California
 
 #Crop western region DEM to local area defined by geojson
-west_us <- rast("downloaded_data/dem90_hf/dem90_hf.tif")
+zoom_2 <- rast("downloaded_data/dem90_hf/dem90_hf.tif")
 
 
 # this geojson is the extent we want to crop to
@@ -50,16 +50,16 @@ zoom_2_extent <- geojson_sf("scripts/cali.geojson")
 zoom_2_extent <- vect(zoom_2_extent)
 
 # project it to match west_us
-zoom_2_extent <- project(zoom_2_extent, crs(west_us))
+zoom_2_extent <- project(zoom_2_extent, crs(zoom_2))
 crs(zoom_2_extent)
 
 # now you can plot them together
-plot(west_us)
+plot(zoom_2)
 polys(zoom_2_extent)
 
 # and crop to that extent
 # is this slow?
-cali_zoom_2 <- crop(x=west_us, y=zoom_2_extent)
+cali_zoom_2 <- crop(x=zoom_2, y=zoom_2_extent)
 plot(cali_zoom_2, col=grays)
 
 # put the extent back into the default projection
@@ -82,6 +82,8 @@ crs(cali_zoom_2_downsample) == crs(fake_zoom_3_aoi)
 
 # so make them match
 fake_zoom_3_aoi <- project(fake_zoom_3_aoi, crs(my_crs))
+cali_zoom_2_downsample <- project(cali_zoom_2_downsample, my_crs)
+
 
 plot(cali_zoom_2_downsample, col=grays)
 polys(fake_zoom_3_aoi, col="red")
@@ -92,12 +94,12 @@ polys(fake_zoom_3_aoi, col="red")
 # Zoom 1
 # California overview
 # this one arrived as a hillshade.
+# maybe this should actually be made from the west_us?
 world <- rast("downloaded_data/GRAY_HR_SR_OB.tif")
 plot(world)
 
-# too slow!
 # world <- project(world, my_crs)
-# clip first insead
+# clip first instead
 zoom_1_extent <- geojson_sf("scripts/cali.geojson")
 zoom_1_extent <- vect(zoom_1_extent)
 zoom_1_extent <- project(zoom_1_extent, crs(world))
@@ -106,20 +108,10 @@ cali_zoom_1 <- crop(x=world, y=zoom_1_extent)
 zoom_1_extent <- project(zoom_1_extent, my_crs)
 cali_zoom_1 <- project(cali_zoom_1, my_crs)
 
-plot(cali_zoom_1)
-
-### something hinky here.
-plot(cali_zoom_1)
-polys(zoom_2_extent)
-
 plot(cali_zoom_1, col=grays)
-polys(fake_zoom_3_aoi, col="red")
+polys(fake_zoom_3_aoi, border="red")
 
-# save the 3 graphics
-# write out the new files for later use.
-# zoom 1
-# zoom 2
-# zoom 3
+
 
 
 # page layout start
@@ -129,12 +121,12 @@ polys(fake_zoom_3_aoi, col="red")
 par(mfrow = c(1,3))
 
 plot(cali_zoom_1, col=grays)
-polys(socal_extent, col="red")
+polys(fake_zoom_3_aoi, col="red")
 
-plot(socal_hillshade, col=grays)
-polys(campus_extent, col="red")
+plot(cali_zoom_2_downsample, col=grays)
+polys(fake_zoom_3_aoi, col="red")
 
-plot(campus_hillshade, col=grays)
+plot(campus_DEM, col=grays)
 
 
 # now do that to a file
