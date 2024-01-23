@@ -155,9 +155,60 @@ par(mfrow = c(1,1))
 
 # now make zoom 2 into a hillshade
 ####################################
+<<<<<<< HEAD
 # zoom 1 came as a hillshade
 # zoom 3 hillshade gets made in data prep
-# #######################################
+=======
+
+
+
+# zoom3
+# figure out the layer names
+# kristi stuck here, cant get hillshades to load 
+(campus_DEM)
+(campus_hillshade)
+
+zoom3 <- ggplot() +
+  geom_raster(data = campus_DEM,
+              aes(x=x, y=y, fill=layer)) +
+  geom_raster(data=campus_hillshade,
+              aes(x=x, y=y, alpha = 'hillshade')) +
+  scale_fill_viridis_c() +
+  scale_alpha(range = c(0.15, 0.65), guide="none")
+
+
+# zoom2
+# isn't zoom 2 already a hillshade and should we be loading the cropped? 
+socal_hillshade
+(zoom_2_cropped)
+
+ggplot() +
+  geom_raster(data = zoom_2_cropped,
+              aes(x=x, y=y, fill=dem90_hf)) +
+  geom_raster(data=zoom_2_cropped,
+              aes(x=x, y=y, alpha = hillshade)) +
+  scale_fill_viridis_c() +
+  scale_alpha(range = c(0.15, 0.65), guide="none")
+
+# zoom1
+# figure out the layer names
+
+
+ggplot() +
+  geom_raster(data = cali_zoom_1,
+              aes(x=x, y=y, fill=dem90_hf)) +
+  geom_raster(data=socal_hillshade,
+              aes(x=x, y=y, alpha = hillshade)) +
+  scale_fill_viridis_c() +
+  scale_alpha(range = c(0.15, 0.65), guide="none")
+
+
+cali_zoom_1
+ggplot() +
+  geom_raster(data = cali_zoom_1,
+              aes(x=x, y=y, fill=GRAY_HR_SR_OB)) +
+  scale_fill_viridis_c() 
+
 
 
 # zoom 2 hillshade
@@ -216,9 +267,9 @@ zoom3 <- ggplot() +
                 scale_fill_viridis_c() +
                 scale_alpha(range = c(0.15, 0.65), guide="none")
               plot(zoom3)
-########################################              
-# zoom2
-              # isn't zoom 2 already a hillshade and should we be loading the cropped? 
+
+              
+              
               socal_hillshade
               (zoom_2_cropped)
               
