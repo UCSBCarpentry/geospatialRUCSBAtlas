@@ -155,11 +155,8 @@ par(mfrow = c(1,1))
 
 # now make zoom 2 into a hillshade
 ####################################
-<<<<<<< HEAD
 # zoom 1 came as a hillshade
 # zoom 3 hillshade gets made in data prep
-=======
-
 
 
 # zoom3
