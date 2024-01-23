@@ -153,94 +153,28 @@ dev.off()
 par(mfrow = c(1,1))
 
 
-# now make them all into hillshades
+# now make zoom 2 into a hillshade
 ####################################
-
-
-
-# zoom3
-# figure out the layer names
-# kristi stuck here, cant get hillshades to load 
-(campus_DEM)
-#campus_hillshade <- rast("source_data/campus_hillshade.tif")
-(campus_hillshade)
-
-zoom3 <- ggplot() +
-  geom_raster(data = campus_DEM,
-              aes(x=x, y=y, fill=layer) +
-  geom_raster(data=campus_hillshade,
-              aes(x=x, y=y, alpha = hillshade)) +
-  scale_fill_viridis_c() +
-  scale_alpha(range = c(0.15, 0.65), guide="none")
-plot(zoom3)
-
-# zoom2
-# isn't zoom 2 already a hillshade and should we be loading the cropped? 
-socal_hillshade
-(zoom_2_cropped)
-
-ggplot() +
-  geom_raster(data = zoom_2_cropped,
-              aes(x=x, y=y, fill=dem90_hf)) +
-  geom_raster(data=zoom_2_cropped,
-              aes(x=x, y=y, alpha = hillshade)) +
-  scale_fill_viridis_c() +
-  scale_alpha(range = c(0.15, 0.65), guide="none")
-
-# zoom1
-# figure out the layer names
-
-
-ggplot() +
-  geom_raster(data = cali_zoom_1,
-              aes(x=x, y=y, fill=dem90_hf)) +
-  geom_raster(data=socal_hillshade,
-              aes(x=x, y=y, alpha = hillshade)) +
-  scale_fill_viridis_c() +
-  scale_alpha(range = c(0.15, 0.65), guide="none")
-
-
-cali_zoom_1
-ggplot() +
-  geom_raster(data = cali_zoom_1,
-              aes(x=x, y=y, fill=GRAY_HR_SR_OB)) +
-  scale_fill_viridis_c() 
-
-
-
-
+# zoom 1 came as a hillshade
+# zoom 3 hillshade gets made in data prep
 # #######################################
-# make the hillshades
 
-# zoom 3 ##################################
-# hillshades are made of slopes and aspects
-campus_slope <- terrain(campus_DEM, "slope", unit="radians")
-plot(campus_slope)
-campus_aspect <- terrain(campus_DEM, "aspect", unit="radians")
-plot(campus_aspect)
-campus_hillshade <- shade(campus_slope, campus_aspect,
-                          angle = 25,
-                          direction = 320,
-                          normalize = TRUE)
-plot(campus_hillshade, col=grays)
 
-# zoom 2 ##################################
+# zoom 2 hillshade
 # hillshades are made of slopes and aspects
-socal_slope <- terrain(zoom_2_downsample, "slope", unit="radians")
-plot(socal_slope)
-socal_aspect <- terrain(zoom_2_downsample, "aspect", unit="radians")
-plot(socal_aspect)
-socal_hillshade <- shade(socal_slope, socal_aspect,
+zoom_2_slope <- terrain(zoom_2_cropped, "slope", unit="radians")
+plot(zoom_2_slope)
+zoom_2_aspect <- terrain(zoom_2_cropped, "aspect", unit="radians")
+plot(zoom_2_aspect)
+zoom_2_hillshade <- shade(zoom_2_cropped, zoom_2_aspect,
                          angle = 15,
                          direction = 270,
                          normalize = TRUE)
-plot(socal_hillshade, col=grays)
-
-
+plot(zoom_2_hillshade, col=grays)
 
 
 # add the AOI polygons
-# ########################
+# 
 
 
 # zoom2
@@ -273,6 +207,50 @@ par(mfrow = c(1,3))
 zoom3
 zoom2
 zoom1
+
+zoom3 <- ggplot() +
+  geom_raster(data = campus_DEM,
+              aes(x=x, y=y, fill=layer) +
+                geom_raster(data=campus_hillshade,
+                            aes(x=x, y=y, alpha = hillshade)) +
+                scale_fill_viridis_c() +
+                scale_alpha(range = c(0.15, 0.65), guide="none")
+              plot(zoom3)
+########################################              
+# zoom2
+              # isn't zoom 2 already a hillshade and should we be loading the cropped? 
+              socal_hillshade
+              (zoom_2_cropped)
+              
+              ggplot() +
+                geom_raster(data = zoom_2_cropped,
+                            aes(x=x, y=y, fill=dem90_hf)) +
+                geom_raster(data=zoom_2_cropped,
+                            aes(x=x, y=y, alpha = hillshade)) +
+                scale_fill_viridis_c() +
+                scale_alpha(range = c(0.15, 0.65), guide="none")
+              
+              # zoom1
+              # figure out the layer names
+              
+              
+              ggplot() +
+                geom_raster(data = cali_zoom_1,
+                            aes(x=x, y=y, fill=dem90_hf)) +
+                geom_raster(data=socal_hillshade,
+                            aes(x=x, y=y, alpha = hillshade)) +
+                scale_fill_viridis_c() +
+                scale_alpha(range = c(0.15, 0.65), guide="none")
+              
+              
+              cali_zoom_1
+              ggplot() +
+                geom_raster(data = cali_zoom_1,
+                            aes(x=x, y=y, fill=GRAY_HR_SR_OB)) +
+                scale_fill_viridis_c() 
+
+
+
 
 # polygons
 places <- vect("downloaded_data/tl_2023_06_place.shp")
