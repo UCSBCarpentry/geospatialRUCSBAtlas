@@ -190,7 +190,6 @@ plot(zoom_3, col = grays)
 # now we should make them with ggplot with better 
 # visualization.
 
-
 zoom2 <- ggplot() +
 # zoom 1 as ggplot
 str(zoom_1)
@@ -207,19 +206,15 @@ zoom_1_plot
 
 
 # zoom 2 as ggplot
-zoom_2_df <- as.data.frame(zoom_2, xy=TRUE)
-str(zoom_2_df)
 
-zoom_2_plot <- ggplot() +
-  geom_raster(data = zoom_2_df,
+zoom2 <- ggplot()+
+  geom_raster(data = zoom_2_cropped,
               aes(x=x, y=y, fill=dem90_hf)) +
-  geom_raster(data=zoom_2_hillshade,
-              aes(x=x, y=y, alpha = hillshade)) +
+  geom_raster(data=zoom_2_hillshade, 
+              aes(x=x, y=y, alpha=hillshade))+
   geom_sf(data=campus_extent, fill="NA") +
   scale_fill_viridis_c() +
-  scale_alpha(range = c(0.15, 0.65), guide="none")+
-  geom_raster(data = zoom_2_cropped,
-              aes(x=x, y=y, fill=dem90_hf))
+  scale_alpha(range = c(0.15, 0.65), guide="none")
 
 plot(zoom2)
 
