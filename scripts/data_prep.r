@@ -171,7 +171,7 @@ campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4,
 aspect <- terrain(campus_DEM_downsampled, "aspect", unit="radians")
 slope <- terrain(campus_DEM_downsampled, "slope", unit="radians")
 
-hillShade <- shade(slope, aspect, angle=260, direction=0, 
+hillShade <- shade(slope, aspect, angle=15, direction=270, 
           filename="source_data/hillshade.tiff", overwrite = TRUE, 
           normalize=FALSE)
 
