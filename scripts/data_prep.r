@@ -18,6 +18,7 @@ library(tidyverse)
 #### ep 1: Starting with rasters ####
 # find another one with NA's if this one doesn't have any
 
+# hi-res UCSB Campus DEM ####################################
 # Download the data from the Google Drive
 drive_download("https://drive.google.com/file/d/1bkIVwJESL99Kd5N9_0QqwctgmpXYFbR8/view?usp=sharing",
                 "downloaded_data/campus_DEM.zip", overwrite=TRUE)
@@ -142,8 +143,8 @@ campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4,
                                     filename = "source_data/campus_DEM.tif",
                                     overwrite = TRUE)
 
-#uh why are we downsampling here?
-# above or below here?
+# KL: uh why are we downsampling here?
+# JJ: above or below here?
 
 
 # JJ fixes KL's campus hillshade here
