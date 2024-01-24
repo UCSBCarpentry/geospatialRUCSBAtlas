@@ -18,6 +18,7 @@ library(tidyverse)
 #### ep 1: Starting with rasters ####
 # find another one with NA's if this one doesn't have any
 
+# hi-res UCSB Campus DEM ####################################
 # Download the data from the Google Drive
 drive_download("https://drive.google.com/file/d/1bkIVwJESL99Kd5N9_0QqwctgmpXYFbR8/view?usp=sharing",
                 "downloaded_data/campus_DEM.zip", overwrite=TRUE)
@@ -138,7 +139,6 @@ map2(files_bind$id, files_bind$name, ~drive_download(as_id(.x), path = file.path
    # ^^ because you had the path wrong
 campus_DEM <- rast("downloaded_data/greatercampusDEM/greatercampusDEM/greatercampusDEM_1_1.tif")
 
-
 #this produces errors, but the output gets made
 campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4, fun=mean,
                                     filename = "source_data/campus_DEM.tif",
@@ -158,6 +158,26 @@ hillShade <- shade(slope, aspect,
                    angle=45, direction=270, normalize=TRUE, 
           filename="source_data/hillshade.tiff", overwrite = TRUE)
 plot(hillShade,col=grays)
+
+campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4,
+                                    filename = "source_data/campus_DEM.tif",
+                                    overwrite = TRUE)
+
+# KL: uh why are we downsampling here?
+# JJ: above or below here?
+
+
+# JJ fixes KL's campus hillshade here
+aspect <- terrain(campus_DEM_downsampled, "aspect", unit="radians")
+slope <- terrain(campus_DEM_downsampled, "slope", unit="radians")
+
+hillShade <- shade(slope, aspect, angle=260, direction=0, 
+          filename="source_data/hillshade.tiff", overwrite = TRUE, 
+          normalize=FALSE)
+
+plot(hillShade)
+# end JJ's fix
+>>>>>>> ce66ff486d9bec556d1937dc4256dd0e9c0682d7
 
 
 unzip("source_data/Bathymetry_OffshoreCoalOilPoint.zip",
