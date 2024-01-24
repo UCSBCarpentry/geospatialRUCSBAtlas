@@ -190,7 +190,6 @@ plot(zoom_3, col = grays)
 # now we should make them with ggplot with better 
 # visualization.
 
-
 # zoom 1 as ggplot
 str(zoom_1)
 zoom_1_df <- as.data.frame(zoom_1, xy=TRUE)

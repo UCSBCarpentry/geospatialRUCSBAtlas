@@ -139,6 +139,26 @@ map2(files_bind$id, files_bind$name, ~drive_download(as_id(.x), path = file.path
    # ^^ because you had the path wrong
 campus_DEM <- rast("downloaded_data/greatercampusDEM/greatercampusDEM/greatercampusDEM_1_1.tif")
 
+#this produces errors, but the output gets made
+campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4, fun=mean,
+                                    filename = "source_data/campus_DEM.tif",
+                                    overwrite = TRUE)
+
+#uh why are we downsampling here?
+# above or below here?
+aspect <- terrain(campus_DEM_downsampled, 
+        v="aspect", unit="radians", neighbors=8, 
+        filename="output_data/aspect.tif", overwrite = TRUE)
+plot(aspect)
+slope <- terrain(campus_DEM_downsampled, 
+        v="slope", unit = "radians", neighbors=8, 
+        filename="output_data/slope.tiff", overwrite = TRUE)
+
+hillShade <- shade(slope, aspect, 
+                   angle=0, direction=0, normalize=TRUE, 
+          filename="source_data/hillshade.tiff", overwrite = TRUE)
+plot(hillShade,col=grays)
+
 campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4,
                                     filename = "source_data/campus_DEM.tif",
                                     overwrite = TRUE)
@@ -157,6 +177,7 @@ hillShade <- shade(slope, aspect, angle=15, direction=270,
 
 plot(hillShade)
 # end JJ's fix
+>>>>>>> ce66ff486d9bec556d1937dc4256dd0e9c0682d7
 
 
 unzip("source_data/Bathymetry_OffshoreCoalOilPoint.zip",
