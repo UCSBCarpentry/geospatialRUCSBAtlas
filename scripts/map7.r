@@ -191,6 +191,7 @@ plot(zoom_3, col = grays)
 # visualization.
 
 zoom2 <- ggplot() +
+
 # zoom 1 as ggplot
 str(zoom_1)
 zoom_1_df <- as.data.frame(zoom_1, xy=TRUE)
