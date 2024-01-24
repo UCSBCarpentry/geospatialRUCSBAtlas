@@ -155,7 +155,7 @@ slope <- terrain(campus_DEM_downsampled,
         filename="output_data/slope.tiff", overwrite = TRUE)
 
 hillShade <- shade(slope, aspect, 
-                   angle=45, direction=270, normalize=TRUE, 
+                   angle=0, direction=0, normalize=TRUE, 
           filename="source_data/hillshade.tiff", overwrite = TRUE)
 plot(hillShade,col=grays)
 
