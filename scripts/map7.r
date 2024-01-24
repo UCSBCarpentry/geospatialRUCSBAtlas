@@ -176,20 +176,41 @@ plot(zoom_2_hillshade, col=grays)
 
 # zoom 1: 
 plot(zoom_1, col = grays)
+polys(zoom_2_extent, border="red")
 
-# zoom 2:
+# zoom 2:# zoom 2:reduce()
 plot(zoom_2_hillshade, col = grays)
+polys(campus_extent, border="red")
 
 # zoom 3:
 zoom_3 <- rast("source_data/hillshade.tiff")
 plot(zoom_3, col = grays)
 
 #################################################
-summary(campus_extent)
-plot(campus_extent)
+# now we should make them with ggplot with better 
+# visualization.
 
-zoom2 <- ggplot() +
-  geom_raster(data = cali_zoom_2,
+
+# zoom 1 as ggplot
+str(zoom_1)
+zoom_1_df <- as.data.frame(zoom_1, xy=TRUE)
+colnames(zoom_1)
+
+zoom_1_plot <- ggplot() +
+  geom_raster(data = zoom_1,
+              aes(x=x, y=y, fill=GRAY_HR_SR_OB)) +
+  geom_spatvector(data=zoom_2_extent, fill="NA") +
+    scale_fill_viridis_c() 
+
+zoom_1_plot
+
+
+# zoom 2 as ggplot
+zoom_2_df <- as.data.frame(zoom_2, xy=TRUE)
+str(zoom_2_df)
+
+zoom_2_plot <- ggplot() +
+  geom_raster(data = zoom_2_df,
               aes(x=x, y=y, fill=dem90_hf)) +
   geom_raster(data=zoom_2_hillshade,
               aes(x=x, y=y, alpha = hillshade)) +
@@ -197,15 +218,12 @@ zoom2 <- ggplot() +
   scale_fill_viridis_c() +
   scale_alpha(range = c(0.15, 0.65), guide="none")
 
-# zoom1
-str(cali_zoom_1)
-zoom1 <- ggplot() +
-  geom_raster(data = cali_zoom_1,
-              aes(x=x, y=y, fill=GRAY_HR_SR_OB)) +
-  geom_spatvector(data=zoom_2_extent, fill="NA") +
-    scale_fill_viridis_c() 
+zoom_2_plot
 
-# end of 2023 work
+
+
+
+
 # I guess par doesn't work with ggplot outputs
 par(mfrow = c(1,3))
 zoom3
@@ -255,55 +273,6 @@ ggplot() +
 (campus_DEM)
 (campus_hillshade)
 
-zoom3 <- ggplot() +
-  geom_raster(data = campus_DEM,
-              aes(x=x, y=y, fill=layer)) +
-  geom_raster(data=campus_hillshade,
-              aes(x=x, y=y, alpha = 'hillshade')) +
-  scale_fill_viridis_c() +
-  scale_alpha(range = c(0.15, 0.65), guide="none")
-
-
-zoom3 <- ggplot() +
-  geom_raster(data = campus_DEM,
-              aes(x=x, y=y, fill=layer) +
-                geom_raster(data=campus_hillshade,
-                            aes(x=x, y=y, alpha = hillshade)) +
-                scale_fill_viridis_c() +
-                scale_alpha(range = c(0.15, 0.65), guide="none")
-              plot(zoom3)
-
-              
-              
-              zoom_2_hillshade
-              (zoom_2_cropped)
-              
-              ggplot() +
-                geom_raster(data = zoom_2_cropped,
-                            aes(x=x, y=y, fill=dem90_hf)) +
-                geom_raster(data=zoom_2_cropped,
-                            aes(x=x, y=y, alpha = hillshade)) +
-                scale_fill_viridis_c() +
-                scale_alpha(range = c(0.15, 0.65), guide="none")
-              
-              # zoom1
-              # figure out the layer names
-              
-              
-              ggplot() +
-                geom_raster(data = cali_zoom_1,
-                            aes(x=x, y=y, fill=dem90_hf)) +
-                geom_raster(data=zoom_2_hillshade,
-                            aes(x=x, y=y, alpha = hillshade)) +
-                scale_fill_viridis_c() +
-                scale_alpha(range = c(0.15, 0.65), guide="none")
-              
-              
-              cali_zoom_1
-              ggplot() +
-                geom_raster(data = cali_zoom_1,
-                            aes(x=x, y=y, fill=GRAY_HR_SR_OB)) +
-                scale_fill_viridis_c() 
 
 
 
