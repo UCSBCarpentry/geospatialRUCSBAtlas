@@ -189,13 +189,15 @@ summary(campus_extent)
 plot(campus_extent)
 
 zoom2 <- ggplot() +
-  geom_raster(data = zoom_2_cropped,
-              aes(x=x, y=y, fill=dem90_hf)) +
   geom_raster(data=zoom_2_hillshade,
               aes(x=x, y=y, alpha = hillshade)) +
   geom_sf(data=campus_extent, fill="NA") +
   scale_fill_viridis_c() +
-  scale_alpha(range = c(0.15, 0.65), guide="none")
+  scale_alpha(range = c(0.15, 0.65), guide="none")+
+  geom_raster(data = zoom_2_cropped,
+              aes(x=x, y=y, fill=dem90_hf))
+
+plot(zoom2)
 
 # zoom1
 str(cali_zoom_1)
