@@ -140,7 +140,7 @@ campus_DEM <- rast("downloaded_data/greatercampusDEM/greatercampusDEM/greatercam
 
 
 #this produces errors, but the output gets made
-campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4,
+campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4, fun=mean,
                                     filename = "source_data/campus_DEM.tif",
                                     overwrite = TRUE)
 
@@ -149,14 +149,15 @@ campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4,
 aspect <- terrain(campus_DEM_downsampled, 
         v="aspect", unit="radians", neighbors=8, 
         filename="output_data/aspect.tif", overwrite = TRUE)
+plot(aspect)
 slope <- terrain(campus_DEM_downsampled, 
-        v="slope", neighbors=8, 
+        v="slope", unit = "radians", neighbors=8, 
         filename="output_data/slope.tiff", overwrite = TRUE)
 
-hillShade <- shade(slope, aspect, angle=260, direction=0, 
-          filename="source_data/hillshade.tiff", overwrite = TRUE, 
-          normalize=FALSE)
-
+hillShade <- shade(slope, aspect, 
+                   angle=45, direction=270, normalize=TRUE, 
+          filename="source_data/hillshade.tiff", overwrite = TRUE)
+plot(hillShade,col=grays)
 
 
 unzip("source_data/Bathymetry_OffshoreCoalOilPoint.zip",

@@ -189,7 +189,7 @@ summary(campus_extent)
 plot(campus_extent)
 
 zoom2 <- ggplot() +
-  geom_raster(data = cali_zoom_2,
+  geom_raster(data = zoom_2_cropped,
               aes(x=x, y=y, fill=dem90_hf)) +
   geom_raster(data=zoom_2_hillshade,
               aes(x=x, y=y, alpha = hillshade)) +
