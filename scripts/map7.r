@@ -169,10 +169,10 @@ zoom_2_hillshade <- shade(zoom_2_slope, zoom_2_aspect,
 plot(zoom_2_hillshade, col=grays)
 
 
+# Review
 # ##########################
 # add the AOI polygons
 # and output a tryptic of hillshades
-# via ggplot
 
 # zoom 1: 
 plot(zoom_1, col = grays)
@@ -186,19 +186,22 @@ polys(campus_extent, border="red")
 zoom_3 <- rast("source_data/hillshade.tiff")
 plot(zoom_3, col = grays)
 
+
+
+
+# via ggplot
 #################################################
 # now we should make them with ggplot with better 
 # visualization.
 
-zoom2 <- ggplot() +
 
 # zoom 1 as ggplot
 str(zoom_1)
 zoom_1_df <- as.data.frame(zoom_1, xy=TRUE)
-colnames(zoom_1)
+colnames(zoom_1_df)
 
 zoom_1_plot <- ggplot() +
-  geom_raster(data = zoom_1,
+  geom_raster(data = zoom_1_df,
               aes(x=x, y=y, fill=GRAY_HR_SR_OB)) +
   geom_spatvector(data=zoom_2_extent, fill="NA") +
     scale_fill_viridis_c() 
@@ -208,8 +211,16 @@ zoom_1_plot
 
 # zoom 2 as ggplot
 
-zoom2 <- ggplot()+
-  geom_raster(data = zoom_2_cropped,
+## SLOW!!!! ##########
+zoom_2_df <- as.data.frame(zoom_2, xy=TRUE)
+colnames(zoom_2_df)
+
+zoom_2_hillshade_df <- as.data.frame(zoom_2_hillshade, xy=TRUE)
+
+#### post bus start
+
+zoom_2_plot <- ggplot()+
+  geom_raster(data = zoom_2_df,
               aes(x=x, y=y, fill=dem90_hf)) +
   geom_raster(data=zoom_2_hillshade, 
               aes(x=x, y=y, alpha=hillshade))+
