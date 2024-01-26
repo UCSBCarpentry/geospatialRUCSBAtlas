@@ -212,7 +212,7 @@ zoom_1_plot
 # zoom 2 as ggplot
 
 ## SLOW!!!! ##########
-zoom_2_df <- as.data.frame(zoom_2, xy=TRUE)
+zoom_2_df <- as.data.frame(zoom_2_cropped, xy=TRUE)
 colnames(zoom_2_df)
 
 zoom_2_hillshade_df <- as.data.frame(zoom_2_hillshade, xy=TRUE)
@@ -228,7 +228,9 @@ zoom_2_plot <- ggplot()+
   scale_fill_viridis_c() +
   scale_alpha(range = c(0.15, 0.65), guide="none")
 
-plot(zoom2)
+plot(zoom_2_plot)
+
+###### kristi to here after fixing zoom 2 crop
 
 zoom_2_plot
 
