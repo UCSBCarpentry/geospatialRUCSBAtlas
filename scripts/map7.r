@@ -202,9 +202,10 @@ colnames(zoom_1_df)
 
 zoom_1_plot <- ggplot() +
   geom_raster(data = zoom_1_df,
-              aes(x=x, y=y, fill=GRAY_HR_SR_OB)) +
+              aes(x=x, y=y, fill=GRAY_HR_SR_OB), show.legend = FALSE) +
   geom_spatvector(data=zoom_2_extent, fill="NA") +
-    scale_fill_viridis_c() 
+    scale_fill_viridis_c() +
+  theme_dark()
 
 zoom_1_plot
 
@@ -217,14 +218,13 @@ zoom_2_hillshade_df <- as.data.frame(zoom_2_hillshade, xy=TRUE)
 
 zoom_2_plot <- ggplot()+
   geom_raster(data = zoom_2_df,
-              aes(x=x, y=y, fill=dem90_hf)) +
+              aes(x=x, y=y, fill=dem90_hf), show.legend = FALSE) +
   geom_raster(data=zoom_2_hillshade_df, 
               aes(x=x, y=y, alpha=hillshade))+
   geom_sf(data=campus_extent, fill="NA") +
   scale_fill_viridis_c() +
-  scale_alpha(range = c(0.15, 0.65), guide="none")
-
-plot(zoom_2_plot)
+  scale_alpha(range = c(0.15, 0.65), guide="none") +
+  theme_dark()
 
 zoom_2_plot
 
@@ -240,11 +240,12 @@ colnames(zoom_3_df)
 
 zoom_3_plot <- ggplot()+
   geom_raster(data = zoom_3_df,
-              aes(x=x, y=y, fill=greatercampusDEM_1_1)) +
+              aes(x=x, y=y, fill=greatercampusDEM_1_1), show.legend = FALSE) +
   geom_raster(data=zoom_3_hillshade_df, 
               aes(x=x, y=y, alpha=hillshade))+
   scale_fill_viridis_c() +
-  scale_alpha(range = c(0.15, 0.65), guide="none")
+  scale_alpha(range = c(0.15, 0.65), guide="none")+
+  theme_dark()
 
 zoom_3_plot
 
