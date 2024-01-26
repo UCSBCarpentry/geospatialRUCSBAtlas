@@ -210,19 +210,15 @@ zoom_1_plot
 
 
 # zoom 2 as ggplot
-
-## SLOW!!!! ##########
 zoom_2_df <- as.data.frame(zoom_2_cropped, xy=TRUE)
 colnames(zoom_2_df)
 
 zoom_2_hillshade_df <- as.data.frame(zoom_2_hillshade, xy=TRUE)
 
-#### post bus start
-
 zoom_2_plot <- ggplot()+
   geom_raster(data = zoom_2_df,
               aes(x=x, y=y, fill=dem90_hf)) +
-  geom_raster(data=zoom_2_hillshade, 
+  geom_raster(data=zoom_2_hillshade_df, 
               aes(x=x, y=y, alpha=hillshade))+
   geom_sf(data=campus_extent, fill="NA") +
   scale_fill_viridis_c() +
@@ -230,9 +226,27 @@ zoom_2_plot <- ggplot()+
 
 plot(zoom_2_plot)
 
-###### kristi to here after fixing zoom 2 crop
-
 zoom_2_plot
+
+
+# zoom3
+# figure out the layer names
+zoom_3_df <- as.data.frame(campus_DEM, xy=TRUE)
+
+campus_hillshade <- rast("source_data/hillshade.tiff") 
+zoom_3_hillshade_df <- as.data.frame(campus_hillshade, xy=TRUE)
+
+colnames(zoom_3_df)
+
+zoom_3_plot <- ggplot()+
+  geom_raster(data = zoom_3_df,
+              aes(x=x, y=y, fill=greatercampusDEM_1_1)) +
+  geom_raster(data=zoom_3_hillshade_df, 
+              aes(x=x, y=y, alpha=hillshade))+
+  scale_fill_viridis_c() +
+  scale_alpha(range = c(0.15, 0.65), guide="none")
+
+zoom_3_plot
 
 
 
@@ -243,49 +257,6 @@ par(mfrow = c(1,3))
 zoom3
 zoom2
 zoom1
-
-
-
-# zoom2
-# isn't zoom 2 already a hillshade and should we be loading the cropped? 
-zoom_2_hillshade
-(zoom_2_cropped)
-
-ggplot() +
-  geom_raster(data = zoom_2_cropped,
-              aes(x=x, y=y, fill=dem90_hf)) +
-  geom_raster(data=zoom_2_cropped,
-              aes(x=x, y=y, alpha = hillshade)) +
-  scale_fill_viridis_c() +
-  scale_alpha(range = c(0.15, 0.65), guide="none")
-
-# zoom1
-# figure out the layer names
-
-
-ggplot() +
-  geom_raster(data = cali_zoom_1,
-              aes(x=x, y=y, fill=dem90_hf)) +
-  geom_raster(data=zoom_2_hillshade,
-              aes(x=x, y=y, alpha = hillshade)) +
-  scale_fill_viridis_c() +
-  scale_alpha(range = c(0.15, 0.65), guide="none")
-
-
-cali_zoom_1
-ggplot() +
-  geom_raster(data = cali_zoom_1,
-              aes(x=x, y=y, fill=GRAY_HR_SR_OB)) +
-  scale_fill_viridis_c() 
-
-
-
-
-
-# zoom3
-# figure out the layer names
-(campus_DEM)
-(campus_hillshade)
 
 
 
