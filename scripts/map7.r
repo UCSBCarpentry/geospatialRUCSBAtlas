@@ -114,7 +114,7 @@ zoom_1_extent <- project(zoom_1_extent, my_crs)
 zoom_1 <- project(zoom_1, my_crs)
 
 plot(zoom_1, col=grays)
-polys(zoom_3_fake_aoi, border="red")
+polys(zoom_3_fake_aoi, border="red", lwd=5)
 
 
 
@@ -176,11 +176,11 @@ plot(zoom_2_hillshade, col=grays)
 
 # zoom 1: 
 plot(zoom_1, col = grays)
-polys(zoom_2_extent, border="red")
+polys(zoom_2_extent, border="red",lwd=5)
 
 # zoom 2:# zoom 2:reduce()
 plot(zoom_2_hillshade, col = grays)
-polys(campus_extent, border="red")
+polys(campus_extent, border="red", lwd=5)
 
 # zoom 3:
 zoom_3 <- rast("source_data/hillshade.tiff")
