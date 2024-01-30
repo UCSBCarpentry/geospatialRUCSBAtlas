@@ -177,7 +177,6 @@ hillShade <- shade(slope, aspect, angle=15, direction=270,
 
 plot(hillShade)
 # end JJ's fix
->>>>>>> ce66ff486d9bec556d1937dc4256dd0e9c0682d7
 
 
 unzip("source_data/Bathymetry_OffshoreCoalOilPoint.zip",
