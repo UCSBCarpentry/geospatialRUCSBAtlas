@@ -150,17 +150,20 @@ campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4, fun=mean,
 #uh why are we downsampling here?
 # above or below here?
 aspect <- terrain(campus_DEM_downsampled, 
-        v="aspect", unit="radians", neighbors=8, 
-        filename="output_data/aspect.tif", overwrite = TRUE)
+                  v="aspect", unit="radians", neighbors=8, 
+                  filename="output_data/aspect.tif", overwrite = TRUE)
 plot(aspect)
+
 slope <- terrain(campus_DEM_downsampled, 
-        v="slope", unit = "radians", neighbors=8, 
-        filename="output_data/slope.tiff", overwrite = TRUE)
+                 v="slope", unit = "radians", neighbors=8, 
+                 filename="output_data/slope.tiff", overwrite = TRUE)
+plot(slope)
 
 hillShade <- shade(slope, aspect, 
-                   angle=0, direction=0, normalize=TRUE, 
-          filename="source_data/hillshade.tiff", overwrite = TRUE)
-plot(hillShade,col=grays)
+                   angle=40, direction=170, normalize=TRUE, 
+                   filename="source_data/hillshade.tiff", overwrite = TRUE)
+grays <- colorRampPalette(c("black", "white"))(255)
+plot(hillShade, col=grays)
 
 campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4,
                                     filename = "source_data/campus_DEM.tif",
