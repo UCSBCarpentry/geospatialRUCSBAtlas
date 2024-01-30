@@ -10,6 +10,9 @@ library(sf)
 library(ggplot2)
 library(tidyterra)
 library(dplyr)
+# needed to lay out multiple ggplots
+library(cowplot)
+library(ggpubr)
 
 # make sure output window is 1x1
 # because you muck with it a lot
@@ -202,9 +205,10 @@ colnames(zoom_1_df)
 
 zoom_1_plot <- ggplot() +
   geom_raster(data = zoom_1_df,
-              aes(x=x, y=y, fill=GRAY_HR_SR_OB)) +
+              aes(x=x, y=y, fill=GRAY_HR_SR_OB), show.legend = FALSE) +
   geom_spatvector(data=zoom_2_extent, fill="NA") +
-    scale_fill_viridis_c() 
+    scale_fill_viridis_c() +
+  theme_dark()
 
 zoom_1_plot
 
@@ -217,14 +221,13 @@ zoom_2_hillshade_df <- as.data.frame(zoom_2_hillshade, xy=TRUE)
 
 zoom_2_plot <- ggplot()+
   geom_raster(data = zoom_2_df,
-              aes(x=x, y=y, fill=dem90_hf)) +
+              aes(x=x, y=y, fill=dem90_hf), show.legend = FALSE) +
   geom_raster(data=zoom_2_hillshade_df, 
               aes(x=x, y=y, alpha=hillshade))+
   geom_sf(data=campus_extent, fill="NA") +
   scale_fill_viridis_c() +
-  scale_alpha(range = c(0.15, 0.65), guide="none")
-
-plot(zoom_2_plot)
+  scale_alpha(range = c(0.15, 0.65), guide="none") +
+  theme_dark()
 
 zoom_2_plot
 
@@ -240,23 +243,23 @@ colnames(zoom_3_df)
 
 zoom_3_plot <- ggplot()+
   geom_raster(data = zoom_3_df,
-              aes(x=x, y=y, fill=greatercampusDEM_1_1)) +
+              aes(x=x, y=y, fill=greatercampusDEM_1_1), show.legend = FALSE) +
   geom_raster(data=zoom_3_hillshade_df, 
               aes(x=x, y=y, alpha=hillshade))+
   scale_fill_viridis_c() +
-  scale_alpha(range = c(0.15, 0.65), guide="none")
+  scale_alpha(range = c(0.15, 0.65), guide="none")+
+  theme_dark()
 
 zoom_3_plot
 
 
+# plot_grid() or ggarrange() for ggplots instead of par()
+# is supposed to work, but darned if I can
+# figure out how
+tryptic <- list(zoom_1_plot, zoom_2_plot, zoom_3_plot)
 
+ggarrange(tryptic, align="h", ncol=3)
 
-
-# I guess par doesn't work with ggplot outputs
-par(mfrow = c(1,3))
-zoom3
-zoom2
-zoom1
 
 
 
@@ -270,16 +273,26 @@ ggplot() +
   geom_spatvector(data=places)
 
 # how can I get a vector overlay into here?
-# right now you are doing geom_raster, but I 
-# think I should be using geom_spatraster
+# geom_raster and geom_spatraster
+# produce slightly different results
+colnames(zoom_2_hillshade_df)
+colnames(places)
+
+# is the alpha doing anything here?
 ggplot() +
-  geom_raster(data = cali_zoom_2,
-              aes(x=x, y=y, fill=dem90_hf)) +
-  geom_raster(data=zoom_2_hillshade,
-              aes(x=x, y=y, alpha = hillshade)) +
+  geom_spatraster(data = zoom_2_hillshade,
+              aes(fill=hillshade)) +
+    scale_fill_viridis_c() +
+  scale_alpha(range = c(0.15, 0.65), guide="none")
+
+ggplot() +
+  geom_raster(data = zoom_2_hillshade,
+                  aes(x=x, y=y, fill=hillshade)) +
   scale_fill_viridis_c() +
   scale_alpha(range = c(0.15, 0.65), guide="none")
 
+    
+    
 ggplot() +
   geom_spatraster(data = cali_zoom_2,
               aes(fill=dem90_hf))
