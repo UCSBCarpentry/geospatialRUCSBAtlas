@@ -17,6 +17,9 @@ library(tidyverse)
 
 #### ep 1: Starting with rasters ####
 # find another one with NA's if this one doesn't have any
+# In case the folder has been deleted
+dir.create("downloaded_data", showWarnings = FALSE)
+dir.create("source_data", showWarnings = FALSE)
 
 # hi-res UCSB Campus DEM ####################################
 # Download the data from the Google Drive
@@ -63,7 +66,7 @@ unzip("downloaded_data/global_raster.zip", exdir="downloaded_data", overwrite = 
 # this is a big, unweildy file
 curl_download("https://www.sciencebase.gov/catalog/file/get/542aebf9e4b057766eed286a", 
               "downloaded_data/dem90_hf.zip")
-unzip("downloaded_data/dem90_hf.zip", exdir="downloaded_data", overwrite = TRUE)
+unzip("downloaded_data/dem90_hf.zip", exdir="source_data", overwrite = TRUE)
 
 
 
