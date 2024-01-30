@@ -105,7 +105,7 @@ files = drive_ls(building_dir)
 files_bind <- bind_rows(files)
 
 # Batch download the files
-map2(files_bind$id, files_bind$name, ~drive_download(as_id(.x), path = file.path(dir_local, .y)))
+map2(files_bind$id, files_bind$name, ~drive_download(as_id(.x), path = file.path(dir_local, .y), overwrite = TRUE))
 
 
 # Foraging Habitat?
