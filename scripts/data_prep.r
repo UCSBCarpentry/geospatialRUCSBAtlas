@@ -169,33 +169,18 @@ campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4,
                                     filename = "source_data/campus_DEM.tif",
                                     overwrite = TRUE)
 
-# KL: uh why are we downsampling here?
-# JJ: above or below here?
-
-
-# JJ fixes KL's campus hillshade here
-aspect <- terrain(campus_DEM_downsampled, "aspect", unit="radians")
-slope <- terrain(campus_DEM_downsampled, "slope", unit="radians")
-
-hillShade <- shade(slope, aspect, angle=15, direction=270, 
-          filename="source_data/hillshade.tiff", overwrite = TRUE, 
-          normalize=FALSE)
-
-plot(hillShade)
-# end JJ's fix
-
-
-unzip("source_data/Bathymetry_OffshoreCoalOilPoint.zip",
-      overwrite = TRUE, 
-      exdir = "source_data/Bathymetry_OffshoreCoalOilPoint")
+#  JB -- this is already done above 
+# unzip("source_data/Bathymetry_OffshoreCoalOilPoint.zip",
+#       overwrite = TRUE, 
+#       exdir = "source_data/Bathymetry_OffshoreCoalOilPoint")
 
 # Ep 3: Reprojecting Rasters
 bathymetry <- 
-  rast("source_data/Bathymetry_OffshoreCoalOilPoint/Bathymetry_2m_OffshoreCoalOilPoint.tif")
+  rast("source_data/SB_bath_2m.tif")
 
 # downsample it so it's runnable
 bathymetry_downsample <- aggregate(bathymetry, fact = 4)
-writeRaster(bathymetry_downsample, "output_data/SB_bath.tif", format="GTiff", overwrite=TRUE)
+writeRaster(bathymetry_downsample, "output_data/SB_bath.tif", filetype="GTiff", overwrite=TRUE)
 
 # ep 5
 # downsample the West Campus CIRGIS multi-band image
