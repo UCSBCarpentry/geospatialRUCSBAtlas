@@ -86,15 +86,10 @@ ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
   scale_fill_viridis_c(na.value = "deeppink") 
 
-# We don't
+# We can check that with math:
 sum(is.na(campus_DEM_df$elevation))
-#> 0
 
 
-# that's not actually what we want. let's white it out.
-ggplot() +
-  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
-  scale_fill_viridis_c(na.value = "white") 
 
 # histogram to look at the elevation distribution
 ggplot() +
@@ -122,10 +117,13 @@ campus_DEM_df <- campus_DEM_df %>%
 
 unique(campus_DEM_df$binned_DEM)
 
-# there's sooooo few
+# there's sooooo few negative values that you can't see them.
+
 ggplot() +
   geom_bar(data = campus_DEM_df, aes(binned_DEM))
 
+# but think about landscapes. elevation tends to be
+# a log. (I know this because I am a geographer)
 # log scale works better
 # this shows that there's nothing at zero.
 # and a little bit of negative
@@ -135,7 +133,7 @@ ggplot() +
 
 ggplot() + 
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) 
-  #coord_quickmap()
+
 
 # let's go again with what we've learned
 custom_bins <- c(-3, 0, 2, 5, 10, 25, 40, 70, 100, 150, 200)
@@ -152,13 +150,13 @@ ggplot() +
 # challenge
 # use custom bins to figure out a good place to put sea level
 custom_bins <- c(-3, 4, 4.8, 5, 10, 25, 40, 70, 100, 150, 200)
-custom_bins <- c(-3, 4.9, 5, 7.5, 10, 25, 40, 70, 100, 150, 200)
+custom_bins <- c(-3, 4.9, 5.1, 7.5, 10, 25, 40, 70, 100, 150, 200)
 
 campus_DEM_df <- campus_DEM_df %>% 
   mutate(binned_DEM = cut(elevation, breaks = custom_bins))
 ggplot() + 
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) 
-  #coord_quickmap()
+  
 
 
 
@@ -171,8 +169,9 @@ ggplot() +
 # let's seize control of our bins
 coast_palette <- terrain.colors(10)
 
-# set 4-5 ft a nice sea blue
-coast_palette[4] <- "#1d95b3"
+# set 4.9-5 ft a nice sea blue
+coast_palette[2] <- "#1d95b3"
+coast_palette[3] <- "#1c9aed"
 coast_palette
 
 # where's my nice blue?
@@ -182,12 +181,14 @@ ggplot() +
   #coord_quickmap()
 
 
+
+
+
 # hillshade layer
 #ok we have to do something here to make a hillshade
 #since one doesn't exist
 
-#10:30PM musings told kristi to do it, 
-# need rename the fill to layer tho
+# insert script from map 7 here.
 
 describe("source_data/campus_hillshade.tif")
 
