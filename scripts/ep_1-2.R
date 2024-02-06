@@ -50,9 +50,8 @@ str(campus_DEM_df)
 #do we want to change the layer name from greater...to layer?
 # names(campus_DEM_df)[names(campus_DEM_df) == 'campus_DEM'] <- 'layer'
 
-ggplot() +
-  geom_raster(data = campus_DEM_df, 
-              aes(x=x, y=y, fill = campus_DEM)) +
+ggplot() + geom_raster(data = campus_DEM_df, 
+              aes(x=x, y=y, fill = elevation)) +
   scale_fill_viridis_c() 
 
 
