@@ -87,15 +87,10 @@ ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
   scale_fill_viridis_c(na.value = "deeppink") 
 
-# We don't
+# We can check that with math:
 sum(is.na(campus_DEM_df$elevation))
-#> 0
 
 
-# that's not actually what we want. let's white it out.
-ggplot() +
-  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
-  scale_fill_viridis_c(na.value = "white") 
 
 # histogram to look at the elevation distribution
 ggplot() +
@@ -123,10 +118,13 @@ campus_DEM_df <- campus_DEM_df %>%
 
 unique(campus_DEM_df$binned_DEM)
 
-# there's sooooo few
+# there's sooooo few negative values that you can't see them.
+
 ggplot() +
   geom_bar(data = campus_DEM_df, aes(binned_DEM))
 
+# but think about landscapes. elevation tends to be
+# a log. (I know this because I am a geographer)
 # log scale works better
 # this shows that there's nothing at zero.
 # and a little bit of negative
@@ -136,7 +134,7 @@ ggplot() +
 
 ggplot() + 
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) 
-  #coord_quickmap()
+
 
 # let's go again with what we've learned
 custom_bins <- c(-3, 0, 2, 5, 10, 25, 40, 70, 100, 150, 200)
@@ -159,7 +157,7 @@ campus_DEM_df <- campus_DEM_df %>%
   mutate(binned_DEM = cut(elevation, breaks = custom_bins))
 ggplot() + 
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) 
-  #coord_quickmap()
+  
 
 
 
