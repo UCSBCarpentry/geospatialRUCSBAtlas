@@ -151,12 +151,12 @@ campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4, fun=mean,
 # above or below here?
 aspect <- terrain(campus_DEM_downsampled, 
                   v="aspect", unit="radians", neighbors=8, 
-                  filename="output_data/aspect.tif", overwrite = TRUE)
+                  filename="source_data/aspect.tif", overwrite = TRUE)
 plot(aspect)
 
 slope <- terrain(campus_DEM_downsampled, 
                  v="slope", unit = "radians", neighbors=8, 
-                 filename="output_data/slope.tiff", overwrite = TRUE)
+                 filename="source_data/slope.tiff", overwrite = TRUE)
 plot(slope)
 
 hillShade <- shade(slope, aspect, 
@@ -180,7 +180,7 @@ bathymetry <-
 
 # downsample it so it's runnable
 bathymetry_downsample <- aggregate(bathymetry, fact = 4)
-writeRaster(bathymetry_downsample, "output_data/SB_bath.tif", filetype="GTiff", overwrite=TRUE)
+writeRaster(bathymetry_downsample, "source_data/SB_bath.tif", filetype="GTiff", overwrite=TRUE)
 
 # ep 5
 # downsample the West Campus CIRGIS multi-band image
