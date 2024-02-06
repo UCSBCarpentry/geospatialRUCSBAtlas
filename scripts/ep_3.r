@@ -5,15 +5,16 @@
 
 # libraries for this episode:
 library(tidyverse)
-library(raster)
-library(rgdal)
+library(terra)
+# library(rgdal)
 
 # set up objects from previous episodes
 
 # create the campus DEM
-campus_DEM_df <- raster("output_data/campus_DEM.tif") %>% 
+campus_DEM <- rast("source_data/campus_DEM.tif")
+campus_DEM_df <-  campus_DEM%>% 
   as.data.frame(xy=TRUE) %>% 
-  rename(elevation = layer)
+  rename(elevation = greatercampusDEM_1_1)
 
 
 # add the custom bins to the dataframe
@@ -27,9 +28,9 @@ campus_DEM_df <- campus_DEM_df %>%
 # how about bathymetry?
 # SB_bath.tif came out of data_prep.r
 # make it the tidy way, so that there's not an extra object
-bath_df <- raster("output_data/SB_bath.tif", xy=TRUE) %>% 
+bath_df <- rast("source_data/SB_bath.tif") %>% 
   as.data.frame(xy=TRUE) %>% 
-  rename(depth = layer)
+  rename(depth = SB_bath_2m)
 
 str(bath_df)
 
@@ -80,20 +81,18 @@ ggplot() +
 
 # let's remake bath_df with a re-projected raster
 # get the original:
-bath <- raster("output_data/SB_bath.tif", xy=TRUE) 
+bath <- rast("source_data/SB_bath.tif") 
 
 projection(bath)
 
 # I need to get projection and resolution objects somewhere.
-my_projection <- raster("output_data/campus_DEM.tif") %>%
+my_projection <- campus_DEM %>%
   crs() 
 
-my_res <- res(raster("output_data/campus_DEM.tif") )
+my_res <- res(campus_DEM)
 
 # there's an error here.
-reprojected_bath <- projectRaster(bath, 
-                      crs = my_projection, 
-                      res = my_res)
+reprojected_bath <- project(bath, campus_DEM)
 
 plot(reprojected_bath)
 
@@ -110,6 +109,10 @@ bath_df <- bath_df %>%
 campus_DEM_df <- campus_DEM_df %>% 
   mutate(binned_DEM = cut(elevation, breaks = custom_bins))
 
+
+################################################
+#### JB -- Needs to be reprojected first #######
+################################################
 
 # so now they are in the same crs, and overlay!
 ggplot() +
@@ -139,14 +142,14 @@ ggplot() +
 # later on we will clip to extent, but for now we will leave it at this:
 
 # extent object
-campus_border <- extent(campus_DEM_df)
-str(campus_border)
+campus_border <- ext(campus_DEM)
+campus_border
 
 #can be turned into a spatial object
-campus_border_poly <- as(campus_border, 'SpatialPolygons')
+campus_border_poly <- as.polygons(campus_border)
 
 # and written out to a file:
-shapefile(campus_border_poly, 'output_data/campus_borderline.shp')
+writeVector(campus_border_poly, 'output_data/campus_borderline.shp', overwrite=TRUE)
 
 # from ep 11: crop the bathymetry to the extent
 # of campus_DEM
@@ -158,7 +161,7 @@ bath_clipped <-crop(x=reprojected_bath, y=campus_border)
 # save the file:
 # ep 4:
 writeRaster(bath_clipped, "output_data/campus_bath.tif",
-            format="GTiff",
+            filetype="GTiff",
             overwrite=TRUE)
 
 campus_bath_df <- as.data.frame(bath_clipped, xy=TRUE)
@@ -168,7 +171,7 @@ colnames(campus_bath_df)
 # now we have a smaller campus bathymetry file:
 ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
-  geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = layer)) +
+  geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = SB_bath_2m)) +
       scale_fill_viridis_c(na.value="NA") +
   coord_quickmap()
 
