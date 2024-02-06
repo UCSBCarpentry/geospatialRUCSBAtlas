@@ -181,6 +181,9 @@ ggplot() +
   #coord_quickmap()
 
 
+
+
+
 # hillshade layer
 #ok we have to do something here to make a hillshade
 #since one doesn't exist
