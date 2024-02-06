@@ -17,13 +17,15 @@ The goal is for this script to download raw data (into a
 any data that's required for the rAtlas. Its outputs
 go into `source_data`
 
-3: now each episode and map should run nicely, sroucing input data from the `source_data` directory
+3: now each episode and map should run nicely, opening input data from the `source_data` directory
 
 
-The goal is to produce a number of well formatted maps.
-All with a 3 tall x 4 wide aspect ratio
+The narrative of the lesson produces a number of maps, but not particularly 
+well formatted. We'll have 7 well-formatted maps that exist as a shadow to the 
+lesson narrative. 
 
-7 to be exact:
+All have a 3 tall x 4 wide aspect ratio
+
 ###  1. A wide view of campus with
   * Extent should be the same as #3 inset of map 7.
   * NCOS
