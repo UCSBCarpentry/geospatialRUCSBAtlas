@@ -266,7 +266,7 @@ ggarrange(plotlist = tryptic, align="h", ncol=3)
 
 
 
-
+#what is this? I don't see it in the localdata drive? 
 # polygons
 places <- vect("downloaded_data/tl_2023_06_place.shp")
 plot(places)
