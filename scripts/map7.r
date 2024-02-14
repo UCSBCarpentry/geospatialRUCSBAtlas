@@ -46,7 +46,7 @@ plot(campus_extent)
 
 # Crop western region DEM to local area defined by 
 # socal_aoi.geojson
-zoom_2 <- rast("downloaded_data/dem90_hf/dem90_hf.tif")
+zoom_2 <- rast("source_data/dem90_hf/dem90_hf.tif")
 
 
 # this geojson is the extent we want to crop to
