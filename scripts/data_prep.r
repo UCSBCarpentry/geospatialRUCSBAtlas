@@ -125,6 +125,11 @@ map2(files_bind$id, files_bind$name, ~drive_download(as_id(.x), path = file.path
 # kelp shapefile?
 # would be episode 9
 
+# california populated places
+curl_download("https://www2.census.gov/geo/tiger/TIGER2023/PLACE/tl_2023_06_place.zip", "downloaded_data/tl_2023_06_place.zip")
+unzip("downloaded_data/tl_2023_06_place.zip", exdir="source_data/cal_pop_places", overwrite = TRUE)
+     
+
 # episode 10
 # csv of lat-long pairs
 # NCOS photo points

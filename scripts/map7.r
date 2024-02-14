@@ -253,22 +253,15 @@ zoom_3_plot <- ggplot()+
 zoom_3_plot
 
 
-# plot_grid() or ggarrange() for ggplots instead of par()
-# is supposed to work, but darned if I can
-# figure out how
+# ggarrange() for ggplots instead of par()
 tryptic <- list(zoom_1_plot, zoom_2_plot, zoom_3_plot)
 
 ggarrange(plotlist = tryptic, align="h", ncol=3)
-#error: in as_grob.default(plot): Cannot convert object of class list into a grob
-#grob??? 
-
-#kristi changed plotlist=tryptic and its working now
 
 
-
-#what is this? I don't see it in the localdata drive? 
+# what is this? I don't see it in the localdata drive? 
 # polygons
-places <- vect("downloaded_data/tl_2023_06_place.shp")
+places <- vect("source_data/cal_pop_places/tl_2023_06_place.shp")
 plot(places)
 
 ggplot() + 
@@ -285,7 +278,9 @@ ggplot() +
   geom_spatraster(data = zoom_2_hillshade,
               aes(fill=hillshade)) +
     scale_fill_viridis_c() +
-  scale_alpha(range = c(0.15, 0.65), guide="none")
+  scale_alpha(range = c(0.15, 0.65), guide="none")+
+  geom_spatvector(data=places)
+
 
 ggplot() +
   geom_raster(data = zoom_2_hillshade,
