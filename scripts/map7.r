@@ -267,12 +267,18 @@ plot(places)
 ggplot() + 
   geom_spatvector(data=places)
 
-# how can I get a vector overlay into here?
+# overlay 
 # geom_raster and geom_spatraster
-# produce slightly different results
 colnames(zoom_2_hillshade_df)
 colnames(places)
 
+
+ggplot() +
+  geom_spatvector(data = places) +
+  geom_spatraster(data = zoom_2_hillshade,
+                  aes(fill=hillshade))
+  
+#######################
 # is the alpha doing anything here?
 ggplot() +
   geom_spatraster(data = zoom_2_hillshade,
