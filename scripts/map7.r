@@ -258,10 +258,11 @@ zoom_3_plot
 # figure out how
 tryptic <- list(zoom_1_plot, zoom_2_plot, zoom_3_plot)
 
-ggarrange(tryptic, align="h", ncol=3)
+ggarrange(plotlist = tryptic, align="h", ncol=3)
 #error: in as_grob.default(plot): Cannot convert object of class list into a grob
 #grob??? 
 
+#kristi changed plotlist=tryptic and its working now
 
 
 
