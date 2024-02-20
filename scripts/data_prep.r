@@ -107,6 +107,10 @@ files_bind <- bind_rows(files)
 # Batch download the files
 map2(files_bind$id, files_bind$name, ~drive_download(as_id(.x), path = file.path(dir_local, .y), overwrite = TRUE))
 
+#NCOS birds 
+download.file("https://drive.google.com/drive/folders/1ouG80A4qCkt2KF2h5mVXIsv074sSzwE9?usp=sharing",
+               "downloaded_data/NCOS_Shorebird_Foraging_Habitat.zip", overwrite = TRUE)
+unzip("downloaded_data/NCOS_Shorebird_Foraging_Habitat.zip", exdir = "source_data/NCOS_bird_observations") 
 
 # Foraging Habitat?
 # AOI's (Can be used later for clipping extents)
