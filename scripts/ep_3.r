@@ -12,7 +12,8 @@ library(terra)
 
 # create the campus DEM
 campus_DEM <- rast("source_data/campus_DEM.tif")
-campus_DEM_df <-  campus_DEM%>% 
+
+campus_DEM_df <-  campus_DEM %>% 
   as.data.frame(xy=TRUE) %>% 
   rename(elevation = greatercampusDEM_1_1)
 
@@ -28,13 +29,14 @@ campus_DEM_df <- campus_DEM_df %>%
 # how about bathymetry?
 # SB_bath.tif came out of data_prep.r
 # make it the tidy way, so that there's not an extra object
-bath_df <- rast("source_data/SB_bath.tif") %>% 
+bath_rast <- rast("source_data/SB_bath.tif")  
+bath_rast 
+
+bath_df <-  bath_rast %>% 
   as.data.frame(xy=TRUE) %>% 
   rename(depth = SB_bath_2m)
 
 str(bath_df)
-
-
 
 summary(bath_df, maxsamp = ncell(bath_df))
 # ^^ remember, those are negative numbers  
@@ -80,39 +82,29 @@ ggplot() +
 
 
 # let's remake bath_df with a re-projected raster
-# get the original:
-bath <- rast("source_data/SB_bath.tif") 
-
-projection(bath)
+# check the original bathymetry raster projection:
+crs(bath_rast , proj=TRUE)
 
 # I need to get projection and resolution objects somewhere.
-my_projection <- campus_DEM %>%
-  crs() 
+crs(campus_DEM ) 
+res(campus_DEM)
 
-my_res <- res(campus_DEM)
-
-# there's an error here.
-reprojected_bath <- project(bath, campus_DEM)
+# We can reproject using the other raster as reference matching projection and resolution
+reprojected_bath <- project(bath_rast, campus_DEM)
+reprojected_bath
 
 plot(reprojected_bath)
 
 # remake bath_df
-bath_df <- as.data.frame(reprojected_bath, 
-                         xy=TRUE) %>% 
-  rename(depth = layer) 
+bath_df <- as.data.frame(reprojected_bath, xy=TRUE) %>% 
+  rename(depth = SB_bath_2m) 
+
 str(bath_df)
 
 # add the binned column to both dataframes
 bath_df <- bath_df %>% 
   mutate(binned_bath = cut(depth, breaks = custom_bath_bins))
 
-campus_DEM_df <- campus_DEM_df %>% 
-  mutate(binned_DEM = cut(elevation, breaks = custom_bins))
-
-
-################################################
-#### JB -- Needs to be reprojected first #######
-################################################
 
 # so now they are in the same crs, and overlay!
 ggplot() +
@@ -147,13 +139,15 @@ campus_border
 
 #can be turned into a spatial object
 campus_border_poly <- as.polygons(campus_border)
+campus_border_poly
+#### JB STOPPED HERE -- NEED to add the projection too####
 
 # and written out to a file:
 writeVector(campus_border_poly, 'output_data/campus_borderline.shp', overwrite=TRUE)
 
 # from ep 11: crop the bathymetry to the extent
 # of campus_DEM
-bath_clipped <-crop(x=reprojected_bath, y=campus_border)
+bath_clipped <- crop(x=reprojected_bath, y=campus_border)
 
 # now we can make a big, slow overview map, and save the clipped bathymetry
 # for overlaying goodness:
