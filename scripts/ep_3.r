@@ -90,9 +90,10 @@ crs(campus_DEM )
 res(campus_DEM)
 
 # We can reproject using the other raster as reference matching projection and resolution
-reprojected_bath <- project(bath_rast, campus_DEM)
+reprojected_bath <- project(bath_rast, crs(campus_DEM))
 reprojected_bath
 
+# Have a look
 plot(reprojected_bath)
 
 # remake bath_df
@@ -129,8 +130,7 @@ ggplot() +
   coord_quickmap()
   
   
-# get a bounding box out of campus DEM to clip
-# the bathymetry.
+# get a bounding box out of campus DEM to clip the bathymetry.
 # later on we will clip to extent, but for now we will leave it at this:
 
 # extent object
@@ -138,9 +138,8 @@ campus_border <- ext(campus_DEM)
 campus_border
 
 #can be turned into a spatial object
-campus_border_poly <- as.polygons(campus_border)
+campus_border_poly <- as.polygons(campus_border, crs(campus_DEM))
 campus_border_poly
-#### JB STOPPED HERE -- NEED to add the projection too####
 
 # and written out to a file:
 writeVector(campus_border_poly, 'output_data/campus_borderline.shp', overwrite=TRUE)
@@ -148,7 +147,7 @@ writeVector(campus_border_poly, 'output_data/campus_borderline.shp', overwrite=T
 # from ep 11: crop the bathymetry to the extent
 # of campus_DEM
 bath_clipped <- crop(x=reprojected_bath, y=campus_border)
-
+plot(bath_clipped)
 # now we can make a big, slow overview map, and save the clipped bathymetry
 # for overlaying goodness:
 
@@ -157,6 +156,9 @@ bath_clipped <- crop(x=reprojected_bath, y=campus_border)
 writeRaster(bath_clipped, "output_data/campus_bath.tif",
             filetype="GTiff",
             overwrite=TRUE)
+
+# Note that with the terra package, we could have done both reprojection and cropping at the same time by running:
+# reprojected_bath <- project(bath_rast, campus_DEM)
 
 campus_bath_df <- as.data.frame(bath_clipped, xy=TRUE)
 str(campus_bath_df)
