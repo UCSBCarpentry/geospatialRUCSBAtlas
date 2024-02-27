@@ -6,7 +6,7 @@ The goal is to produce several nice atlas pages of campus that use all the techn
 covered in the Intro to GeoSpatial R Carpentry lesson. (Maybe not the NDVI over time, 
 since we've never ever done that episode.)
 
-We have created a [Data Dictionary]('datadictionary.md') to help us keep track of names.
+We have created a [Data Dictionary](datadictionary.md) to help us keep track of names.
 
 1: The repo is set up with a `source_data` folder
 
