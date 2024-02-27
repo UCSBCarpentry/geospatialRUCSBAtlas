@@ -63,7 +63,7 @@ unzip("downloaded_data/global_raster.zip", exdir="downloaded_data", overwrite = 
 # Elevation in the Western United States 90m DEM
 # to prep for SLO/SB/VEN/LA/OC/SD region extent on map 7 
 # https://www.sciencebase.gov/catalog/item/542aebf9e4b057766eed286a
-# this is a big, unweildy file
+# this is a big, unwieldy file
 curl_download("https://www.sciencebase.gov/catalog/file/get/542aebf9e4b057766eed286a", 
               "downloaded_data/dem90_hf.zip")
 unzip("downloaded_data/dem90_hf.zip", exdir="source_data", overwrite = TRUE)

@@ -12,8 +12,9 @@ Items from the Carpentry Google Drive are at
 * Hillshades at 3 scales and extents:
 Which episodes do each of these come in?
 What is their original source and format/CRS?
-  * The Bite of California
-  * Campus context: campus_topo_bath
+  * [The Bite of California](https://www.sciencebase.gov/catalog/item/542aebf9e4b057766eed286a)
+    Elecation in the Western United States, 90 meter DEM, subsetted to CA
+  * [Campus context: campus_topo_bath]()
   * Henley Gate to Ellwood Beach: campus_topo_bath
   * we will need 3 tiffs out of data_prep.r for these
 * Shapefiles
