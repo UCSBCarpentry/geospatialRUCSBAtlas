@@ -14,9 +14,10 @@ Which episodes do each of these come in?
 What is their original source and format/CRS?
   * [The Bite of California](https://www.sciencebase.gov/catalog/item/542aebf9e4b057766eed286a)
     Elevation in the Western United States, 90 meter DEM, subsetted to CA
-  * [Campus context: campus_topo_bath](https://pubs.usgs.gov/ds/781/)
-    California State Waters Map Series, Offshore of Coal Oil Point, Block ID 63 
-  * Henley Gate to Ellwood Beach: campus_topo_bath
+  * [Campus context: campus_DEM](https://drive.google.com/drive/folders/1_NWRIonW03jm5MdP9tq-zJjkfDjFCWEm?usp=drive_link)
+     Kristi looking for metadata
+  * [Henley Gate to Ellwood Beach: campus_topo_bath](https://pubs.usgs.gov/ds/781/)
+    California State Waters Map Series, Offshore of Coal Oil Point, Block ID 63
   * we will need 3 tiffs out of data_prep.r for these
 * Shapefiles
   * Walkways
