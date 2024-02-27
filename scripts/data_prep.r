@@ -44,10 +44,10 @@ curl_download("https://pubs.usgs.gov/ds/781/OffshoreCoalOilPoint/data/Bathymetry
               "downloaded_data/Bathymetry_OffshoreCoalOilPoint.zip")
 
 # Unzip the archive
-unzip("downloaded_data/Bathymetry_OffshoreCoalOilPoint.zip", exdir = "downloaded_data/bathymery") # The zip archive on the GDrive has one extra level of nesting
+unzip("downloaded_data/Bathymetry_OffshoreCoalOilPoint.zip", exdir = "downloaded_data/bathymetry") # The zip archive on the GDrive has one extra level of nesting
 
 # copy the file needed for episode 3
-file.copy(from='downloaded_data/bathymery/Bathymetry_2m_OffshoreCoalOilPoint.tif', 
+file.copy(from='downloaded_data/bathymetry/Bathymetry_2m_OffshoreCoalOilPoint.tif', 
             to='source_data/SB_bath_2m.tif')
 
 # Delete the zip archive
