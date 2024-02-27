@@ -88,7 +88,7 @@ download.file("https://drive.google.com/drive/folders/1XoOOD3xcTaSevQZGtwB9ndIwa
 ## Part of repo:
 # POINTS
 # Bird Observations
-# LINES:
+# LINES: bike paths
 
 # POLYGONS
 # Buildings (good extent example?)
@@ -119,9 +119,15 @@ unzip("downloaded_data/NCOS_Shorebird_Foraging_Habitat.zip", exdir = "source_dat
 
 # LINES
 # X-drive?
+drive_download("https://drive.google.com/open?id=187OdKbbfTUtwN9wNunpmU6GeVM5dhQzE&usp=drive_fs", 
+              "downloaded_data/bike_paths.zip", overwrite=TRUE)
+unzip("downloaded_data/bike_paths.zip", exdir = "source_data/bike_paths/", overwrite=TRUE)
+
 # ("source_data/bike_paths/bikelanescollapsedv8.shp")
-# AGO?
-# ("source_data/bike_paths/cgis_2014003_ICM_BikePath.shp")
+
+
+
+
 # POINTS
 
 
