@@ -14,6 +14,10 @@ described on the [Read Me](https://github.com/UCSBCarpentry/geospatialRUCSBAtlas
 * Shapefiles
   * Walkways
   * Buildings
+    * [Carpentry Google Drive](https://drive.google.com/drive/folders/1SwcCrBoa0a7I_kmBNCa3_zNQ6Aw9P-8H)
   * Trees
+  * Bike paths: 
+     * There is some confusion about which one.
+     * source_data/bike_paths/bike_paths
 * Vernal pools
   * will be created by analysis in a script.

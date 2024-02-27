@@ -116,6 +116,7 @@ unzip("downloaded_data/NCOS_Shorebird_Foraging_Habitat.zip", exdir = "source_dat
 # AOI's (Can be used later for clipping extents)
 #       (You should create them in this script)
 
+
 # LINES
 # X-drive?
 # ("source_data/bike_paths/bikelanescollapsedv8.shp")
