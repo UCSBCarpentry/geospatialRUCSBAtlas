@@ -55,7 +55,7 @@ file.remove("downloaded_data/Bathymetry_OffshoreCoalOilPoint.zip")
 
 # largest extent raster
 # global shaded relief from NaturalEarth
-curl_download("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/raster/GRAY_HR_SR_OB.zip",
+curl_download("https://naciscdn.org/naturalearth/10m/raster/GRAY_HR_SR_OB.zip",
               "downloaded_data/global_raster.zip")
 unzip("downloaded_data/global_raster.zip", exdir="downloaded_data", overwrite = TRUE)
 
