@@ -1,33 +1,37 @@
 # episode 5
 # multi-band rasters
+# ie: color
 
 
 library(terra)
 library(tidyverse)
-library(sf)
+# library(sf)
 # library(raster)
 
 
-# bring in an overview map 
 
 # do we still need raster in this lesson?
+# yes. for now. 
 # natural_color <- raster("source_data/cirgis2020/w_campus_1ft.tif")
 
 # rast comes from terra
 # it makes a SpatRaster object
-natural_color <- rast("source_data/cirgis2020/w_campus_1ft.tif")
+natural_color <- rast("source_data/w_campus_1ft.tif")
+
+NCOS <- rast("source_data/NCOS_07_25-26_2023.tif")
 
 
 # can do the quickplot, it's a bit mysterious
+plot(NCOS)
 plot(natural_color)
 
 str(natural_color)
 class(natural_color)
 
 # outputting it to stdout shows how
-# many bands (5).
+# many bands (5 and 4).
 natural_color
-
+NCOS
 
 # brick maybe no more. it's from raster
 # a brick is a new class for us
@@ -40,8 +44,16 @@ plotRGB(natural_color_brick)
 
 # we also have raster stack
 natural_color_stack <- stack("source_data/cirgis2020/w_campus_1ft.tif")
-# still has 5 layers
+
+NCOS_stack <- stack("source_data/NCOS_07_25-26_2023.tif")
+
+# still has 5 channels
 natural_color_stack
+
+# still has 4 channels
+NCOS_stack
+
+plotRGB(NCOS, r=1, g=2, b=3)
 
 plotRGB(natural_color)
 
