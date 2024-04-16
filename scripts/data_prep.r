@@ -74,8 +74,19 @@ unzip("downloaded_data/dem90_hf.zip", exdir="source_data", overwrite = TRUE)
 # *********************
 # ep 5
 # CIRGIS 1ft Campus
-download.file("https://drive.google.com/drive/folders/1XoOOD3xcTaSevQZGtwB9ndIwaYoUbwIU?usp=drive_link",
-  "source_data/w_campus_1ft.tif")
+# download.file("https://drive.google.com/drive/folders/1XoOOD3xcTaSevQZGtwB9ndIwaYoUbwIU?usp=drive_link",
+#   "source_data/w_campus_1ft.tif")
+
+drive_download("https://drive.google.com/drive/folders/1XoOOD3xcTaSevQZGtwB9ndIwaYoUbwIU?usp=drive_link",
+              "downloaded_data/w_campus_1ft.zip",
+              overwrite = TRUE)
+unzip("downloaded_data/w_campus_1ft.zip", 
+      exdir="source_data", overwrite = TRUE)
+
+
+
+
+
 
 # Planet 50cm WCOS?
 # with arc.open()

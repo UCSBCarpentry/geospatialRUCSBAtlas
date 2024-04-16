@@ -6,13 +6,15 @@
 library(terra)
 library(tidyverse)
 # library(sf)
-# library(raster)
+library(raster)
 
 
 
 # do we still need raster in this lesson?
 # yes. for now. 
-# natural_color <- raster("source_data/cirgis2020/w_campus_1ft.tif")
+natural_color <- raster("source_data/w_campus_1ft.tif")
+natural_color_terra <- rast("source_data/w_campus_1ft.tif")
+
 
 # rast comes from terra
 # it makes a SpatRaster object
