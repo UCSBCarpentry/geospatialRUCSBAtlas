@@ -33,3 +33,5 @@ What is their original source and format/CRS?
      * DREAM Lab data drive collection
 * Vernal pools
   * will be created by analysis in a script.
+* Rasters
+  * Planet SkySat images
