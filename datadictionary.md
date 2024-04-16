@@ -15,6 +15,8 @@ What is their original source and format/CRS?
   * [The Bite of California](https://www.sciencebase.gov/catalog/item/542aebf9e4b057766eed286a)
     Elevation in the Western United States, 90 meter DEM, subsetted to CA
   * [Campus context: campus_DEM](https://drive.google.com/drive/folders/1_NWRIonW03jm5MdP9tq-zJjkfDjFCWEm?usp=drive_link)
+  * For the campus DEM, the elevation field should be renamed from greatercampusDEM_1_1 to elevation with the following code in episode 1: 
+  names(campus_DEM_df)[names(campus_DEM_df) == 'greatercampusDEM_1_1'] <- 'elevation'
      Kristi looking for metadata
   * [Henley Gate to Ellwood Beach: campus_topo_bath](https://pubs.usgs.gov/ds/781/)
     California State Waters Map Series, Offshore of Coal Oil Point, Block ID 63

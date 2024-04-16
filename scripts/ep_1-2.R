@@ -47,8 +47,9 @@ campus_DEM_df <- as.data.frame(campus_DEM, xy = TRUE)
 # refer to.
 str(campus_DEM_df)
 
-#do we want to change the layer name from greater...to layer?
-# names(campus_DEM_df)[names(campus_DEM_df) == 'campus_DEM'] <- 'layer'
+#change the elevation field named greatercampusdem_1_1 to elevation 
+#we will stick to this naming convention the rest of the lesson
+names(campus_DEM_df)[names(campus_DEM_df) == 'greatercampusDEM_1_1'] <- 'elevation'
 
 ggplot() + geom_raster(data = campus_DEM_df, 
               aes(x=x, y=y, fill = elevation)) +
