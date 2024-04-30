@@ -74,16 +74,11 @@ unzip("downloaded_data/dem90_hf.zip", exdir="source_data", overwrite = TRUE)
 # *********************
 # ep 5
 # CIRGIS 1ft Campus
-# download.file("https://drive.google.com/drive/folders/1XoOOD3xcTaSevQZGtwB9ndIwaYoUbwIU?usp=drive_link",
-#   "source_data/w_campus_1ft.tif")
-
-drive_download("https://drive.google.com/drive/folders/1XoOOD3xcTaSevQZGtwB9ndIwaYoUbwIU?usp=drive_link",
-              "downloaded_data/w_campus_1ft.zip",
-              overwrite = TRUE)
-unzip("downloaded_data/w_campus_1ft.zip", 
+drive_download("https://drive.google.com/file/d/13ceWKBnTABOH5C9KDeBIJysSdjWuBMAj/view?usp=drive_link",
+               "downloaded_data/w_campus_1ft.zip",
+               overwrite = TRUE)
+unzip("downloaded_data/w_campus_1ft.zip",
       exdir="source_data", overwrite = TRUE)
-
-
 
 
 
@@ -119,7 +114,7 @@ files_bind <- bind_rows(files)
 map2(files_bind$id, files_bind$name, ~drive_download(as_id(.x), path = file.path(dir_local, .y), overwrite = TRUE))
 
 #NCOS birds 
-download.file("https://drive.google.com/drive/folders/1ouG80A4qCkt2KF2h5mVXIsv074sSzwE9?usp=sharing",
+drive_download("https://drive.google.com/file/d/1ssytmTbpC1rpT5b-h8AxtvSgNrsGQVNY/view?usp=drive_link",
                "downloaded_data/NCOS_Shorebird_Foraging_Habitat.zip", overwrite = TRUE)
 unzip("downloaded_data/NCOS_Shorebird_Foraging_Habitat.zip", exdir = "source_data/NCOS_bird_observations") 
 
@@ -130,7 +125,7 @@ unzip("downloaded_data/NCOS_Shorebird_Foraging_Habitat.zip", exdir = "source_dat
 
 # LINES
 # X-drive?
-drive_download("https://drive.google.com/open?id=187OdKbbfTUtwN9wNunpmU6GeVM5dhQzE&usp=drive_fs", 
+drive_download("https://drive.google.com/file/d/1_Rt6HGF4LsIbZPMP6vZFm67H5MlzlIW1/view?usp=drive_link", 
               "downloaded_data/bike_paths.zip", overwrite=TRUE)
 unzip("downloaded_data/bike_paths.zip", exdir = "source_data/bike_paths/", overwrite=TRUE)
 

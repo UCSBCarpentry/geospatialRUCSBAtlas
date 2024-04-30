@@ -12,13 +12,13 @@ library(raster)
 
 # do we still need raster in this lesson?
 # yes. for now. 
-natural_color <- raster("source_data/w_campus_1ft.tif")
-natural_color_terra <- rast("source_data/w_campus_1ft.tif")
+natural_color <- raster("source_data/w_campus_1ft/w_campus_1ft.tif")
+natural_color_terra <- rast("source_data/w_campus_1ft/w_campus_1ft.tif")
 
 
 # rast comes from terra
 # it makes a SpatRaster object
-natural_color <- rast("source_data/w_campus_1ft.tif")
+# natural_color <- rast("source_data/w_campus_1ft.tif")
 
 NCOS <- rast("source_data/NCOS_07_25-26_2023.tif")
 
