@@ -56,13 +56,15 @@ Vertical
 Landscape
   * extended campus will have maptiles background
   * Bacara(?) or El Capitan to Modoc/State
+
 #### 7 
 Landscape
   * A stripped down version of #1
   * Include a Planet feed. (Issue #15)
 
 ![Overview map](/images/overview_map.jpg "Sketch")
-Here's the beginning of a piece:
+
+Here's the strip of 3 for across the top:
 ![Triplet zoom in](/images/3-zoom.png "Draft zoom.")
 
 

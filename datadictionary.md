@@ -21,12 +21,15 @@ What is their original source and format/CRS?
   * [Henley Gate to Ellwood Beach: campus_topo_bath](https://pubs.usgs.gov/ds/781/)
     California State Waters Map Series, Offshore of Coal Oil Point, Block ID 63
   * we will need 3 tiffs out of data_prep.r for these
+
 * Shapefiles
   * Walkways
   * Buildings
+    * Campus_Buildings.shp
     * [Carpentry Google Drive](https://drive.google.com/drive/folders/1SwcCrBoa0a7I_kmBNCa3_zNQ6Aw9P-8H)
     Metadata says this came from the ICM on AGO circa 2017'ish.
   * Trees
+    * AGO: 
   * Bike paths: 
      * original filename: bikelanescollapsedv8.shp
      * source_data/bike_paths/bike_paths.shp

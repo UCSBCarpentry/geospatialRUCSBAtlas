@@ -11,6 +11,9 @@ library(curl)
 library(googledrive)
 library(tidyverse)
 
+# to connect to AGO data
+library(arcgis)
+
 # Get Campus Rasters
 # **********************
 
@@ -94,6 +97,7 @@ unzip("downloaded_data/w_campus_1ft.zip",
 ## Part of repo:
 # POINTS
 # Bird Observations
+# Trees
 # LINES: bike paths
 
 # POLYGONS
@@ -118,6 +122,29 @@ drive_download("https://drive.google.com/file/d/1ssytmTbpC1rpT5b-h8AxtvSgNrsGQVN
                "downloaded_data/NCOS_Shorebird_Foraging_Habitat.zip", overwrite = TRUE)
 unzip("downloaded_data/NCOS_Shorebird_Foraging_Habitat.zip", exdir = "source_data/NCOS_bird_observations") 
 
+
+# POINTS
+# NCOS Planted Trees???
+# AGO: https://ucsb.maps.arcgis.com/home/item.html?id=6e05f326c17b4d84a626b42a3714c918
+
+
+# 2018 Campus Tree Layer:
+# Open to Public
+# there may be a better version out there.
+# https://ucsb.maps.arcgis.com/home/item.html?id=c6eb1b782f674be082f9eb764314dda5
+trees_url <- "https://services1.arcgis.com/4TXrdeWh0RyCqPgB/arcgis/rest/services/Treekeeper_012116/FeatureServer/0"
+
+trees_layer <- arc_open(trees_url)
+trees_layer
+
+trees_layer_sf <- arc_select(trees_layer)
+
+
+dir_local <- file.path("source_data/trees")
+dir.create(dir_local, showWarnings = FALSE)
+
+write.shapefile("source_data/trees/campus_trees.shp")
+
 # Foraging Habitat?
 # AOI's (Can be used later for clipping extents)
 #       (You should create them in this script)
@@ -134,7 +161,7 @@ unzip("downloaded_data/bike_paths.zip", exdir = "source_data/bike_paths/", overw
 
 
 
-# POINTS
+
 
 
 # Global vectors for insets
