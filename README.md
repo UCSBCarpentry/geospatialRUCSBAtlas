@@ -43,9 +43,10 @@ All have a 3 tall x 4 wide aspect ratio, except where noted
   * hillshade
   * walkways
   * buildings
-![](/images/complicated_thematic_map.jpg)
+![](/images/complicated_thematic_map.jpg style="width:50%")
 
-November 28 test push.
+
+
 
 ### Map 2 A stylized thematic map with trees, water, and bikeways
 (Issue #8)
