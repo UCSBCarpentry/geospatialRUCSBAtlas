@@ -3,7 +3,8 @@ A repo that uses local UCSB examples applied to all of the
 steps of the Carpentries' Intro to Raster and
 Vector Data workshop.
 
-Scripts run parallel to the episodes of Raster and Vector Data with R Data Carpentry.
+Scripts run parallel to the episodes (ep_1.r ep_2.r ...) and create
+maps 'suitable for publication'. (map1.r, map2.r) as laid our Maps 1 thru 7 below.
 
 The goal is to produce several nice atlas pages of campus that use all the techniques
 covered in the Intro to GeoSpatial R Carpentry lesson. (Maybe not the NDVI over time, 
@@ -11,6 +12,7 @@ since we've never ever done that episode.)
 
 We have created a [Data Dictionary](datadictionary.md) to help us keep track of names.
 
+## Getting Started
 1: The repo is set up with a `source_data` folder
 
 `source_data` is *.* git ignored, so it's probably not going to
@@ -37,7 +39,7 @@ All have a 3 tall x 4 wide aspect ratio, except where noted
   * Extent should be the same as #3 inset of map 7.
   * NCOS
   * Water
-  * Bathymentry and elevation
+  * Bathymentry and elevation in one layer
   * hillshade
   * walkways
   * buildings
@@ -75,7 +77,7 @@ Landscape
 Maps 4-5-6:
 ![Triplet zoom in](/images/3-zoom.png "Draft zoom.")
 
-Maps 4-5-6:
+
 ![Triplet zoom in](/images/zoom_in_first_results.png "Draft zoom.")
 
 

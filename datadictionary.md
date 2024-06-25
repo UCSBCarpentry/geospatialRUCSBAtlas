@@ -4,7 +4,7 @@ we need to know where we are going. Therefore, we need to build
 the finished maps. 
 
 This is a list of all the data required for the 7 maps 
-described on the [Read Me](https://github.com/UCSBCarpentry/geospatialRUCSBAtlas/blob/main/README.md), as well as where they come into the episode flow.
+described on the [Read Me](https://github.com/UCSBCarpentry/geospatialRUCSBAtlas/blob/main/README.md), along with notes regarding where they appear into the episode flow.
 
 Items from the Carpentry Google Drive are at 
 `\\Carpentry\Workshop Development\Local Data for Workshops\geo`
@@ -55,7 +55,8 @@ Links are to their original source:
 
 ## Map 3: Page with 4 insets
 ### Map 4-5-6: 
-* Zomm in to site
+* Zoom in to site
   * Western North America
   * Bite of California
   * Extended Campus
+* with little red extent boxes indicating the areas of zoom
