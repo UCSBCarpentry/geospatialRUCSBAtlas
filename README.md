@@ -67,6 +67,9 @@ Landscape
 Here's the strip of 3 for across the top:
 ![Triplet zoom in](/images/3-zoom.png "Draft zoom.")
 
+Here's the beginning of a piece:
+![Triplet zoom in](/images/zoom_in_first_results.png "Draft zoom.")
+
 
 [UCSB Carpentry](https://ucsbcarpentry.github.io)
 

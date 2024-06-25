@@ -6,7 +6,6 @@
 # libraries for this episode:
 library(tidyverse)
 library(terra)
-# library(rgdal)
 
 # set up objects from previous episodes
 
@@ -90,7 +89,7 @@ crs(campus_DEM )
 res(campus_DEM)
 
 # We can reproject using the other raster as reference matching projection and resolution
-reprojected_bath <- project(bath_rast, crs(campus_DEM))
+reprojected_bath <- project(bath_rast, campus_DEM)
 reprojected_bath
 
 # Have a look
@@ -153,7 +152,7 @@ plot(bath_clipped)
 
 # save the file:
 # ep 4:
-writeRaster(bath_clipped, "output_data/campus_bath.tif",
+writeRaster(bath_clipped, "output_data/campus_bathymetry.tif",
             filetype="GTiff",
             overwrite=TRUE)
 

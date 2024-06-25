@@ -6,6 +6,7 @@
 source_data/**
 downloaded_data/**
 *.qgz
+output_data/
 
 # Mac stuff
 .DS_Store
