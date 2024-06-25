@@ -41,7 +41,11 @@ All have a 3 tall x 4 wide aspect ratio
 November 28 test push.
 
 ### 2 A stylized thematic map with trees, water, and bikeways
+(Issue #8)
 ![Stylized, minimalistic](/images/limited_thematic_map.jpg "Sketch")
+Trees from ArcGIS Online: 
+Water: NCOS upper lagoon shapefile of bathymetric topo lines or polygons
+is it this [bird habitat file?](https://drive.google.com/file/d/1ssytmTbpC1rpT5b-h8AxtvSgNrsGQVNY/view?usp=drive_link)
 
 ### 3 An atlas page layout with 4 insets:
 #### 4 California
@@ -59,7 +63,7 @@ Landscape
 
 ![Overview map](/images/overview_map.jpg "Sketch")
 Here's the beginning of a piece:
-![Triplet zoom in](/images/3-zoom.png "Draft zoom.")
+![Triplet zoom in](/images/zoom_in_first_results.png "Draft zoom.")
 
 
 [UCSB Carpentry](https://ucsbcarpentry.github.io)
