@@ -135,9 +135,15 @@ unzip("downloaded_data/NCOS_Shorebird_Foraging_Habitat.zip", exdir = "source_dat
 trees_url <- "https://services1.arcgis.com/4TXrdeWh0RyCqPgB/arcgis/rest/services/Treekeeper_012116/FeatureServer/0"
 
 trees_layer <- arc_open(trees_url)
-trees_layer
+trees_layer.properties["id"]
+str(trees_layer)
+class(trees_layer)
 
-trees_layer_sf <- arc_select(trees_layer)
+# not quite sure how to get this FeatureLayer 
+# into a usable format
+trees_layer_sf <- read_sf(trees_layer)
+
+
 
 
 dir_local <- file.path("source_data/trees")

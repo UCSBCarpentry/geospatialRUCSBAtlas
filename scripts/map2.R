@@ -7,3 +7,5 @@
 library(tidyverse)
 library(raster)
 library(sf)
+
+trees <- st_read("source_data/trees/)
