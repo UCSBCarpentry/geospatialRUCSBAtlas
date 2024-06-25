@@ -10,21 +10,17 @@
 # do raster math on the bathymetry later to make sea level zero
 # or is it the DEM that has sea level at 4ft?
 
-
-
-# setup environment
-# library(raster)
-# library(rgdal)
+# Libraries
 library(tidyverse)
 library(terra)
 
 # reload rasters
 # from output folder
 campus_DEM <- rast("output_data/campus_DEM.tif")
-campus_DEM
+plot(campus_DEM)
 # remember: this is the one we cropped, so the 2 extents are the same.
-campus_bath <- rast("output_data/campus_bath.tif")
-campus_bath
+campus_bath <- rast("output_data/campus_bathymetry.tif")
+plot(campus_bath)
 
 # do they have the same projections?
 campus_DEM
@@ -67,6 +63,7 @@ ggplot() +
 # raster math 
 # how would I do this with overlay?
 sea_level <- campus_DEM - 4.9
+sea_level
 
 sea_level_df <- as.data.frame(sea_level, xy=TRUE) %>%
   rename(elevation = greatercampusDEM_1_1)
