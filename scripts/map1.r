@@ -6,9 +6,40 @@ library(tidyverse)
 library(raster)
 # library(rgdal)
 library(terra)
+library(sf)
 
 # set up objects
-# the basic setup is bathymetry and topography
+
+#vector layers
+buildings <- st_read("source_data/campus_buildings/Campus_Buildings.shp")
+# walkways <- 
+bikeways <- st_read("source_data/bike_paths/bikelanescollapsedv8.shp")
+habitat <- st_read("source_data/NCOS_bird_observations/NCOS_Shorebird_Foraging_Habitat.shp")
+
+
+
+# basic terra plots
+plot(buildings)
+plot(bikeways)
+plot(habitat)
+
+# overlays as in episode 8
+ggplot() +
+  geom_sf(data=habitat) +
+  geom_sf(data=buildings) +
+  geom_sf(data=bikeways) +
+  coord_sf()
+
+ggplot() +
+  geom_sf(data=habitat, color="yellow") +
+  geom_sf(data=buildings) +
+  geom_sf(data=bikeways, color="blue") +
+  coord_sf()
+
+ggsave("images/map1.1.png", plot=last_plot())
+
+
+# the background setup is bathymetry and topography
 # mashed together
 
 campus_DEM <- rast("output_data/campus_DEM.tif") 
