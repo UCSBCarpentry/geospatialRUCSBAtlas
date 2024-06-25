@@ -63,7 +63,7 @@ Landscape
 
 ![Overview map](/images/overview_map.jpg "Sketch")
 Here's the beginning of a piece:
-![Triplet zoom in](/images/3-zoom.png "Draft zoom.")
+![Triplet zoom in](/images/zoom_in_first_results.png "Draft zoom.")
 
 
 [UCSB Carpentry](https://ucsbcarpentry.github.io)
