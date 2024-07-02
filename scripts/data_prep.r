@@ -10,6 +10,7 @@ library(terra)
 library(curl)
 library(googledrive)
 library(tidyverse)
+library(sf)
 
 # to connect to AGO data
 library(arcgis)
@@ -132,21 +133,21 @@ unzip("downloaded_data/NCOS_Shorebird_Foraging_Habitat.zip", exdir = "source_dat
 # Open to Public
 # there may be a better version out there.
 # https://ucsb.maps.arcgis.com/home/item.html?id=c6eb1b782f674be082f9eb764314dda5
-trees_url <- "https://services1.arcgis.com/4TXrdeWh0RyCqPgB/arcgis/rest/services/Treekeeper_012116/FeatureServer/0"
+
+# there's a version of this with a trailing 0
+trees_url <- "https://services1.arcgis.com/4TXrdeWh0RyCqPgB/arcgis/rest/services/Treekeeper_012116/FeatureServer"
 
 trees_layer <- arc_open(trees_url)
-trees_layer.properties["id"]
 str(trees_layer)
 class(trees_layer)
 
 # not quite sure how to get this FeatureLayer 
 # into a usable format
-trees_layer_sf <- read_sf(trees_layer)
+trees_layer_sf <- vect(trees_layer)
+trees_layer_sf <- vect(trees_layer, type="points")
+colnames(trees_layer)
 
-
-
-
-dir_local <- file.path("source_data/trees")
+dir_local <- file.vector_layers()dir_local <- file.path("source_data/trees")
 dir.create(dir_local, showWarnings = FALSE)
 
 write.shapefile("source_data/trees/campus_trees.shp")
