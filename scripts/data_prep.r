@@ -135,22 +135,27 @@ unzip("downloaded_data/NCOS_Shorebird_Foraging_Habitat.zip", exdir = "source_dat
 # https://ucsb.maps.arcgis.com/home/item.html?id=c6eb1b782f674be082f9eb764314dda5
 
 # there's a version of this with a trailing 0
-trees_url <- "https://services1.arcgis.com/4TXrdeWh0RyCqPgB/arcgis/rest/services/Treekeeper_012116/FeatureServer"
+trees_url <- "https://services1.arcgis.com/4TXrdeWh0RyCqPgB/ArcGIS/rest/services/Treekeeper_012116/FeatureServer/0"
 
 trees_layer <- arc_open(trees_url)
 str(trees_layer)
 class(trees_layer)
 
-# not quite sure how to get this FeatureLayer 
+# not quite sure how to get this FeatureServer
 # into a usable format
-trees_layer_sf <- vect(trees_layer)
+trees_layer_sf <- arc_select(trees_layer)
 trees_layer_sf <- vect(trees_layer, type="points")
 colnames(trees_layer)
 
 dir_local <- file.vector_layers()dir_local <- file.path("source_data/trees")
 dir.create(dir_local, showWarnings = FALSE)
 
-write.shapefile("source_data/trees/campus_trees.shp")
+# so I'm faking it by putting a shapefile in the Carpentry google drive
+unzip("downloaded_data/Treekeeper_012116.zip", exdir = "source_data/trees") 
+
+trees_sf <- vect("source_data/trees/DTK_012116.shp")
+plot(trees_sf)
+
 
 # Foraging Habitat?
 # AOI's (Can be used later for clipping extents)
