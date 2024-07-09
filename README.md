@@ -43,6 +43,7 @@ All have a 3 tall x 4 wide aspect ratio, except where noted
   * hillshade
   * walkways
   * buildings
+  * vernal pools: vector data to be create via analysis from DEMs
 ![](/images/complicated_thematic_map.jpg)
 ![](/images/map1.1.png)
 
