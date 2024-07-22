@@ -205,12 +205,14 @@ unzip("downloaded_data/tl_2023_06_place.zip", exdir="source_data/cal_pop_places"
    # ^^ because you had the path wrong
 campus_DEM <- rast("downloaded_data/greatercampusDEM/greatercampusDEM/greatercampusDEM_1_1.tif")
 
-#this produces errors, but the output gets made
 campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4, fun=mean,
                                     filename = "source_data/campus_DEM.tif",
                                     overwrite = TRUE)
 
-#uh why are we downsampling here?
+#q: uh why are we downsampling here?
+#a: so that learners can run this faster.
+
+
 # above or below here?
 aspect <- terrain(campus_DEM_downsampled, 
                   v="aspect", unit="radians", neighbors=8, 
@@ -228,9 +230,9 @@ hillShade <- shade(slope, aspect,
 grays <- colorRampPalette(c("black", "white"))(255)
 plot(hillShade, col=grays)
 
-campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4,
-                                    filename = "source_data/campus_DEM.tif",
-                                    overwrite = TRUE)
+# campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4,
+#                                     filename = "source_data/campus_DEM.tif",
+#                                     overwrite = TRUE)
 
 #  JB -- this is already done above 
 # unzip("source_data/Bathymetry_OffshoreCoalOilPoint.zip",

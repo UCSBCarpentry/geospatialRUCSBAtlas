@@ -90,7 +90,7 @@ zoom_2_cropped <- project(zoom_2_cropped, my_crs)
 # aesthetically, at this point
 # we can start to use the extent of campus
 plot(zoom_2_cropped, col=grays)
-polys(campus_extent, col="red")
+polys(campus_extent, border="red", lwd=4)
 
 
 
@@ -117,7 +117,7 @@ zoom_1_extent <- project(zoom_1_extent, my_crs)
 zoom_1 <- project(zoom_1, my_crs)
 
 plot(zoom_1, col=grays)
-polys(zoom_3_fake_aoi, border="red", lwd=5)
+polys(zoom_3_fake_aoi, border="red", lwd=4)
 
 
 
@@ -128,10 +128,10 @@ polys(zoom_3_fake_aoi, border="red", lwd=5)
 par(mfrow = c(1,3))
 
 plot(zoom_1, col=grays)
-polys(zoom_3_fake_aoi, col="red")
+polys(zoom_3_fake_aoi,  border="red", lwd=4)
 
 plot(zoom_2_cropped, col=grays)
-polys(campus_extent, col="red")
+polys(campus_extent,  border="red", lwd=4)
 
 plot(campus_DEM, col=grays)
 
@@ -196,6 +196,7 @@ plot(zoom_3, col = grays)
 #################################################
 # now we should make them with ggplot with better 
 # visualization.
+# as is done in the lessons
 
 
 # zoom 1 as ggplot
@@ -208,7 +209,8 @@ zoom_1_plot <- ggplot() +
               aes(x=x, y=y, fill=GRAY_HR_SR_OB), show.legend = FALSE) +
   geom_spatvector(data=zoom_2_extent, fill="NA") +
     scale_fill_viridis_c() +
-  theme_dark()
+  theme_dark() +
+  coord_sf(crs=my_crs)
 
 zoom_1_plot
 
@@ -219,15 +221,20 @@ colnames(zoom_2_df)
 
 zoom_2_hillshade_df <- as.data.frame(zoom_2_hillshade, xy=TRUE)
 
+
+# this plot breaks if I try to style the extent box.
+# geom_sf(data=campus_extent, aes(stroke=3, fill=NA)) +
+# also, the crs throws an error
 zoom_2_plot <- ggplot()+
-  geom_raster(data = zoom_2_df,
+    geom_raster(data = zoom_2_df,
               aes(x=x, y=y, fill=dem90_hf), show.legend = FALSE) +
   geom_raster(data=zoom_2_hillshade_df, 
               aes(x=x, y=y, alpha=hillshade))+
-  geom_sf(data=campus_extent, fill="NA") +
-  scale_fill_viridis_c() +
-  scale_alpha(range = c(0.15, 0.65), guide="none") +
-  theme_dark()
+    scale_fill_viridis_c() +
+  geom_spatvector(data=campus_extent, fill="NA") +
+  scale_alpha(range = c(0.05, 0.5), guide="none") +
+  theme_dark() 
+#  coord_sf(crs=my_crs)
 
 zoom_2_plot
 
@@ -248,7 +255,8 @@ zoom_3_plot <- ggplot()+
               aes(x=x, y=y, alpha=hillshade))+
   scale_fill_viridis_c() +
   scale_alpha(range = c(0.15, 0.65), guide="none")+
-  theme_dark()
+  theme_dark() +
+  coord_sf(crs=my_crs)
 
 zoom_3_plot
 
@@ -259,7 +267,8 @@ tryptic <- list(zoom_1_plot, zoom_2_plot, zoom_3_plot)
 ggarrange(plotlist = tryptic, align="h", ncol=3)
 
 
-# what is this? I don't see it in the localdata drive? 
+# q: what is this? I don't see it in the localdata drive? 
+# a: census data. For labels. data prep under '# california populated places'
 # polygons
 places <- vect("source_data/cal_pop_places/tl_2023_06_place.shp")
 plot(places)
