@@ -28,15 +28,25 @@ tree_height <- unique(trees$HT)
 # ggplot with points
 # sized by height
 ggplot() +
-  geom_point(data = trees, aes(x=x, y=y))
+  geom_spatvector(data=trees, aes(size=HT))
 
-
-
-
-
-
-
-bikes <- vect("source_data/bike_paths/bikelanescollapsedv8.shp")
-plot(bikes)  
+# We could modify it a bit to reduce the scale of the dots
 ggplot() +
-  geom_sf(data = bikes)
+  geom_spatvector(data=trees, aes(size=HT)) +
+  scale_size_continuous(range = c(0, 2))
+
+
+# Bikepaths
+bikes <- vect("source_data/bike_paths/bikelanescollapsedv8.shp")
+plot(bikes)
+names(bikes)
+
+# using ggplot
+ggplot() +
+  geom_spatvector(data=bikes)
+
+# plotting bike paths on top ob trees layer
+ggplot() +
+  geom_spatvector(data=trees, aes(size=HT)) +
+  scale_size_continuous(range = c(0, 2)) +
+  geom_spatvector(data=bikes, colour = 'green')

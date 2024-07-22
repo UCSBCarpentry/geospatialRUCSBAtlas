@@ -151,6 +151,8 @@ dir_local <- file.vector_layers()dir_local <- file.path("source_data/trees")
 dir.create(dir_local, showWarnings = FALSE)
 
 # so I'm faking it by putting a shapefile in the Carpentry google drive
+drive_download("https://drive.google.com/file/d/1vu82OhdgrSL8qhlXBqEndohAvcgDmJ83/view?usp=drive_link",
+               "downloaded_data/Treekeeper_012116.zip", overwrite = TRUE)
 unzip("downloaded_data/Treekeeper_012116.zip", exdir = "source_data/trees") 
 
 trees_sf <- vect("source_data/trees/DTK_012116.shp")
