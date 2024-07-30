@@ -88,6 +88,7 @@ unzip("downloaded_data/w_campus_1ft.zip",
 
 
 # Planet 50cm NCOS?
+# Where art thou NCOS_07_25-26_2023.tif
 # with arc.open()
 # the planet will have a funny band combo
 # when it first opens
