@@ -50,23 +50,33 @@ custom_bins <- c(-3, 4.9, 5, 7.5, 10, 25, 40, 70, 100, 150, 200)
 campus_DEM_df <- campus_DEM_df %>% 
   mutate(binned = cut(elevation, breaks=custom_bins))
 
-
+# Let's have a look
 ggplot() + 
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned)) + 
   coord_sf() # to keep map's proportions
 
 # this sea level doesn't make much sense, 
-# why is it 4 ft? so let's do 
-# raster math
+# why is it 5 ft? so let's do:
+
+# raster math to substract 5ft from the DEM
+sea_level <- campus_DEM - 5
+
+# Set values below or equal to 0 to NA
+sea_level_0 <- app(sea_level, function(x) ifelse(x <=0, NA, x))
+
+# Note: this remove some values in the marsh that are below 0
+
+# Make it a data frame and rebinned
+sea_level_df <- as.data.frame(sea_level_0, xy=TRUE) %>% 
+  rename(elevation = lyr.1) %>%
+  mutate(binned = cut(elevation, breaks=custom_bins))
 
 # to make our scale make sense, we can do 
 # raster math 
 # how would I do this with overlay?
-sea_level <- campus_DEM - 4.9
-sea_level
-
-sea_level_df <- as.data.frame(sea_level, xy=TRUE) %>%
-  rename(elevation = greatercampusDEM_1_1)
+ggplot() + 
+  geom_raster(data = sea_level_df, aes(x=x, y=y, fill = binned)) + 
+  coord_sf() # to keep map's proportions
 
 summary(sea_level_df)
 custom_sea_bins <- c(-8, -.1, .1, 3, 5, 7.5, 10, 25, 40, 70, 100, 150, 200)
