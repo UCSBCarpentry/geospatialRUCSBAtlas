@@ -20,6 +20,7 @@ natural_color_terra <- rast("source_data/w_campus_1ft/w_campus_1ft.tif")
 # it makes a SpatRaster object
 # natural_color <- rast("source_data/w_campus_1ft.tif")
 
+#This is Planet
 NCOS <- rast("source_data/NCOS_07_25-26_2023.tif")
 
 

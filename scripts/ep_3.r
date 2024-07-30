@@ -119,7 +119,7 @@ ggplot() +
 ggplot() +
   geom_raster(data = bath_df, aes(x=x, y=y, fill = depth)) +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
-  scale_fill_viridis_c(na.value="white") +
+  scale_fill_viridis_c(na.value="red") +
   coord_quickmap()
 
 ggplot() +
