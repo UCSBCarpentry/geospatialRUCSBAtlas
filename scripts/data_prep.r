@@ -10,6 +10,10 @@ library(terra)
 library(curl)
 library(googledrive)
 library(tidyverse)
+library(sf)
+
+# to connect to AGO data
+library(arcgis)
 
 # Get Campus Rasters
 # **********************
@@ -94,6 +98,7 @@ unzip("downloaded_data/w_campus_1ft.zip",
 ## Part of repo:
 # POINTS
 # Bird Observations
+# Trees
 # LINES: bike paths
 
 # POLYGONS
@@ -118,6 +123,42 @@ drive_download("https://drive.google.com/file/d/1ssytmTbpC1rpT5b-h8AxtvSgNrsGQVN
                "downloaded_data/NCOS_Shorebird_Foraging_Habitat.zip", overwrite = TRUE)
 unzip("downloaded_data/NCOS_Shorebird_Foraging_Habitat.zip", exdir = "source_data/NCOS_bird_observations") 
 
+
+# POINTS
+# NCOS Planted Trees???
+# AGO: https://ucsb.maps.arcgis.com/home/item.html?id=6e05f326c17b4d84a626b42a3714c918
+
+
+# 2018 Campus Tree Layer:
+# Open to Public
+# there may be a better version out there.
+# https://ucsb.maps.arcgis.com/home/item.html?id=c6eb1b782f674be082f9eb764314dda5
+
+# there's a version of this with a trailing 0
+trees_url <- "https://services1.arcgis.com/4TXrdeWh0RyCqPgB/ArcGIS/rest/services/Treekeeper_012116/FeatureServer/0"
+
+trees_layer <- arc_open(trees_url)
+str(trees_layer)
+class(trees_layer)
+
+# not quite sure how to get this FeatureServer
+# into a usable format
+trees_layer_sf <- arc_select(trees_layer)
+trees_layer_sf <- vect(trees_layer, type="points")
+colnames(trees_layer)
+
+dir_local <- file.vector_layers()dir_local <- file.path("source_data/trees")
+dir.create(dir_local, showWarnings = FALSE)
+
+# so I'm faking it by putting a shapefile in the Carpentry google drive
+drive_download("https://drive.google.com/file/d/1vu82OhdgrSL8qhlXBqEndohAvcgDmJ83/view?usp=drive_link",
+               "downloaded_data/Treekeeper_012116.zip", overwrite = TRUE)
+unzip("downloaded_data/Treekeeper_012116.zip", exdir = "source_data/trees") 
+
+trees_sf <- vect("source_data/trees/DTK_012116.shp")
+plot(trees_sf)
+
+
 # Foraging Habitat?
 # AOI's (Can be used later for clipping extents)
 #       (You should create them in this script)
@@ -134,7 +175,7 @@ unzip("downloaded_data/bike_paths.zip", exdir = "source_data/bike_paths/", overw
 
 
 
-# POINTS
+
 
 
 # Global vectors for insets
@@ -164,12 +205,14 @@ unzip("downloaded_data/tl_2023_06_place.zip", exdir="source_data/cal_pop_places"
    # ^^ because you had the path wrong
 campus_DEM <- rast("downloaded_data/greatercampusDEM/greatercampusDEM/greatercampusDEM_1_1.tif")
 
-#this produces errors, but the output gets made
 campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4, fun=mean,
                                     filename = "source_data/campus_DEM.tif",
                                     overwrite = TRUE)
 
-#uh why are we downsampling here?
+#q: uh why are we downsampling here?
+#a: so that learners can run this faster.
+
+
 # above or below here?
 aspect <- terrain(campus_DEM_downsampled, 
                   v="aspect", unit="radians", neighbors=8, 
@@ -187,9 +230,9 @@ hillShade <- shade(slope, aspect,
 grays <- colorRampPalette(c("black", "white"))(255)
 plot(hillShade, col=grays)
 
-campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4,
-                                    filename = "source_data/campus_DEM.tif",
-                                    overwrite = TRUE)
+# campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4,
+#                                     filename = "source_data/campus_DEM.tif",
+#                                     overwrite = TRUE)
 
 #  JB -- this is already done above 
 # unzip("source_data/Bathymetry_OffshoreCoalOilPoint.zip",

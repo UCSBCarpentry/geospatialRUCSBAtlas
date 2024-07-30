@@ -1,13 +1,18 @@
 # geospatialRUCSBAtlas
-A repo that uses local UCSB examples applied to all of the steps of the Carpentries' R for GeoSpatial workshop.
+A repo that uses local UCSB examples applied to all of the 
+steps of the Carpentries' Intro to Raster and
+Vector Data workshop.
 
-Scripts run parallel to the episodes of Raster and Vector Data with R Data Carpentry.
+Scripts run parallel to the episodes (ep_1.r ep_2.r ...) and create
+maps 'suitable for publication'. (map1.r, map2.r) as laid our Maps 1 thru 7 below.
+
 The goal is to produce several nice atlas pages of campus that use all the techniques
 covered in the Intro to GeoSpatial R Carpentry lesson. (Maybe not the NDVI over time, 
 since we've never ever done that episode.)
 
 We have created a [Data Dictionary](datadictionary.md) to help us keep track of names.
 
+## Getting Started
 1: The repo is set up with a `source_data` folder
 
 `source_data` is *.* git ignored, so it's probably not going to
@@ -19,51 +24,69 @@ The goal is for this script to download raw data (into a
 any data that's required for the rAtlas. Its outputs
 go into `source_data`
 
-3: now each episode and map should run nicely, opening input data from the `source_data` directory
+3: now each episode and map should run nicely, 
+  opening input data from the `source_data` directory. Any data that
+  an episode writes should be placed in `output_data`
 
 
 The narrative of the lesson produces a number of maps, but not particularly 
 well formatted. We'll have 7 well-formatted maps that exist as a shadow to the 
 lesson narrative. 
 
-All have a 3 tall x 4 wide aspect ratio
+All have a 3 tall x 4 wide aspect ratio, except where noted
 
-###  1. A wide view of campus with
+###  Map 1. A wide view of campus with
   * Extent should be the same as #3 inset of map 7.
   * NCOS
   * Water
-  * Bathymentry and elevation
+  * Bathymentry and elevation in one layer
   * hillshade
   * walkways
   * buildings
+  * vernal pools: vector data to be create via analysis from DEMs
 ![](/images/complicated_thematic_map.jpg)
+![](/images/map1.1.png)
 
-November 28 test push.
 
-### 2 A stylized thematic map with trees, water, and bikeways
+
+### Map 2 A stylized thematic map with trees, water, and bikeways
 (Issue #8)
 ![Stylized, minimalistic](/images/limited_thematic_map.jpg "Sketch")
 Trees from ArcGIS Online: 
 Water: NCOS upper lagoon shapefile of bathymetric topo lines or polygons
 is it this [bird habitat file?](https://drive.google.com/file/d/1ssytmTbpC1rpT5b-h8AxtvSgNrsGQVNY/view?usp=drive_link)
 
-### 3 An atlas page layout with 4 insets:
-#### 4 California
-Vertical
-#### 5 The Bite of California
-Vertical
-#### 6 Extended Campus
-Landscape
+### Map 3 An atlas page layout with 4 insets:
+
+#### map 4 California
+Vertical 3x4
+
+#### map 5 The Bite of California
+Vertical 3x4
+
+#### map 6 Extended Campus
+Landscape 4x3
   * extended campus will have maptiles background
   * Bacara(?) or El Capitan to Modoc/State
-#### 7 
+
+#### 7 Campus Detail
 Landscape
   * A stripped down version of #1
-  * Include a Planet feed. (Issue #15)
+
 
 ![Overview map](/images/overview_map.jpg "Sketch")
-Here's the beginning of a piece:
+
+Maps 4-5-6:
+![Triplet zoom in](/images/3-zoom.png "Draft zoom.")
+
+
 ![Triplet zoom in](/images/zoom_in_first_results.png "Draft zoom.")
+
+
+
+
+Include a Planet feed. (Issue #15)
+
 
 
 [UCSB Carpentry](https://ucsbcarpentry.github.io)
