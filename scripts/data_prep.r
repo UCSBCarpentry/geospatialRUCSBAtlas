@@ -87,7 +87,7 @@ unzip("downloaded_data/w_campus_1ft.zip",
 
 
 
-# Planet 50cm WCOS?
+# Planet 50cm NCOS?
 # with arc.open()
 # the planet will have a funny band combo
 # when it first opens
