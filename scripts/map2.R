@@ -6,11 +6,19 @@
 # clean the environment and hidden objects
 rm(list=ls())
 
+# To-dos:
+#  * Add water
+#  * Step-by-step explanation of all the information added to the plot
+#  * Also explanation on how to filter out trees with height 0. Maybe some descriptive statistics
+#  * Find out how spat_vector() handles projections. trees (EPSG:3857) and bikes (EPSG:2229) have
+#    different projections and extents, but spat_vector() seems to handle it automatically
+
 # use to demo a more exotic ggplot(theme=)
 
 library(tidyverse)
 library(raster)
 library(sf)
+library(terra)
 library(tidyterra)
 library(ggspatial)
 
@@ -65,7 +73,7 @@ ggplot() +
   theme_minimal() + 
   theme(
     panel.grid = element_blank(),
-    panel.border = element_rect(color = "black", fill = NA, size = 0.5),
+    panel.border = element_rect(color = "black", fill = NA, linewidth = 0.5),
     plot.title = element_text(hjust = 0.5),
     plot.subtitle = element_text(hjust = 0.5)
   ) +
@@ -73,3 +81,6 @@ ggplot() +
        subtitle = 'Trees, bike paths, and water') +
   annotation_scale(location = "br", style = 'ticks', pad_y = unit(0.1, "cm"), unit_category = 'imperial') +
   annotation_north_arrow(location = "tr", which_north = "true", style = north_arrow_nautical())
+
+
+
