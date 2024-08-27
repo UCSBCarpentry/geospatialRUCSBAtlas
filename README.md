@@ -51,6 +51,7 @@ All have a 3 tall x 4 wide aspect ratio, except where noted
 
 ### Map 2 A stylized thematic map with trees, water, and bikeways
 (Issue #8)
+![Pending feedback map 2](/images/map2.png "Map 2 pending feedback")
 ![Stylized, minimalistic](/images/limited_thematic_map.jpg "Sketch")
 Trees from ArcGIS Online: 
 Water: NCOS upper lagoon shapefile of bathymetric topo lines or polygons
