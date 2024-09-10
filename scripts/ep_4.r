@@ -8,7 +8,7 @@
 
 # UCSB version:
 # do raster math on the bathymetry later to make sea level zero
-# or is it the DEM that has sea level at 4ft?
+# or is it the DEM that has sea level at 5ft?
 
 
 
@@ -22,10 +22,12 @@ library(terra)
 # from output folder
 campus_DEM <- rast("output_data/campus_DEM.tif")
 campus_DEM
-# remember: this is the one we cropped, so the 2 extents are the same.
-campus_bath <- rast("output_data/campus_bath.tif")
-campus_bath
+plot(campus_DEM)
 
+# remember: this is the one we cropped, so the 2 extents are the same.
+campus_bath <- rast("output_data/campus_bathymetry.tif")
+campus_bath
+plot(campus_bath)
 # do they have the same projections?
 campus_DEM
 campus_bath
@@ -60,19 +62,16 @@ ggplot() +
   coord_sf() # to keep map's proportions
 
 # this sea level doesn't make much sense, 
-# why is it 4 ft? so let's do 
-# raster math
+# why is it 5 ft? 
 
-# to make our scale make sense, we can do 
-# raster math 
-# how would I do this with overlay?
-sea_level <- campus_DEM - 4.9
+# so let's do raster math to set see level to 0
+sea_level <- campus_DEM - 5
 
 sea_level_df <- as.data.frame(sea_level, xy=TRUE) %>%
   rename(elevation = greatercampusDEM_1_1)
 
 summary(sea_level_df)
-custom_sea_bins <- c(-8, -.1, .1, 3, 5, 7.5, 10, 25, 40, 70, 100, 150, 200)
+custom_sea_bins <- c(-8, -.1, 0, 3, 5, 7.5, 10, 25, 40, 70, 100, 150, 200)
 
 sea_level_df <- sea_level_df %>% 
   mutate(binned = cut(elevation, breaks=custom_sea_bins))
@@ -97,6 +96,8 @@ ggplot() +
 # write a new geoTIFF with the new 
 # sea level = 0 version of the data
 
+
+merge(x, y, ..., first=TRUE, na.rm=TRUE,
 
 
 # ep 4 challenge to add:
