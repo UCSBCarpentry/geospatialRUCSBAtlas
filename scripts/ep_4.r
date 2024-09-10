@@ -18,16 +18,19 @@
 library(tidyverse)
 library(terra)
 
+data_folder = "output_data"
+
 # reload rasters
 # from output folder
-campus_DEM <- rast("output_data/campus_DEM.tif")
+campus_DEM <- rast(file.path(data_folder,"campus_DEM.tif"))
 campus_DEM
 plot(campus_DEM)
 
 # remember: this is the one we cropped, so the 2 extents are the same.
-campus_bath <- rast("output_data/campus_bathymetry.tif")
+campus_bath <- rast(file.path(data_folder,"campus_bathymetry.tif"))
 campus_bath
 plot(campus_bath)
+
 # do they have the same projections?
 campus_DEM
 campus_bath
@@ -65,9 +68,9 @@ ggplot() +
 # why is it 5 ft? 
 
 # so let's do raster math to set see level to 0
-sea_level <- campus_DEM - 5
+sea_level_fixed <- campus_DEM - 5
 
-sea_level_df <- as.data.frame(sea_level, xy=TRUE) %>%
+sea_level_df <- as.data.frame(sea_level_fixed, xy=TRUE) %>%
   rename(elevation = greatercampusDEM_1_1)
 
 summary(sea_level_df)
@@ -95,10 +98,17 @@ ggplot() +
 # end of ep. 4:
 # write a new geoTIFF with the new 
 # sea level = 0 version of the data
+writeRaster(sea_level_fixed, filename=file.path(data_folder,"campus_DEM_sea_level_fixed.tif"), overwrite=TRUE)
 
+# Merge the bathymetry and the DEM
+# Takes the values of the bathy first
+campus_dem_bathy <- terra::merge(campus_bath, sea_level_fixed, first=TRUE, na.rm=TRUE, overwrite = TRUE, 
+                   filename=file.path(data_folder,"campus_dem_bathy_merged.tif"))
 
-merge(x, y, ..., first=TRUE, na.rm=TRUE,
+# NOTE: it is important to namespace merge() as terra::merge() as merge() is also a R base function
 
+# quick look
+plot(campus_dem_bathy)
 
 # ep 4 challenge to add:
 # bare earth vs canopy for 2 different sources?
