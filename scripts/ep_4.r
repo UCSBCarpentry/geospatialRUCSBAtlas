@@ -10,6 +10,10 @@
 # do raster math on the bathymetry later to make sea level zero
 # or is it the DEM that has sea level at 4ft?
 
+
+# clean the environment and hidden objects
+rm(list=ls())
+
 # Libraries
 library(tidyverse)
 library(terra)

@@ -1,6 +1,8 @@
 # map 1
 # Wide overview of campus
 
+# clean the environment and hidden objects
+rm(list=ls())
 
 library(tidyverse)
 library(raster)
@@ -46,13 +48,15 @@ campus_DEM <- rast("output_data/campus_DEM.tif")
 crs(campus_DEM)
 
 # does bathymetry still needs to be re-projected in order to overlay?
-bath <- rast("output_data/SB_bath.tif") 
+bath <- rast("source_data/SB_bath.tif") 
 crs(bath)
 
 # can't overlay them because they are different CRS's
 # that's part of the narrative of the lesson.
 plot(campus_DEM)
 plot(bath)
+
+# intentional error:
 plot(bath + campus_DEM, na.rm=TRUE)
 
 campus_projection <- crs(campus_DEM)
@@ -67,14 +71,87 @@ crs(campus_DEM) == crs(bath)
 # this still won't work because the extents are different.
 plot(bath + campus_DEM)
 
+# Julien solved this in ep_4
+# for these files, CRS, extent, and resolution all match:
 
-
-
+# best coast line bins from ep 2
+# from ep 2, these are best sea level bins:
+custom_bins <- c(-3, 4.9, 5, 7.5, 10, 25, 40, 70, 100, 150, 200)
 
 # I need to get projection and resolution objects somewhere.
 # so I 'copy' the one that I already have:
 (my_projection <- raster("output_data/campus_DEM.tif") %>%
   crs()) 
+
+# reload rasters
+# from output folder
+campus_DEM <- rast("output_data/campus_DEM.tif")
+plot(campus_DEM)
+# remember: this is the one we cropped, so the 2 extents are the same.
+campus_bath <- rast("output_data/campus_bathymetry.tif")
+plot(campus_bath)
+
+# do they have the same projections?
+crs(campus_DEM) == crs(campus_bath)
+
+# make dataframes
+campus_DEM_df <- as.data.frame(campus_DEM, xy=TRUE) %>%
+  rename(elevation = greatercampusDEM_1_1) # rename to match code later
+str(campus_DEM_df)
+
+campus_bath_df <- as.data.frame(campus_bath, xy=TRUE) %>%
+  rename(bathymetry = SB_bath_2m)
+str(campus_bath_df)
+
+sea_level <- campus_DEM - 5
+
+# Set values below or equal to 0 to NA
+sea_level_0 <- app(sea_level, function(x) ifelse(x <=0, NA, x))
+
+# Note: this remove some values in the marsh that are below 0
+
+# Make it a data frame and rebinned
+sea_level_df <- as.data.frame(sea_level_0, xy=TRUE) %>% 
+  rename(elevation = lyr.1) %>%
+  mutate(binned = cut(elevation, breaks=custom_bins))
+
+# to make our scale make sense, we can do 
+# raster math 
+# how would I do this with overlay?
+ggplot() + 
+  geom_raster(data = sea_level_df, aes(x=x, y=y, fill = binned)) + 
+  coord_sf() # to keep map's proportions
+
+summary(sea_level_df)
+custom_sea_bins <- c(-8, -.1, .1, 3, 5, 7.5, 10, 25, 40, 70, 100, 150, 200)
+
+sea_level_df <- sea_level_df %>% 
+  mutate(binned = cut(elevation, breaks=custom_sea_bins))
+
+
+length(custom_sea_bins)
+
+# now sea level is zero.
+ggplot() + 
+  geom_raster(data = sea_level_df, aes(x=x, y=y, fill = binned)) +
+  coord_sf()
+
+# if we overlay, we should get the same result as at the 
+# end of the previous episode:
+ggplot() +
+  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
+  geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = bathymetry)) +
+  scale_fill_viridis_c(na.value="NA") +
+  coord_sf()
+
+
+
+
+
+
+
+
+
 
 # same with resolution:
 my_res <- res(raster("output_data/campus_DEM.tif") )
