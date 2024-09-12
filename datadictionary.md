@@ -8,6 +8,7 @@ described on the [Read Me](https://github.com/UCSBCarpentry/geospatialRUCSBAtlas
 
 Items from the Carpentry Google Drive are at 
 `\\Carpentry\Workshop Development\Local Data for Workshops\geo`
+But we would like to move away from keeping them there. Perhaps build a zenodo package at the end of our exercise?
 
 * Hillshades at 3 scales and extents:
 
