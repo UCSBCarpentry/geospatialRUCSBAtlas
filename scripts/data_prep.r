@@ -13,7 +13,7 @@ library(tidyverse)
 library(sf)
 
 # to connect to AGO data
-library(arcgis)
+library(arcgisutils)
 
 # Get Campus Rasters
 # **********************
@@ -138,18 +138,19 @@ unzip("downloaded_data/NCOS_Shorebird_Foraging_Habitat.zip", exdir = "source_dat
 # there's a version of this with a trailing 0
 trees_url <- "https://services1.arcgis.com/4TXrdeWh0RyCqPgB/ArcGIS/rest/services/Treekeeper_012116/FeatureServer/0"
 
+# this breaks:
 trees_layer <- arc_open(trees_url)
 str(trees_layer)
 class(trees_layer)
 
 # not quite sure how to get this FeatureServer
 # into a usable format
-trees_layer_sf <- arc_select(trees_layer)
-trees_layer_sf <- vect(trees_layer, type="points")
-colnames(trees_layer)
+# trees_layer_sf <- arc_select(trees_layer)
+# trees_layer_sf <- vect(trees_layer, type="points")
+# colnames(trees_layer)
 
-dir_local <- file.vector_layers()dir_local <- file.path("source_data/trees")
-dir.create(dir_local, showWarnings = FALSE)
+# dir_local <- file.vector_layers()dir_local <- file.path("source_data/trees")
+# dir.create(dir_local, showWarnings = FALSE)
 
 # so I'm faking it by putting a shapefile in the Carpentry google drive
 drive_download("https://drive.google.com/file/d/1vu82OhdgrSL8qhlXBqEndohAvcgDmJ83/view?usp=drive_link",
