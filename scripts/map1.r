@@ -200,12 +200,15 @@ ggplot() +
 # overlay the other layers
 # why can't I overlay raster and vector?
 
+names(campus_DEM)
+names(campus_bath)
+
 ggplot() +
+  geom_spatraster(data = campus_DEM, aes(fill = greatercampusDEM_1_1)) +
+  geom_spatraster(data = campus_bath, aes(fill = SB_bath_2m)) +
+  scale_fill_viridis_c(na.value="NA") +
   geom_sf(data=habitat, color="yellow") +
   geom_sf(data=buildings) +
   geom_sf(data=bikeways, color="blue") +
-  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
-  geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = bathymetry)) +
-  scale_fill_viridis_c(na.value="NA") +
-  coord_sf()
+    coord_sf()
 
