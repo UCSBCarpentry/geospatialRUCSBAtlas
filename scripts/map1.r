@@ -44,12 +44,19 @@ ggsave("images/map1.1.png", plot=last_plot())
 # the background setup is bathymetry and topography
 # mashed together
 
+# We'll need some bins
+# best coast line bins from ep 2
+# from ep 2, these are best sea level bins:
+custom_bins <- c(-3, 4.9, 5, 7.5, 10, 25, 40, 70, 100, 150, 200)
+
+
+
 campus_DEM <- rast("output_data/campus_DEM.tif") 
 crs(campus_DEM)
 
 # does bathymetry still needs to be re-projected in order to overlay?
 bath <- rast("source_data/SB_bath.tif") 
-crs(bath)
+crs(campus_DEM) == crs(bath)
 
 # can't overlay them because they are different CRS's
 # that's part of the narrative of the lesson.
@@ -74,9 +81,6 @@ plot(bath + campus_DEM)
 # Julien solved this in ep_4
 # for these files, CRS, extent, and resolution all match:
 
-# best coast line bins from ep 2
-# from ep 2, these are best sea level bins:
-custom_bins <- c(-3, 4.9, 5, 7.5, 10, 25, 40, 70, 100, 150, 200)
 
 # I need to get projection and resolution objects somewhere.
 # so I 'copy' the one that I already have:
@@ -149,34 +153,6 @@ ggplot() +
 
 
 
-
-
-
-
-# same with resolution:
-my_res <- res(raster("output_data/campus_DEM.tif") )
-
-str(bath)
-# reproject the bathymetry data using the
-# projection of the DEM:
-reprojected_bath <- projectRaster(bath, 
-                                  crs = my_projection)
-
-bath_df <- as.data.frame(reprojected_bath, 
-                         xy=TRUE) %>% 
-  rename(depth = layer) 
-
-
-# create those two dataframes
-campus_DEM_df <- campus_DEM %>% 
-  as.data.frame(xy=TRUE) %>% 
-  rename(elevation = layer)
-crs(campus_DEM_df)
-
-bath_df <- as.data.frame(bath, xy=TRUE)
-
-
-
 # add custom bins to each.
 # these were based on experimentation
 custom_DEM_bins <- c(-3, -.01, .01, 2, 3, 4, 5, 10, 40, 200)
@@ -186,32 +162,34 @@ campus_DEM_df <- campus_DEM_df %>%
 str(campus_DEM_df)
 
 custom_bath_bins <- c(1, -5, -15, -35, -45, -55, -60, -65, -75, -100, -125)
+str(custom_bath_bins)
 
-str(bath_df)
-bath_df <- bath_df %>% 
-  mutate(binned_bath = cut(layer, breaks=custom_bath_bins))
+str(campus_bath_df)
 
-str(bath_df)
+campus_bath_df <- campus_bath_df %>% 
+  mutate(binned_bath = cut(bathymetry, breaks =custom_bath_bins))
 
+str(campus_bath_df)
 str(campus_DEM_df)
 
 # overlays works!!!!!
 ggplot() + 
-  geom_raster(data = bath_df, aes(x=x, y=y, fill = binned_bath)) +
+  geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = binned_bath)) +
   scale_fill_manual(values = terrain.colors(10)) +
   geom_raster(data=campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
   scale_fill_manual(values = terrain.colors(19))
   coord_quickmap()
 
-
-  ggplot() +
-    geom_raster(data = bath_df, aes(x=x, y=y, fill = depth)) +
-    geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
-    scale_fill_viridis_c(na.value="white") +
+# not sure why 16. Not sure how it gets on both layers
+# not sure why it's so so ugly
+ggplot() +
+    geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = binned_bath)) +
+    geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
+    scale_fill_manual(values = terrain.colors(16)) +
     coord_quickmap()
   
-  ggplot() +
-    geom_raster(data = bath_df, aes(x=x, y=y, fill = depth)) +
+ggplot() +
+    geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = bathymetry)) +
     geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
     scale_fill_viridis_c(na.value="NA") +
     coord_quickmap()

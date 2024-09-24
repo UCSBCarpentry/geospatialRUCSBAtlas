@@ -228,7 +228,7 @@ zoom_2_hillshade_df <- as.data.frame(zoom_2_hillshade, xy=TRUE)
 # this plot breaks if I try to style the extent box.
 # geom_sf(data=campus_extent, aes(stroke=3, fill=NA)) +
 # also, the crs throws an error
-zoom_2_plot <- ggplot()+
+ggplot()+
     geom_raster(data = zoom_2_df,
               aes(x=x, y=y, fill=dem90_hf), show.legend = FALSE) +
   geom_raster(data=zoom_2_hillshade_df, 
@@ -239,7 +239,6 @@ zoom_2_plot <- ggplot()+
   theme_dark() 
 #  coord_sf(crs=my_crs)
 
-zoom_2_plot
 
 
 # zoom3
@@ -301,19 +300,29 @@ ggplot() +
 
 
 ggplot() +
+  geom_spatraster(data = zoom_2_hillshade,
+                  aes(fill=hillshade))+
+      scale_fill_viridis_c() +
+  scale_alpha(range = c(0.15, 0.65), guide="none")
+
+
+zoom_2_plot <- ggplot() +
   geom_raster(data = zoom_2_hillshade,
                   aes(x=x, y=y, fill=hillshade)) +
   scale_fill_viridis_c() +
   scale_alpha(range = c(0.15, 0.65), guide="none")
 
-    
-    
-ggplot() +
-  geom_spatraster(data = cali_zoom_2,
-              aes(fill=dem90_hf))
-  
 
+  
+# this doesn't work anymore. try cowplot
 par(mfrow = c(1,3))
+zoom_1_plot
+zoom_2_plot
+zoom_3_plot
 
 # reset par when you're done
 par(mfrow = c(1,1))
+
+# cowplot output
+aligned_zoom <- align_plots(zoom_1_plot, zoom_2_plot, zoom_3_plot, align = "h")
+draw_plot(aligned_zoom)
