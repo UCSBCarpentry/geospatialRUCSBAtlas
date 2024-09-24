@@ -312,7 +312,7 @@ trees_filt$SPP_grouped <- ifelse(trees_filt$SPP %in% top5_species,
 
 # Finally, making the plot with the same aesthetics as the previous one
 map2_v5 <- ggplot() +
-  geom_spatvector(data=trees_filt, aes(colour = SPP_grouped), alpha=0.9) +
+  geom_spatvector(data=trees_filt, aes(colour = SPP_grouped), alpha=0.5, size=0.5) +
   scale_color_viridis_d(name = 'Tree species') +
   new_scale_color() +
   geom_spatvector(data=streams_crop, aes(colour = 'Streams'), , linewidth = 2, alpha=0.6) +
@@ -347,3 +347,4 @@ ggsave(
   dpi = 500,
   units = 'in'
 )
+
