@@ -177,26 +177,35 @@ ggplot() +
   geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = binned_bath)) +
   scale_fill_manual(values = terrain.colors(10)) +
   geom_raster(data=campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
-  scale_fill_manual(values = terrain.colors(19))
+  scale_fill_manual(values = terrain.colors(19)) +
   coord_quickmap()
 
 # not sure why 16. Not sure how it gets on both layers
 # not sure why it's so so ugly
 ggplot() +
-    geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = binned_bath)) +
     geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
+    geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = binned_bath)) +
     scale_fill_manual(values = terrain.colors(16)) +
     coord_quickmap()
   
 ggplot() +
-    geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = bathymetry)) +
-    geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
-    scale_fill_viridis_c(na.value="NA") +
+  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
+  geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = bathymetry)) +
+        scale_fill_viridis_c(na.value="NA") +
     coord_quickmap()
   
   
 # now we need to clip to the extent that we want
-# further format the color ramps here
+# further format the color ramps
 # overlay the other layers
-  
-  
+# why can't I overlay raster and vector?
+
+ggplot() +
+  geom_sf(data=habitat, color="yellow") +
+  geom_sf(data=buildings) +
+  geom_sf(data=bikeways, color="blue") +
+  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
+  geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = bathymetry)) +
+  scale_fill_viridis_c(na.value="NA") +
+  coord_sf()
+
