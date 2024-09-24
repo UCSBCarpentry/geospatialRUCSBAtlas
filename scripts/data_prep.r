@@ -160,6 +160,18 @@ unzip("downloaded_data/Treekeeper_012116.zip", exdir = "source_data/trees")
 trees_sf <- vect("source_data/trees/DTK_012116.shp")
 plot(trees_sf)
 
+# Water data for map 2
+# * California Streams https://data.cnra.ca.gov/dataset/california-streams
+curl_download("https://data-cdfw.opendata.arcgis.com/api/download/v1/items/92b18d9e091d469fa69d256fb395b946/shapefile?layers=0",
+              "downloaded_data/california_streams.zip")
+unzip("downloaded_data/california_streams.zip", exdir="source_data/california_streams", overwrite = TRUE)
+file.remove("downloaded_data/california_streams.zip")
+
+# * Pacific Ocean Polygon https://geodata.library.ucsb.edu/catalog/3853-s3_2002_s3_reg_pacific_ocean
+curl_download("https://geodata.library.ucsb.edu/download/file/3853-s3_2002_s3_reg_pacific_ocean-shapefile.zip",
+              "downloaded_data/3853-s3_2002_s3_reg_pacific_ocean-shapefile.zip")
+unzip("downloaded_data/3853-s3_2002_s3_reg_pacific_ocean-shapefile.zip", exdir="source_data/california_coastline", overwrite = TRUE)
+file.remove("downloaded_data/3853-s3_2002_s3_reg_pacific_ocean-shapefile.zip")
 
 # Foraging Habitat?
 # AOI's (Can be used later for clipping extents)
