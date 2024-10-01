@@ -233,9 +233,10 @@ ggplot() +
   geom_sf(data=habitat, color="yellow") +
   geom_sf(data=buildings) +
   geom_sf(data=bikeways, color="black") +
+  labs(title="Map 1", subtitle="wide view of campus")
   coord_sf()
 
-ggsave("images/map1.2.png", plot=last_plot())
+ggsave("images/map1.3.png", plot=last_plot())
 
 # now we need to clip to the extent that we want
 # further format the color ramps
