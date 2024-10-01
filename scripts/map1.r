@@ -231,9 +231,9 @@ campus_hillshade_df <-
   str(campus_hillshade_df)
 
 #idk if I have to match the dem bins here too but just in case
-custom_DEM_bins <- c(-3, -.01, .01, 2, 3, 4, 5, 10, 40, 200)
-campus_hillshade_df <- campus_hillshade_df %>% 
-  mutate(binned_DEM = cut(hillshade, breaks = custom_DEM_bins))
+# custom_DEM_bins <- c(-3, -.01, .01, 2, 3, 4, 5, 10, 40, 200)
+# campus_hillshade_df <- campus_hillshade_df %>% 
+#  mutate(binned_DEM = cut(hillshade, breaks = custom_DEM_bins))
 
 
 # reproject the vectors
