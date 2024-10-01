@@ -220,6 +220,16 @@ ggplot() +
   scale_fill_viridis_c(na.value="NA") +
     coord_sf()
 
+#create a hillshade
+#open file from ep1-2
+
+campus_hillshade_df <- 
+  rast("source_data/campus_hillshade.tif") %>% 
+  as.data.frame(xy = TRUE) 
+
+#need to fix the trim hold
+
+
 # reproject the vectors
 buildings <- st_transform(buildings, campus_projection)
 habitat <- st_transform(habitat, campus_projection)
@@ -229,6 +239,7 @@ bikeways <- st_transform(bikeways, campus_projection)
 ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
   geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = bathymetry)) +
+  geom_raster(data = campus_hillshade_df, aes(x=x, y=y, alpha = campus_hillshade)) +
   scale_fill_viridis_c(na.value="NA") +
   labs(title="Map 1", subtitle="wide view of campus") +
   geom_sf(data=buildings, color ="hotpink") +
