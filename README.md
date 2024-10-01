@@ -56,6 +56,10 @@ All have a 3 tall x 4 wide aspect ratio, except where noted
 -   vernal pools:
     -   vector data to be create via analysis from DEMs
     -   this will come later ![](/images/map1.2.png)
+    
+Something like this:
+![Map 1 DRAFT](/images/map1.3.png "Map 1.3")
+![Triplet zoom in](/images/3-zoom.png "Draft zoom.")
 
 ### Map 2 A stylized thematic map with trees, water, and bikeways
 
