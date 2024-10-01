@@ -93,6 +93,7 @@ plot(campus_DEM)
 campus_bath <- rast("output_data/campus_bathymetry.tif")
 plot(campus_bath)
 
+
 # do they have the same projections?
 crs(campus_DEM) == crs(campus_bath)
 
@@ -234,6 +235,8 @@ ggplot() +
   geom_sf(data=bikeways, color="black") +
   coord_sf()
 
+ggsave("images/map1.2.png", plot=last_plot())
 
 # now we need to clip to the extent that we want
 # further format the color ramps
+
