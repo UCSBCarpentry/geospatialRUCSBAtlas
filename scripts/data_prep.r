@@ -244,7 +244,7 @@ plot(slope)
 
 hillShade <- shade(slope, aspect, 
                    angle=40, direction=170, normalize=TRUE, 
-                   filename="source_data/hillshade.tiff", overwrite = TRUE)
+                   filename="source_data/campus_hillshade.tif", overwrite = TRUE)
 grays <- colorRampPalette(c("black", "white"))(255)
 plot(hillShade, col=grays)
 

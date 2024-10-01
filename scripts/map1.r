@@ -74,7 +74,7 @@ crs(campus_DEM) == crs(bath)
 
 #################################
 # this still won't work because the extents are different.
-plot(bath + campus_DEM)
+# plot(bath + campus_DEM)
 
 # Julien solved this in ep_4
 # for these files, CRS, extent, and resolution all match:
@@ -199,14 +199,14 @@ names(campus_DEM)
 names(campus_bath)
 
 # geom_spatraster is tidyterra. that's why this one doesn't work.
-ggplot() +
-  geom_spatraster(data = campus_DEM, aes(fill = greatercampusDEM_1_1)) +
-  geom_spatraster(data = campus_bath, aes(fill = SB_bath_2m)) +
-  scale_fill_viridis_c(na.value="NA") +
-  geom_sf(data=habitat, color="yellow") +
-  geom_sf(data=buildings) +
-  geom_sf(data=bikeways, color="blue") +
-    coord_sf()
+#ggplot() +
+#  geom_spatraster(data = campus_DEM, aes(fill = greatercampusDEM_1_1)) +
+#  geom_spatraster(data = campus_bath, aes(fill = SB_bath_2m)) +
+#  scale_fill_viridis_c(na.value="NA") +
+#  geom_sf(data=habitat, color="yellow") +
+#  geom_sf(data=buildings) +
+#  geom_sf(data=bikeways, color="blue") +
+#    coord_sf()
 
 
 # this is whack
@@ -226,8 +226,9 @@ ggplot() +
 campus_hillshade_df <- 
   rast("source_data/campus_hillshade.tif") %>% 
   as.data.frame(xy = TRUE) %>% 
-  rename(hillshade = campus_hillshade) # rename to match code later
-str(campus_hillshade_df)
+  rename(campus_hillshade = hillshade) # rename to match code later
+
+  str(campus_hillshade_df)
 
 #idk if I have to match the dem bins here too but just in case
 custom_DEM_bins <- c(-3, -.01, .01, 2, 3, 4, 5, 10, 40, 200)
@@ -245,7 +246,7 @@ bikeways <- st_transform(bikeways, campus_projection)
 ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
   geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = bathymetry)) +
-  geom_raster(data = campus_hillshade_df, aes(x=x, y=y, alpha = hillshade)) +
+  geom_raster(data = campus_hillshade_df, aes(x=x, y=y, alpha = campus_hillshade)) +
   scale_fill_viridis_c(na.value="NA") +
   labs(title="Map 1", subtitle="wide view of campus") +
   geom_sf(data=buildings, color ="hotpink") +
