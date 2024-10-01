@@ -245,8 +245,8 @@ bikeways <- st_transform(bikeways, campus_projection)
 # +hillshade
 ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
-  geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = bathymetry)) +
   geom_raster(data = campus_hillshade_df, aes(x=x, y=y, alpha = campus_hillshade)) +
+  geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = bathymetry)) +
   scale_fill_viridis_c(na.value="NA") +
   labs(title="Map 1", subtitle="wide view of campus") +
   geom_sf(data=buildings, color ="hotpink") +
