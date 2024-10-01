@@ -220,14 +220,19 @@ ggplot() +
   scale_fill_viridis_c(na.value="NA") +
     coord_sf()
 
-#create a hillshade
+#bring back the hillshade
 #open file from ep1-2
 
 campus_hillshade_df <- 
   rast("source_data/campus_hillshade.tif") %>% 
-  as.data.frame(xy = TRUE) 
+  as.data.frame(xy = TRUE) %>% 
+  rename(hillshade = campus_hillshade) # rename to match code later
+str(campus_hillshade_df)
 
-#need to fix the trim hold
+#idk if I have to match the dem bins here too but just in case
+custom_DEM_bins <- c(-3, -.01, .01, 2, 3, 4, 5, 10, 40, 200)
+campus_hillshade_df <- campus_hillshade_df %>% 
+  mutate(binned_DEM = cut(hillshade, breaks = custom_DEM_bins))
 
 
 # reproject the vectors
@@ -236,10 +241,11 @@ habitat <- st_transform(habitat, campus_projection)
 bikeways <- st_transform(bikeways, campus_projection)
 
 #update color scheme for contrast 
+# +hillshade
 ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
   geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = bathymetry)) +
-  geom_raster(data = campus_hillshade_df, aes(x=x, y=y, alpha = campus_hillshade)) +
+  geom_raster(data = campus_hillshade_df, aes(x=x, y=y, alpha = hillshade)) +
   scale_fill_viridis_c(na.value="NA") +
   labs(title="Map 1", subtitle="wide view of campus") +
   geom_sf(data=buildings, color ="hotpink") +
