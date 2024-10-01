@@ -44,6 +44,8 @@ All have a 3 tall x 4 wide aspect ratio, except where noted
 
 ### Map 1. A wide view of campus with
 
+(issue #7)
+
 -   Extent should be the same as #3 inset of map 7.
 -   NCOS – for now the new lagoon habitat shapefile
 -   Water
@@ -58,12 +60,11 @@ All have a 3 tall x 4 wide aspect ratio, except where noted
 ### Map 2 A stylized thematic map with trees, water, and bikeways
 
 (Issue #8) ![map 2 with tree
-height](/images/map2_TreeHeight.png "Map 2 tree height") ![map 2 with
-tree species](/images/map2_TreeSpecies.png "Map 2 tree height")
-![Stylized, minimalistic](/images/limited_thematic_map.jpg "Sketch")
-Trees from ArcGIS Online: Water: NCOS upper lagoon shapefile of
-bathymetric topo lines or polygons is it this [bird habitat
+species](/images/map2_TreeSpecies.png "Map 2 tree height")Trees from
+ArcGIS Online: Water: NCOS upper lagoon shapefile of bathymetric topo
+lines or polygons is it this [bird habitat
 file?](https://drive.google.com/file/d/1ssytmTbpC1rpT5b-h8AxtvSgNrsGQVNY/view?usp=drive_link)
+– yes bird habitats
 
 ### Map 3 An atlas page layout with 4 insets:
 
@@ -80,15 +81,14 @@ Vertical 3x4
 Landscape 4x3 \* extended campus will have maptiles background \*
 Bacara(?) or El Capitan to Modoc/State
 
+Maps 4-5-6: ![Triplet zoom in](/images/3-zoom.png "Draft zoom.")
 #### 7 Campus Detail
-
 Landscape \* A stripped down version of #1
 
 ![Overview map](/images/overview_map.jpg "Sketch")
 
-Maps 4-5-6: ![Triplet zoom in](/images/3-zoom.png "Draft zoom.")
 
-![Triplet zoom in](/images/zoom_in_first_results.png "Draft zoom.")
+
 
 Include a Planet feed. (Issue #15)
 
