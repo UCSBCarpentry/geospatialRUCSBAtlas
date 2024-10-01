@@ -85,14 +85,16 @@ Maps 4-5-6: ![Triplet zoom in](/images/3-zoom.png "Draft zoom.")
 #### 7 Campus Detail
 Wide Landscape \* A stripped down version of #1
 
+
+### Map 3 sketch:
 ![Overview map](/images/overview_map.jpg "Sketch")
 
 
-#### 8 RS Imagery
+### 8 RS Imagery
 Include a Planet feed. (Issue #15)
 
 
-#### 9 Analysis: Find landscape depressions on Campus DEM
+### 9 Analysis: Find landscape depressions on Campus DEM
 ie: identify vernal pools
 
 #### 10 Analysis: Find bike paths that cross water?
