@@ -111,6 +111,7 @@ sea_level <- campus_DEM - 5
 sea_level_0 <- app(sea_level, function(x) ifelse(x <=0, NA, x))
 
 # Note: this remove some values in the marsh that are below 0
+# we are going to want those back later as our 'vernal pools'
 
 # Make it a data frame and rebinned
 sea_level_df <- as.data.frame(sea_level_0, xy=TRUE) %>% 
@@ -230,7 +231,7 @@ ggplot() +
   geom_sf(data=buildings) +
   geom_sf(data=habitat, color="yellow") +
   geom_sf(data=buildings) +
-  geom_sf(data=bikeways, color="blue") +
+  geom_sf(data=bikeways, color="black") +
   coord_sf()
 
 
