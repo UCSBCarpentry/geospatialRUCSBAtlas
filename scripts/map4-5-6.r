@@ -213,7 +213,9 @@ zoom_1_plot <- ggplot() +
   geom_spatvector(data=zoom_2_extent, fill="NA") +
     scale_fill_viridis_c() +
   theme_dark() +
-  coord_sf(crs=my_crs)
+  coord_sf(crs=my_crs) + 
+  labs(title = "California",
+           subtitle = "Zoom 1")
 
 zoom_1_plot
 
@@ -310,8 +312,9 @@ zoom_2_plot <- ggplot() +
   geom_raster(data = zoom_2_hillshade,
                   aes(x=x, y=y, fill=hillshade)) +
   scale_fill_viridis_c() +
-  scale_alpha(range = c(0.15, 0.65), guide="none")
-
+  scale_alpha(range = c(0.15, 0.65), guide="none") +
+  labs(title = "Bite of California",
+       subtitle = "Zoom 2")
 
   
 # this doesn't work anymore. try cowplot
