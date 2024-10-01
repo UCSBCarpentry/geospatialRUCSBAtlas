@@ -63,8 +63,6 @@ crs(campus_DEM) == crs(bath)
 plot(campus_DEM)
 plot(bath)
 
-# intentional error:
-plot(bath + campus_DEM, na.rm=TRUE)
 
 campus_projection <- crs(campus_DEM)
 
@@ -150,9 +148,6 @@ ggplot() +
 
 
 
-
-
-
 # add custom bins to each.
 # these were based on experimentation
 custom_DEM_bins <- c(-3, -.01, .01, 2, 3, 4, 5, 10, 40, 200)
@@ -180,6 +175,7 @@ ggplot() +
   scale_fill_manual(values = terrain.colors(19)) +
   coord_quickmap()
 
+# switch the order
 # not sure why 16. Not sure how it gets on both layers
 # not sure why it's so so ugly
 ggplot() +
@@ -195,14 +191,12 @@ ggplot() +
     coord_quickmap()
   
   
-# now we need to clip to the extent that we want
-# further format the color ramps
-# overlay the other layers
-# why can't I overlay raster and vector?
+# overlay the vectors
 
 names(campus_DEM)
 names(campus_bath)
 
+# geom_spatraster is tidyterra. that's why this one doesn't work.
 ggplot() +
   geom_spatraster(data = campus_DEM, aes(fill = greatercampusDEM_1_1)) +
   geom_spatraster(data = campus_bath, aes(fill = SB_bath_2m)) +
@@ -212,3 +206,33 @@ ggplot() +
   geom_sf(data=bikeways, color="blue") +
     coord_sf()
 
+
+# this is whack
+# you need to re-project
+ggplot() +
+  geom_sf(data=habitat, color="yellow") +
+  geom_sf(data=buildings) +
+  geom_sf(data=bikeways, color="blue") +
+  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
+  geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = bathymetry)) +
+  scale_fill_viridis_c(na.value="NA") +
+    coord_sf()
+
+# reproject the vectors
+buildings <- st_transform(buildings, campus_projection)
+habitat <- st_transform(habitat, campus_projection)
+bikeways <- st_transform(bikeways, campus_projection)
+
+ggplot() +
+  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
+  geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = bathymetry)) +
+  scale_fill_viridis_c(na.value="NA") +
+  geom_sf(data=buildings) +
+  geom_sf(data=habitat, color="yellow") +
+  geom_sf(data=buildings) +
+  geom_sf(data=bikeways, color="blue") +
+  coord_sf()
+
+
+# now we need to clip to the extent that we want
+# further format the color ramps
