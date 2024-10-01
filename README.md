@@ -68,30 +68,34 @@ file?](https://drive.google.com/file/d/1ssytmTbpC1rpT5b-h8AxtvSgNrsGQVNY/view?us
 
 ### Map 3 An atlas page layout with 4 insets:
 
-#### map 4 California
-
+#### map 4 California Overview
 Vertical 3x4
+Western US
 
 #### map 5 The Bite of California
-
 Vertical 3x4
+Needs to be further zoomed in. 
 
 #### map 6 Extended Campus
-
-Landscape 4x3 \* extended campus will have maptiles background \*
-Bacara(?) or El Capitan to Modoc/State
+Landscape 4x3 \* extended campus will have maptiles background? \*
+Bacara-ish to 254/101 
 
 Maps 4-5-6: ![Triplet zoom in](/images/3-zoom.png "Draft zoom.")
+
 #### 7 Campus Detail
-Landscape \* A stripped down version of #1
+Wide Landscape \* A stripped down version of #1
 
 ![Overview map](/images/overview_map.jpg "Sketch")
 
 
-
-
+#### 8 RS Imagery
 Include a Planet feed. (Issue #15)
 
+
+#### 9 Analysis: Find landscape depressions on Campus DEM
+ie: identify vernal pools
+
+#### 10 Analysis: Find bike paths that cross water?
 [UCSB Carpentry](https://ucsbcarpentry.github.io)
 
 [Original lesson -- Introduction to Geospatial Raster and Vector Data
