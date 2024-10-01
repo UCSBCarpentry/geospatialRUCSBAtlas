@@ -225,15 +225,15 @@ buildings <- st_transform(buildings, campus_projection)
 habitat <- st_transform(habitat, campus_projection)
 bikeways <- st_transform(bikeways, campus_projection)
 
+#update color scheme for contrast 
 ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
   geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = bathymetry)) +
   scale_fill_viridis_c(na.value="NA") +
-  geom_sf(data=buildings) +
-  geom_sf(data=habitat, color="yellow") +
-  geom_sf(data=buildings) +
-  geom_sf(data=bikeways, color="black") +
-  labs(title="Map 1", subtitle="wide view of campus")
+  labs(title="Map 1", subtitle="wide view of campus") +
+  geom_sf(data=buildings, color ="hotpink") +
+  geom_sf(data=habitat, color="darkorchid1") +
+  geom_sf(data=bikeways, color="yellow") +
   coord_sf()
 
 ggsave("images/map1.3.png", plot=last_plot())
