@@ -17,7 +17,7 @@ library(tidyverse)
 library(terra)     # Required for loading vector data with vect() function
 library(tidyterra) # Required for using geom_spatvector() with ggplot
 library(ggspatial) # Required for map scale -annotation_scale()- and compass -annotation_north_arrow()-
-library(ggnewscale) # Required for maping multiple scales in ggplot
+library(ggnewscale) # Required for mapping multiple scales in ggplot
 
 
 
