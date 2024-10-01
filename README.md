@@ -77,6 +77,7 @@ Vertical 3x4
 Needs to be further zoomed in. 
 
 #### map 6 Extended Campus
+(issue #14)
 Landscape 4x3 \* extended campus will have maptiles background? \*
 Bacara-ish to 254/101 
 
@@ -97,7 +98,7 @@ Include a Planet feed. (Issue #15)
 ### 9 Analysis: Find landscape depressions on Campus DEM
 ie: identify vernal pools
 
-#### 10 Analysis: Find bike paths that cross water?
+### 10 Analysis: Find bike paths that cross water?
 [UCSB Carpentry](https://ucsbcarpentry.github.io)
 
 [Original lesson -- Introduction to Geospatial Raster and Vector Data
