@@ -139,6 +139,9 @@ unzip("downloaded_data/NCOS_Shorebird_Foraging_Habitat.zip", exdir = "source_dat
 trees_url <- "https://services1.arcgis.com/4TXrdeWh0RyCqPgB/ArcGIS/rest/services/Treekeeper_012116/FeatureServer/0"
 
 # this breaks:
+# says arc_open is not a function in arcgisutils
+# its part of a function in arcgislayers 
+# remote::install_github("r-argis/arcgis", dependencies = TRUE)
 trees_layer <- arc_open(trees_url)
 str(trees_layer)
 class(trees_layer)
@@ -167,6 +170,7 @@ curl_download("https://data-cdfw.opendata.arcgis.com/api/download/v1/items/92b18
 unzip("downloaded_data/california_streams.zip", exdir="source_data/california_streams", overwrite = TRUE)
 file.remove("downloaded_data/california_streams.zip")
 
+# I get an error on the pacific polygon download, HTTP error 500 (KL)
 # * Pacific Ocean Polygon https://geodata.library.ucsb.edu/catalog/3853-s3_2002_s3_reg_pacific_ocean
 curl_download("https://geodata.library.ucsb.edu/download/file/3853-s3_2002_s3_reg_pacific_ocean-shapefile.zip",
               "downloaded_data/3853-s3_2002_s3_reg_pacific_ocean-shapefile.zip")
@@ -249,6 +253,7 @@ plot(hillShade, col=grays)
 #                                     overwrite = TRUE)
 
 #  JB -- this is already done above 
+#  KL -- can we remove 257-259 then?
 # unzip("source_data/Bathymetry_OffshoreCoalOilPoint.zip",
 #       overwrite = TRUE, 
 #       exdir = "source_data/Bathymetry_OffshoreCoalOilPoint")
