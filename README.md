@@ -10,7 +10,7 @@ A repo that uses local UCSB examples applied to all of the steps of the
 Carpentries' Intro to Raster and Vector Data workshop.
 
 Scripts run parallel to the episodes (ep_1.r ep_2.r ...) and create maps
-'suitable for publication'. (map1.r, map2.r) as laid our Maps 1 thru 7
+'suitable for publication'. (map1.r, map2.r) as laid out in Maps 1 thru 7
 below.
 
 The goal is to produce several nice atlas pages of campus that use all
