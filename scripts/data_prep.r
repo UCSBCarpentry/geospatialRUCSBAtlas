@@ -66,13 +66,15 @@ unzip("downloaded_data/global_raster.zip", exdir="downloaded_data", overwrite = 
 
 # Elevation in the Western United States 90m DEM
 # to prep for SLO/SB/VEN/LA/OC/SD region extent on map 7 
-# https://www.sciencebase.gov/catalog/item/542aebf9e4b057766eed286a
+#https://www.sciencebase.gov/catalog/item/542aebf9e4b057766eed286a
 # this is a big, unwieldy file
-curl_download("https://www.sciencebase.gov/catalog/file/get/542aebf9e4b057766eed286a", 
+# 10/8/2024 this link might be broken...I tried changing the url item to match but still conking out 
+curl_download("https://www.sciencebase.gov/catalog/file/get/542aebf9e4b057766eed286a?facet=dem90_hf", 
               "downloaded_data/dem90_hf.zip")
 unzip("downloaded_data/dem90_hf.zip", exdir="source_data", overwrite = TRUE)
 
-
+# Delete the zip archive
+file.remove("downloaded_data/dem90_hf.zip")
 
 # Get Campus Imagery
 # *********************
