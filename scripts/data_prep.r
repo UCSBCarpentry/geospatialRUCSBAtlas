@@ -65,6 +65,8 @@ unzip("downloaded_data/global_raster.zip", exdir="downloaded_data", overwrite = 
 
 
 # Elevation in the Western United States 90m DEM
+# can we make this into a drive file instead? 
+# even downloading from website manually/directly took over an hour
 # to prep for SLO/SB/VEN/LA/OC/SD region extent on map 7 
 #https://www.sciencebase.gov/catalog/item/542aebf9e4b057766eed286a
 # this is a big, unwieldy file
