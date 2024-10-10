@@ -1,10 +1,11 @@
-# map 7 
-# campus detail
-# will be a piece of map 3
+# map 8 actually
+# most recent planet image
 
 
 
 library(terra)
+
+
 library(geojsonsf)
 library(sf)
 library(ggplot2)
@@ -14,8 +15,16 @@ library(dplyr)
 library(cowplot)
 library(ggpubr)
 
+
 # make sure output window is 1x1
 # because you muck with it a lot
 par(mfrow = c(1,1))
 
 
+library(planetR)
+library(curl)
+
+(get_auth)
+plnt_quota
+
+curl(url="https://api.planet.com/features/v1/ogc/my?format=api", open = "")

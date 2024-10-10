@@ -1,8 +1,4 @@
----
-editor_options: 
-  markdown: 
-    wrap: 72
----
+
 
 # geospatialRUCSBAtlas
 
@@ -96,6 +92,8 @@ Wide Landscape \* A stripped down version of #1
 
 ### 8 RS Imagery
 Include a Planet feed. (Issue #15)
+For starters, this will be several pre-fetched campus images.
+4- and 8- bands!
 
 
 ### 9 Analysis: Find landscape depressions on Campus DEM
