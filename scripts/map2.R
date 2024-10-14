@@ -225,7 +225,7 @@ bikes_lines <- disagg(bikes_crop)
 
 # Trying again the same plot to check the differences
 ggplot() +
-  geom_spatvector(data=trees_filt, aes(size=HT, colour='Trees')) +
+  geom_spatvector(data=trees_filt, aes(size=HT, colour='Trees'), alpha=0.5) +
   scale_size_continuous(range = c(0, 2), name = 'Tree Height (ft)') +
   geom_spatvector(data=streams_crop, aes(colour = 'Streams'), , linewidth = 2, alpha=0.4) +
   geom_spatvector(data=bikes_lines, aes(colour = 'Bike Paths'), linewidth = 1) +
@@ -238,16 +238,16 @@ ggplot() +
 # Finally adding the coastline geometry and legend.
 # Save this plot in an object so we don't have to repeat the same code
 map2_v1 <- ggplot() +
-  geom_spatvector(data=trees_filt, aes(size=HT, colour = 'Trees')) +
+  geom_spatvector(data=trees_filt, aes(size=HT, colour = 'Trees'),alpha = 0.5) +
   scale_size_continuous(range = c(0, 2), name = 'Tree Height (ft)') +
   geom_spatvector(data=streams_crop, aes(colour = 'Streams'), , linewidth = 2, alpha=0.6) +
   geom_spatvector(data=bikes_lines, aes(colour = 'Bike Paths'), linewidth = 1) +
-  geom_spatvector(data=coastline_crop, aes(colour = 'Ocean'), linewidth = 1, fill = 'lightblue1') +
+  geom_spatvector(data=coastline_crop, aes(colour = 'Ocean'), linewidth = 1, fill = 'dodgerblue') +
   scale_colour_manual(name = "Legend",
                     values = c('Trees' = 'green4', 
                                'Bike Paths' = 'black',
                                'Streams' = 'cadetblue3',
-                               'Ocean' = 'lightblue1')) +
+                               'Ocean' = 'dodgerblue')) +
   theme_minimal()
 map2_v1
 
@@ -314,16 +314,16 @@ trees_filt$SPP_grouped <- ifelse(trees_filt$SPP %in% top5_species,
 
 # Finally, making the plot with the same aesthetics as the previous one
 map2_v5 <- ggplot() +
-  geom_spatvector(data=trees_filt, aes(colour = SPP_grouped), alpha=0.5, size=0.5) +
+  geom_spatvector(data=trees_filt, aes(colour = SPP_grouped), alpha=0.6, size=0.5) +
   scale_color_viridis_d(name = 'Tree species') +
   new_scale_color() +
   geom_spatvector(data=streams_crop, aes(colour = 'Streams'), , linewidth = 2, alpha=0.6) +
   geom_spatvector(data=bikes_lines, aes(colour = 'Bike Paths'), linewidth = 1) +
-  geom_spatvector(data=coastline_crop, aes(colour = 'Ocean'), linewidth = 1, fill = 'lightblue1') +
+  geom_spatvector(data=coastline_crop, aes(colour = 'Ocean'), linewidth = 1, fill = 'dodgerblue') +
   scale_colour_manual(name = "Legend",
                       values = c('Bike Paths' = 'black',
                                  'Streams' = 'cadetblue3',
-                                 'Ocean' = 'lightblue1')) +
+                                 'Ocean' = 'dodgerblue')) +
   theme_minimal() +
   labs(title = 'Stylized thematic map of UCSB campus',
        subtitle = 'Trees, bike paths, and water',
