@@ -174,7 +174,7 @@ file.remove("downloaded_data/california_streams.zip")
 
 # I get an error on the pacific polygon download, HTTP error 500 (KL)
 # * Pacific Ocean Polygon https://geodata.library.ucsb.edu/catalog/3853-s3_2002_s3_reg_pacific_ocean
-curl_download("https://geodata.library.ucsb.edu/download/3853-s3_2002_s3_reg_pacific_ocean_lines?type=shapefile",
+curl_download("https://geodata.library.ucsb.edu/download/file/3853-s3_2002_s3_reg_pacific_ocean_lines-shapefile.zip",
               "downloaded_data/3853-s3_2002_s3_reg_pacific_ocean-shapefile.zip")
 unzip("downloaded_data/3853-s3_2002_s3_reg_pacific_ocean-shapefile.zip", exdir="source_data/california_coastline", overwrite = TRUE)
 file.remove("downloaded_data/3853-s3_2002_s3_reg_pacific_ocean-shapefile.zip")
