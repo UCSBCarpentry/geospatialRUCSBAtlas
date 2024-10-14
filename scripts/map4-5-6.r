@@ -4,6 +4,9 @@
 # we crop the rasters before reprojecting them.
 # because that's faster
 
+# clean the environment and hidden objects
+rm(list=ls())
+
 library(terra)
 library(geojsonsf)
 library(sf)
@@ -189,7 +192,7 @@ plot(zoom_2_hillshade, col = grays)
 polys(campus_extent, border="red", lwd=5)
 
 # zoom 3:
-zoom_3 <- rast("source_data/hillshade.tiff")
+zoom_3 <- rast("source_data/campus_hillshade.tif")
 plot(zoom_3, col = grays)
 
 
@@ -226,6 +229,7 @@ colnames(zoom_2_df)
 
 zoom_2_hillshade_df <- as.data.frame(zoom_2_hillshade, xy=TRUE)
 
+#did we forget to add zoom_2_plot here?
 
 # this plot breaks if I try to style the extent box.
 # geom_sf(data=campus_extent, aes(stroke=3, fill=NA)) +
@@ -247,7 +251,7 @@ ggplot()+
 # figure out the layer names
 zoom_3_df <- as.data.frame(campus_DEM, xy=TRUE)
 
-campus_hillshade <- rast("source_data/hillshade.tiff") 
+campus_hillshade <- rast("source_data/campus_hillshade.tif") 
 zoom_3_hillshade_df <- as.data.frame(campus_hillshade, xy=TRUE)
 
 colnames(zoom_3_df)
