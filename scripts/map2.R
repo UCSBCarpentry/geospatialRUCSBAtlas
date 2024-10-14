@@ -30,7 +30,7 @@ bikes <- vect("source_data/bike_paths/bikelanescollapsedv8.shp")
 # Streams
 streams <- vect("source_data/california_streams/California_Streams.shp")
 # Coastline polygon
-coastline <- vect("source_data/california_coastline/3853-s3_2002_s3_reg_pacific_ocean.shp")
+coastline <- vect("source_data/california_coastline/3853-s3_2002_s3_reg_pacific_ocean_lines.shp")
 
 
 # Let's take a quick first look at our data and find out their projections
@@ -38,7 +38,7 @@ plot(trees)
 crs(trees, describe=TRUE)
 plot(bikes)
 crs(bikes, describe=TRUE)
-plot(streams) # Takes a lot of time, heavy file
+plot(streams) # Takes a lot of time, heavy file, yeah she hefty -KL
 crs(streams, describe=TRUE)
 plot(coastline)
 crs(coastline, describe=TRUE)
@@ -59,6 +59,7 @@ crs(coastline, describe=TRUE)
 # get the crs from that SpatVector
 bikes_proj <- project(bikes, trees)
 coastline_proj <- project(coastline, trees)
+
 
 ## Challenge: Do we need to reproject the streams data?
 
@@ -88,6 +89,7 @@ streams_crop <- crop(streams, trees)
 coastline_crop <- crop(coastline_proj, trees)
 
 # With this dataset, let's do a first test of how our map would look like
+# question, what in the queens english? 
 ggplot() +
   geom_spatvector(data=trees, colour='green4') +
   geom_spatvector(data=streams_crop, , colour='lightblue') +
