@@ -183,7 +183,7 @@ ggplot() +
 # Increasing the width of the lines that represent the streams and including
 # it in the legend
 ggplot() +
-  geom_spatvector(data=trees_filt, aes(size=HT, colour = 'Trees')) +
+  geom_spatvector(data=trees_filt, aes(size=HT, colour = 'Trees'), alpha = 0.5) +
   scale_size_continuous(range = c(0, 2), name = 'Tree Height (ft)') +
   geom_spatvector(data=streams_crop, aes(colour = 'Streams'), linewidth = 2, alpha=0.6) +
   scale_colour_manual(name = "Legend",
@@ -197,7 +197,7 @@ ggplot() +
 
 # Including the bike paths
 ggplot() +
-  geom_spatvector(data=trees_filt, aes(size=HT, colour = 'Trees')) +
+  geom_spatvector(data=trees_filt, aes(size=HT, colour = 'Trees'),alpha=0.5) +
   scale_size_continuous(range = c(0, 2), name = 'Tree Height (ft)') +
   geom_spatvector(data=streams_crop, aes(colour = 'Streams'), , linewidth = 2, alpha=0.6) +
   geom_spatvector(data=bikes_crop, aes(colour = 'Bike Paths'), linewidth = 1) +
