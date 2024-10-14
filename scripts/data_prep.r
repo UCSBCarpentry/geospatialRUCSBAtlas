@@ -174,7 +174,7 @@ file.remove("downloaded_data/california_streams.zip")
 
 # I get an error on the pacific polygon download, HTTP error 500 (KL)
 # * Pacific Ocean Polygon https://geodata.library.ucsb.edu/catalog/3853-s3_2002_s3_reg_pacific_ocean
-curl_download("https://geodata.library.ucsb.edu/download/file/3853-s3_2002_s3_reg_pacific_ocean-shapefile.zip",
+curl_download("https://geodata.library.ucsb.edu/download/3853-s3_2002_s3_reg_pacific_ocean_lines?type=shapefile",
               "downloaded_data/3853-s3_2002_s3_reg_pacific_ocean-shapefile.zip")
 unzip("downloaded_data/3853-s3_2002_s3_reg_pacific_ocean-shapefile.zip", exdir="source_data/california_coastline", overwrite = TRUE)
 file.remove("downloaded_data/3853-s3_2002_s3_reg_pacific_ocean-shapefile.zip")
@@ -184,7 +184,7 @@ file.remove("downloaded_data/3853-s3_2002_s3_reg_pacific_ocean-shapefile.zip")
 #       (You should create them in this script)
 
 
-# LINES
+# LINES - this is bike paths
 # X-drive?
 drive_download("https://drive.google.com/file/d/1_Rt6HGF4LsIbZPMP6vZFm67H5MlzlIW1/view?usp=drive_link", 
               "downloaded_data/bike_paths.zip", overwrite=TRUE)
@@ -221,8 +221,6 @@ unzip("downloaded_data/tl_2023_06_place.zip", exdir="source_data/cal_pop_places"
 # create a hillshade for our area of an appropriate resolution
 
 # downsizing the campus DEM so that it's more usable
-# this nested folder structure, r does not like
-   # ^^ because you had the path wrong
 campus_DEM <- rast("downloaded_data/greatercampusDEM/greatercampusDEM/greatercampusDEM_1_1.tif")
 
 campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4, fun=mean,
