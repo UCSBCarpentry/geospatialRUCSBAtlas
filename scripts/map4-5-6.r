@@ -233,8 +233,8 @@ zoom_2_hillshade_df <- as.data.frame(zoom_2_hillshade, xy=TRUE)
 
 # this plot breaks if I try to style the extent box.
 # geom_sf(data=campus_extent, aes(stroke=3, fill=NA)) +
-# also, the crs throws an error
-ggplot()+
+# also, the crs throws an error = cannot transform sfc object with missing crs
+zoom_2_plot <- ggplot()+
     geom_raster(data = zoom_2_df,
               aes(x=x, y=y, fill=dem90_hf), show.legend = FALSE) +
   geom_raster(data=zoom_2_hillshade_df, 
@@ -242,9 +242,12 @@ ggplot()+
     scale_fill_viridis_c() +
   geom_spatvector(data=campus_extent, fill="NA") +
   scale_alpha(range = c(0.05, 0.5), guide="none") +
-  theme_dark() 
-#  coord_sf(crs=my_crs)
+  theme_dark()+
+  coord_sf(crs=my_crs)+
+  labs(title = "Santa Barbara", 
+       subtitle = "Zoom 2")
 
+zoom_2_plot
 
 
 # zoom3
