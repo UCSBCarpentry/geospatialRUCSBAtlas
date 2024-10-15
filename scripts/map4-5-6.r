@@ -240,8 +240,8 @@ zoom_2_plot <- ggplot()+
   geom_raster(data=zoom_2_hillshade_df, 
               aes(x=x, y=y, alpha=hillshade))+
     scale_fill_viridis_c() +
-  geom_spatvector(data=campus_extent, fill="NA") +
   scale_alpha(range = c(0.05, 0.5), guide="none") +
+#  geom_spatvector(data=campus_extent) +
   theme_dark()+
   coord_sf(crs=my_crs)+
   labs(title = "Santa Barbara", 
@@ -320,6 +320,7 @@ zoom_2_plot <- ggplot() +
                   aes(x=x, y=y, fill=hillshade)) +
   scale_fill_viridis_c() +
   scale_alpha(range = c(0.15, 0.65), guide="none") +
+  geom_spatvector(data=campus_extent) +
   labs(title = "Bite of California",
        subtitle = "Zoom 2")
 
