@@ -326,7 +326,7 @@ map2_v5 <- ggplot() +
                                  'Ocean' = 'dodgerblue')) +
   theme_minimal() +
   labs(title = 'Stylized thematic map of UCSB campus',
-       subtitle = 'Trees, bike paths, and water',
+       subtitle = 'Trees, bike paths, and water. (v.5)',
        x = 'Longitude', y = 'Latitude') +
   theme(
     plot.title = element_text(hjust = 0.5),
