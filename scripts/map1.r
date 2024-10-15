@@ -80,11 +80,6 @@ crs(campus_DEM) == crs(bath)
 # for these files, CRS, extent, and resolution all match:
 
 
-# I need to get projection and resolution objects somewhere.
-# so I 'copy' the one that I already have:
-(my_projection <- raster("output_data/campus_DEM.tif") %>%
-  crs()) 
-
 # reload rasters
 # from output folder
 campus_DEM <- rast("output_data/campus_DEM.tif")
@@ -257,5 +252,6 @@ ggplot() +
 ggsave("images/map1.3.png", plot=last_plot())
 
 # now we need to clip to the extent that we want
-# further format the color ramps
+# customize the graticule
+# further format the color ramps?
 
