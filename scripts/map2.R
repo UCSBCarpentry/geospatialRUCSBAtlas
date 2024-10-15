@@ -30,7 +30,7 @@ bikes <- vect("source_data/bike_paths/bikelanescollapsedv8.shp")
 # Streams
 streams <- vect("source_data/california_streams/California_Streams.shp")
 # Coastline polygon
-coastline <- vect("source_data/california_coastline/3853-s3_2002_s3_reg_pacific_ocean_lines.shp")
+coastline <- vect("source_data/california_coastline/3853-s3_2002_s3_reg_pacific_ocean.shp")
 
 
 # Let's take a quick first look at our data and find out their projections
