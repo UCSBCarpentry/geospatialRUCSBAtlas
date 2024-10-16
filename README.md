@@ -100,6 +100,8 @@ For starters, this will be several pre-fetched campus images.
 ie: identify vernal pools
 
 ### 10 Analysis: Find bike paths that cross water?
+
+### 12 Episode 12: 12 months of NDVI Raster Stack
 [UCSB Carpentry](https://ucsbcarpentry.github.io)
 
 [Original lesson -- Introduction to Geospatial Raster and Vector Data
