@@ -85,7 +85,7 @@ crs(campus_DEM) == crs(bath)
 campus_DEM <- rast("output_data/campus_DEM.tif")
 plot(campus_DEM)
 # remember: this is the one we cropped, so the 2 extents are the same.
-campus_bath <- rast("output_data/campus_bathymetry.tif")
+campus_bath <- rast("output_data/campus_bath.tif")
 plot(campus_bath)
 
 

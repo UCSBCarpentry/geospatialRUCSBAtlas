@@ -172,7 +172,7 @@ curl_download("https://data-cdfw.opendata.arcgis.com/api/download/v1/items/92b18
 unzip("downloaded_data/california_streams.zip", exdir="source_data/california_streams", overwrite = TRUE)
 file.remove("downloaded_data/california_streams.zip")
 
-# * Pacific Ocean Polygon https://geodata.library.ucsb.edu/catalog/3853-s3_2002_s3_reg_pacific_ocean
+# * Pacific Ocean Lines https://geodata.library.ucsb.edu/catalog/3853-s3_2002_s3_reg_pacific_ocean_lines
 curl_download("https://geodata.library.ucsb.edu/download/file/3853-s3_2002_s3_reg_pacific_ocean_lines-shapefile.zip",
               "downloaded_data/3853-s3_2002_s3_reg_pacific_ocean-shapefile.zip")
 unzip("downloaded_data/3853-s3_2002_s3_reg_pacific_ocean-shapefile.zip", exdir="source_data/california_coastline", overwrite = TRUE)

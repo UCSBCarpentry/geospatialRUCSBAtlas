@@ -58,7 +58,8 @@ bath <- project(bath, campus_projection)
 
 # load campus_bathymetry raster from output folder
 # remember: this is the one we cropped, so the 2 extents are the same.
-campus_bath <- rast("output_data/campus_bathymetry.tif")
+# not sure exactlty where this gets made
+campus_bath <- rast("output_data/campus_bath.tif")
 
 # make dataframes
 campus_DEM_df <- as.data.frame(campus_DEM, xy=TRUE) %>%
