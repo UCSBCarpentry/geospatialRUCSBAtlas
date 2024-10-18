@@ -60,14 +60,16 @@ for (images in scene_paths) {
     writeRaster(ndvi_tiff, new_filename, filetype="GTiff", overwrite=TRUE)
         }
 
-# display the grid of NDVIs
-# get a list of them:
+
+
+# # get a list of the new files:
 ndvi_series_names <- list.files("output_data/ndvi")
 ndvi_series_names <- paste("output_data/ndvi/", ndvi_series_names, sep="")
 (ndvi_series_names)
 
-
+# build raster stack
 ndvi_series_stack <- rast(ndvi_series_names)
+
 
 # make bins
 
