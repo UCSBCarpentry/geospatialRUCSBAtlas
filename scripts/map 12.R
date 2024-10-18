@@ -8,6 +8,7 @@ library(scales)
 library(tidyr)
 library(ggplot2)
 library(raster)
+library(sf) <- to handle geojson
 
 
 # NDVIs were premade in the Carpentries lesson, but
@@ -39,18 +40,34 @@ str(scene_paths)
 # someplace to put our images
 dir.create("output_data/ndvi", showWarnings = FALSE)
 
-# calculate the NDVIs loop
+# We need a common extent to make
+# a raster stack
+ucsb_extent <- st_read("source_data/ucsb_60sqkm_planet_extent.geojson")
+ucsb_extent <- extent(ucsb_extent)
+
+
+# calculate the NDVIs 
+# and set them to the same extent
+# loop
 for (images in scene_paths) {
     source_image <- brick(images, n1=8)
     ndvi_tiff <- (source_image[[8]] - source_image[[6]] / source_image[[8]] + source_image[[6]])
     new_filename <- (substr(images, 67,92))
     new_filename <- paste("output_data/ndvi/", new_filename, ".tif", sep="")
+    setExtent(ndvi_tiff, ucsb_extent) 
     print(new_filename)
     plot(ndvi_tiff)
     writeRaster(ndvi_tiff, new_filename, filetype="GTiff", overwrite=TRUE)
         }
 
 # display the grid of NDVIs
+# get a list of them:
+ndvi_series_names <- list.files("output_data/ndvi")
+ndvi_series_names <- paste("output_data/ndvi/", ndvi_series_names, sep="")
+(ndvi_series_names)
+
+
+ndvi_series_stack <- rast(ndvi_series_names)
 
 # make bins
 
