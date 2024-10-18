@@ -8,13 +8,13 @@ library(scales)
 library(tidyr)
 library(ggplot2)
 library(raster)
-# library(geojsonsf) # to handle geojson
+library(geojsonsf) # to handle geojson
+# library(sf) #<- to handle geojson (not geojsonsf? -KL)
 
 
 # NDVIs were premade in the Carpentries lesson, but
 # we already know enough raster math to make our
 # own
-
 
 
 # make an NDVI for 1 file
@@ -83,6 +83,8 @@ ndvi_series_names <- paste("output_data/ndvi/", ndvi_series_names, sep="")
 length(ndvi_series_names)
 
 length()# build raster stack
+# build raster stack
+## STOP HERE [rast]extents do not match error 
 ndvi_series_stack <- rast(ndvi_series_names)
 ndvi_series_stack <- brick(ndvi_series_names, n1=23)
 

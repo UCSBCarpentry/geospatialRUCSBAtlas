@@ -86,7 +86,24 @@ drive_download("https://drive.google.com/file/d/13ceWKBnTABOH5C9KDeBIJysSdjWuBMA
 unzip("downloaded_data/w_campus_1ft.zip",
       exdir="source_data", overwrite = TRUE)
 
+### UCSB Campus Map 12 23-24 PS Scene and GeoJSON
 
+#Planet Scene 23-24
+drive_download("https://drive.google.com/file/d/1-eeyJvCGqPgx7UJ7st-Vu8__e3dujQVx/view?usp=drive_link",
+               "downloaded_data/UCSB_campus_23-24_psscene_analytic_8b_sr_udm2.zip",
+               overwrite = TRUE)
+
+unzip("downloaded_data/UCSB_campus_23-24_psscene_analytic_8b_sr_udm2.zip",
+      exdir="source_data/UCSB_campus_23-24_psscene_analytic_8b_sr_udm2",
+      overwrite = TRUE)
+
+#delete zip archive
+file.remove("downloaded_data/UCSB_campus_23-24_psscene_analytic_8b_sr_udm2.zip")
+
+#UCSB_60KM Geojson
+drive_download("https://drive.google.com/file/d/1-gAC4BRkcJXxGWUb73h2pa1QfyQ9y9yk/view?usp=drive_link",
+               "source_data/ucsb_60sqkm_planet_extent.geojson",
+               overwrite = TRUE)
 
 
 # Planet 50cm NCOS?
@@ -250,12 +267,6 @@ plot(hillShade, col=grays)
 # campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4,
 #                                     filename = "source_data/campus_DEM.tif",
 #                                     overwrite = TRUE)
-
-#  JB -- this is already done above 
-#  KL -- can we remove 257-259 then?
-# unzip("source_data/Bathymetry_OffshoreCoalOilPoint.zip",
-#       overwrite = TRUE, 
-#       exdir = "source_data/Bathymetry_OffshoreCoalOilPoint")
 
 # Ep 3: Reprojecting Rasters
 bathymetry <- 
