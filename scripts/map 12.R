@@ -8,13 +8,12 @@ library(scales)
 library(tidyr)
 library(ggplot2)
 library(raster)
-library(sf) <- to handle geojson
+library(sf) #<- to handle geojson
 
 
 # NDVIs were premade in the Carpentries lesson, but
 # we already know enough raster math to make our
 # own
-
 
 
 # make an NDVI for 1 file
