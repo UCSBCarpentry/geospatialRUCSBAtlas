@@ -32,6 +32,8 @@ ndvi_tiff <- (image[[8]] - image[[6]] / image[[8]] + image[[6]])
 plot(ndvi_tiff)
 plotRGB(image, r=6,g=3,b=1, stretch = "hist")
 
+names(ndvi_tiff)
+
 # load 23-24 8-band rasters
 # loop over the files and build a raster stack
 
@@ -49,11 +51,14 @@ ucsb_extent <- vect("source_data/ucsb_60sqkm_planet_extent.geojson")
 str(ucsb_extent)
 crs(ucsb_extent)
 crs(ndvi_tiff)
-
+names(ndvi_tiff)
 
 # this tests to see if we can take our calculated NDVIs
 # and reproject them to the CRS of our AOI
-ucsb_extent <- project(ucsb_extent, ndvi_tiff)
+ucsb_extent <- project(ucsb_extent, "epsg:32611")
+
+crs(ucsb_extent)
+crs(ndvi_tiff)
 
 ext(ucsb_extent)
 ext(ndvi_tiff)
@@ -63,6 +68,7 @@ ext(ndvi_tiff)
 ndvi_tiff <- extend(ndvi_tiff, ucsb_extent)
 plot(ndvi_tiff)
 
+# but the extents are still different
 ext(ucsb_extent)
 ext(ndvi_tiff)
 
@@ -73,7 +79,7 @@ ext(ndvi_tiff)
 
 
 # calculate the NDVIs 
-# and set them to the same extent
+# and fill in (extend) to the AOI
 # loop
 for (images in scene_paths) {
     source_image <- rast(images)
@@ -84,7 +90,6 @@ for (images in scene_paths) {
     plot(ndvi_tiff)
     ndvi_tiff <- extend(ndvi_tiff, ucsb_extent)
     plot(ndvi_tiff)
-#    ndvi_tiff <- set.ext(ndvi_tiff, ucsb_extent)
     plot(ndvi_tiff)
     writeRaster(ndvi_tiff, new_filename, overwrite=TRUE)
         }
@@ -96,12 +101,19 @@ ndvi_series_names <- list.files("output_data/ndvi")
 ndvi_series_names <- paste("output_data/ndvi/", ndvi_series_names, sep="")
 length(ndvi_series_names)
 
-length()# build raster stack
 # build raster stack
-## STOP HERE [rast]extents do not match error 
+# build raster stack
 ndvi_series_stack <- rast(ndvi_series_names)
-ndvi_series_stack <- brick(ndvi_series_names, n1=23)
 
+# again: brick is outdated
+# ndvi_series_stack <- brick(ndvi_series_names, n1=20)
+
+ndvi_series_df <- as.data.frame(ndvi_series_stack, xy=TRUE) %>% 
+  pivot_longer(-(x:y), names_to = "variable", values_to= "value")
+
+ggplot() +
+  geom_raster(data = ndvi_series_df , aes(x = x, y = y, fill = value)) +
+  facet_wrap(~ variable)
 
 # make bins
 
