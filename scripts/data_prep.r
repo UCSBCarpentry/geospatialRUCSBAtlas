@@ -98,6 +98,9 @@ unzip("downloaded_data/UCSB_campus_23-24_psscene_analytic_8b_sr_udm2.zip",
 #delete zip archive
 file.remove("downloaded_data/UCSB_campus_23-24_psscene_analytic_8b_sr_udm2.zip")
 
+
+
+
 # Planet 50cm NCOS?
 # Where art thou NCOS_07_25-26_2023.tif
 # with arc.open()
