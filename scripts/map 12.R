@@ -39,8 +39,6 @@ plotRGB(image, r=6,g=3,b=1, stretch = "hist")
 scene_paths <- list.files("source_data/UCSB_campus_23-24_psscene_analytic_8b_sr_udm2/PSScene",
                           full.names = TRUE,
                           pattern = "8b_clip.tif")
-scene_paths[1]
-str(scene_paths)
 
 # someplace to put our images
 dir.create("output_data/ndvi", showWarnings = FALSE)
@@ -52,14 +50,27 @@ str(ucsb_extent)
 crs(ucsb_extent)
 crs(ndvi_tiff)
 
+
 # this tests to see if we can take our calculated NDVIs
 # and reproject them to the CRS of our AOI
 ucsb_extent <- project(ucsb_extent, ndvi_tiff)
+
+ext(ucsb_extent)
+ext(ndvi_tiff)
 
 # can I also extend it?
 # yes I can.
 ndvi_tiff <- extend(ndvi_tiff, ucsb_extent)
 plot(ndvi_tiff)
+
+ext(ucsb_extent)
+ext(ndvi_tiff)
+
+ucsb_extent <- ext(ndvi_tiff)
+
+ext(ucsb_extent)
+ext(ndvi_tiff)
+
 
 # calculate the NDVIs 
 # and set them to the same extent
@@ -70,9 +81,12 @@ for (images in scene_paths) {
     new_filename <- (substr(images, 67,92))
     new_filename <- paste("output_data/ndvi/", new_filename, ".tif", sep="")
     print(new_filename)
+    plot(ndvi_tiff)
     ndvi_tiff <- extend(ndvi_tiff, ucsb_extent)
     plot(ndvi_tiff)
-    writeRaster(ndvi_tiff, new_filename, filetype="GTiff", overwrite=TRUE)
+#    ndvi_tiff <- set.ext(ndvi_tiff, ucsb_extent)
+    plot(ndvi_tiff)
+    writeRaster(ndvi_tiff, new_filename, overwrite=TRUE)
         }
 
 
