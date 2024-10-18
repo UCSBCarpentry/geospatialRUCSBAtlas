@@ -67,6 +67,7 @@ ndvi_series_names <- paste("output_data/ndvi/", ndvi_series_names, sep="")
 (ndvi_series_names)
 
 # build raster stack
+## STOP HERE [rast]extents do not match error 
 ndvi_series_stack <- rast(ndvi_series_names)
 
 
