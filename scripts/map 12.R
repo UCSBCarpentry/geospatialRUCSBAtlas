@@ -75,6 +75,7 @@ ext(ndvi_tiff)<-ext(ucsb_extent)
 # now they are exactly the same extent
 ext(ucsb_extent)
 str(ucsb_extent)
+
 ext(ndvi_tiff)
 
 # but the plot is broken.
@@ -108,7 +109,7 @@ for (images in scene_paths) {
     # plot(ndvi_tiff)
     ndvi_tiff <- extend(ndvi_tiff, ucsb_extent)
     # plot(ndvi_tiff)
-    ndvi_tiff <- ext(ucsb_extent)
+    ext(ndvi_tiff) <- ext(ucsb_extent)
     plot(ndvi_tiff)
     writeRaster(ndvi_tiff, new_filename, overwrite=TRUE)
         }
@@ -122,6 +123,7 @@ length(ndvi_series_names)
 
 # build raster stack
 # rast extents do not match
+#error: [rast]number of rows/columns do not match
 ndvi_series_stack <- rast(ndvi_series_names)
 
 # again: brick is outdated
