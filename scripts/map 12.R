@@ -67,6 +67,7 @@ plot(ndvi_tiff)
 ext(ucsb_extent) == ext(ndvi_tiff)
 
 # put it on there again:
+
 ndvi_tiff <- ext(ucsb_extent)
 
 # now they are exactly the same extent
@@ -76,6 +77,7 @@ ext(ndvi_tiff)
 
 # but the plot is broken.
 # why is my plot broken?
+# plot is broken because ndvi tiff became a spatextent not spatraster
 plot(ndvi_tiff)
 
 
@@ -118,7 +120,7 @@ ndvi_series_names <- paste("output_data/ndvi/", ndvi_series_names, sep="")
 length(ndvi_series_names)
 
 # build raster stack
-# build raster stack
+# rast extents do not match
 ndvi_series_stack <- rast(ndvi_series_names)
 
 # again: brick is outdated
