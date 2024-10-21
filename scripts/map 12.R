@@ -119,12 +119,16 @@ for (images in scene_paths) {
 # # get a list of the new files:
 ndvi_series_names <- list.files("output_data/ndvi")
 ndvi_series_names <- paste("output_data/ndvi/", ndvi_series_names, sep="")
+
 length(ndvi_series_names)
+str(ndvi_series_names)
+
+
 
 # build raster stack
 # rast extents do not match
 #error: [rast]number of rows/columns do not match
-ndvi_series_stack <- rast(ndvi_series_names)
+ndvi_series_stack <- c(ndvi_series_names)
 
 # again: brick is outdated
 # ndvi_series_stack <- brick(ndvi_series_names, n1=20)
