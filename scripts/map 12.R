@@ -138,8 +138,7 @@ ndvi_series_stack <- c(ndvi_series_names)
 # again: brick is outdated
 # ndvi_series_stack <- brick(ndvi_series_names, n1=20)
 
-# I don't think this is correct. but it doesn't
-# throw an error
+# throws an error here, even if you hand-delete the non=conforming tiffs
 ndvi_series_df <- as.data.frame(ndvi_series_stack, xy=TRUE) %>% 
   pivot_longer(-(x:y), names_to = "variable", values_to= "value")
 
