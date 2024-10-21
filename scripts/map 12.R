@@ -120,6 +120,7 @@ for (images in scene_paths) {
 ndvi_series_names <- list.files("output_data/ndvi")
 ndvi_series_names <- paste("output_data/ndvi/", ndvi_series_names, sep="")
 
+#check
 length(ndvi_series_names)
 str(ndvi_series_names)
 
