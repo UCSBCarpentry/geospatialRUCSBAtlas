@@ -19,66 +19,64 @@ library(geojsonsf) # to handle geojson
 # make an NDVI for 1 file
 tiff_path <- c("source_data/UCSB_campus_23-24_psscene_analytic_8b_sr_udm2/PSScene/20230912_175450_00_2439_3B_AnalyticMS_SR_8b_clip.tif")
 
-#(NIR - Red) / (NIR + Red)
-
 # brick is raster. rast is terra
-# the ndvi looks VERY different
+# the 2 different ndvis looks VERY different when
+# you do this raster math
+
 # image <- brick(tiff_path, n1=8)
 image <- rast(tiff_path)
-
-
-ndvi_tiff <- (image[[8]] - image[[6]] / image[[8]] + image[[6]])
-plot(ndvi_tiff)
 plotRGB(image, r=6,g=3,b=1, stretch = "hist")
+image
 
+# here is the NDVI calculation:
+#(NIR - Red) / (NIR + Red)
+ndvi_tiff <- (image[[8]] - image[[6]] / image[[8]] + image[[6]])
+
+plot(ndvi_tiff)
+# not sure how the columns get named "NIR" 
+# probably the first layer imported:
 names(ndvi_tiff)
+ndvi_tiff
 
 
 # We need a common extent to make
 # a raster stack
+# we'll use the original AOI from our Planet request:
 ucsb_extent <- vect("source_data/ucsb_60sqkm_planet_extent.geojson")
 str(ucsb_extent)
 crs(ucsb_extent)
+crs(image) # <---- we want to standardize on this CRS
 crs(ndvi_tiff)
 
-# we want those to be the same crs:
-ucsb_extent <- project(ucsb_extent, "epsg:32611")
+# go ahead and assign it:
+ucsb_extent <- project(x=ucsb_extent, y=image)
+crs(ucsb_extent)
 
+# the CRSs are now the same
+crs(ucsb_extent) == crs(image)
 
-
-# this tests to see if we can take our calculated NDVIs
-# and reproject them to the CRS of our AOI
-
-# crs the same
-crs(ucsb_extent) == crs(ndvi_tiff)
-
-# extents are different
+# but the extents are different
+ext(ucsb_extent) == ext(image)
 ext(ucsb_extent) == ext(ndvi_tiff)
 
-ext(ucsb_extent)
-ext(ndvi_tiff)
 
-
-# I need to extend it AND reset the extent
+# I need to extend my calculated NDVI to the AOI extent
 ndvi_tiff <- extend(ndvi_tiff, ucsb_extent)
 plot(ndvi_tiff)
+ndvi_tiff
 
-# but the extents are still different
+
+# extents are still different after extend:
 ext(ucsb_extent) == ext(ndvi_tiff)
 
-# put it on there again:
-ndvi_tiff <- ext(ucsb_extent)
+# bingo
+set.ext(ndvi_tiff, ext(ucsb_extent))
 
-# now they are exactly the same extent
-ext(ucsb_extent)
-str(ucsb_extent)
-ext(ndvi_tiff)
-
-# but the plot is broken.
-# why is my plot broken?
 plot(ndvi_tiff)
+# now they are exactly the same extent
+ext(ucsb_extent) == ext(ndvi_tiff)
 
-
+(ndvi_tiff)
 
 
 # load 23-24 8-band rasters
@@ -101,12 +99,12 @@ for (images in scene_paths) {
     ndvi_tiff <- (source_image[[8]] - source_image[[6]] / source_image[[8]] + source_image[[6]])
     new_filename <- (substr(images, 67,92))
     new_filename <- paste("output_data/ndvi/", new_filename, ".tif", sep="")
+    # plot(ndvi_tiff)
+    ndvi_tiff <- extend(ndvi_tiff, ucsb_extent, snap="near")
+    # plot(ndvi_tiff)
+    set.ext(ndvi_tiff, ext(ucsb_extent))
     print(new_filename)
-    # plot(ndvi_tiff)
-    ndvi_tiff <- extend(ndvi_tiff, ucsb_extent)
-    # plot(ndvi_tiff)
-    ndvi_tiff <- ext(ucsb_extent)
-    plot(ndvi_tiff)
+    print(dim(ndvi_tiff))
     writeRaster(ndvi_tiff, new_filename, overwrite=TRUE)
         }
 
@@ -118,14 +116,17 @@ ndvi_series_names <- paste("output_data/ndvi/", ndvi_series_names, sep="")
 length(ndvi_series_names)
 
 # build raster stack
-# build raster stack
 ndvi_series_stack <- rast(ndvi_series_names)
 
 # again: brick is outdated
 # ndvi_series_stack <- brick(ndvi_series_names, n1=20)
 
+# I don't think this is correct. but it doesn't
+# throw an error
 ndvi_series_df <- as.data.frame(ndvi_series_stack, xy=TRUE) %>% 
   pivot_longer(-(x:y), names_to = "variable", values_to= "value")
+
+
 
 ggplot() +
   geom_raster(data = ndvi_series_df , aes(x = x, y = y, fill = value)) +
