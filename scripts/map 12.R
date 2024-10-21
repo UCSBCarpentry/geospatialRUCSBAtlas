@@ -2,12 +2,11 @@
 # let's build monthly NDVI's for campus
 # as in episode 12 
 
-
-library(terra)
 library(scales)
 library(tidyr)
 library(ggplot2)
-library(raster)
+# library(raster)
+library(terra)
 library(geojsonsf) # to handle geojson
 # library(sf) #<- to handle geojson (not geojsonsf? -KL)
 
@@ -24,7 +23,7 @@ tiff_path <- c("source_data/UCSB_campus_23-24_psscene_analytic_8b_sr_udm2/PSScen
 
 # brick is raster. rast is terra
 # the ndvi looks VERY different
-image <- brick(tiff_path, n1=8)
+# image <- brick(tiff_path, n1=8)
 image <- rast(tiff_path)
 
 
@@ -33,6 +32,54 @@ plot(ndvi_tiff)
 plotRGB(image, r=6,g=3,b=1, stretch = "hist")
 
 names(ndvi_tiff)
+
+
+# We need a common extent to make
+# a raster stack
+ucsb_extent <- vect("source_data/ucsb_60sqkm_planet_extent.geojson")
+str(ucsb_extent)
+crs(ucsb_extent)
+crs(ndvi_tiff)
+
+# we want those to be the same crs:
+ucsb_extent <- project(ucsb_extent, "epsg:32611")
+
+
+
+# this tests to see if we can take our calculated NDVIs
+# and reproject them to the CRS of our AOI
+
+# crs the same
+crs(ucsb_extent) == crs(ndvi_tiff)
+
+# extents are different
+ext(ucsb_extent) == ext(ndvi_tiff)
+
+ext(ucsb_extent)
+ext(ndvi_tiff)
+
+
+# I need to extend it AND reset the extent
+ndvi_tiff <- extend(ndvi_tiff, ucsb_extent)
+plot(ndvi_tiff)
+
+# but the extents are still different
+ext(ucsb_extent) == ext(ndvi_tiff)
+
+# put it on there again:
+ndvi_tiff <- ext(ucsb_extent)
+
+# now they are exactly the same extent
+ext(ucsb_extent)
+str(ucsb_extent)
+ext(ndvi_tiff)
+
+# but the plot is broken.
+# why is my plot broken?
+plot(ndvi_tiff)
+
+
+
 
 # load 23-24 8-band rasters
 # loop over the files and build a raster stack
@@ -45,38 +92,6 @@ scene_paths <- list.files("source_data/UCSB_campus_23-24_psscene_analytic_8b_sr_
 # someplace to put our images
 dir.create("output_data/ndvi", showWarnings = FALSE)
 
-# We need a common extent to make
-# a raster stack
-ucsb_extent <- vect("source_data/ucsb_60sqkm_planet_extent.geojson")
-str(ucsb_extent)
-crs(ucsb_extent)
-crs(ndvi_tiff)
-names(ndvi_tiff)
-
-# this tests to see if we can take our calculated NDVIs
-# and reproject them to the CRS of our AOI
-ucsb_extent <- project(ucsb_extent, "epsg:32611")
-
-crs(ucsb_extent)
-crs(ndvi_tiff)
-
-ext(ucsb_extent)
-ext(ndvi_tiff)
-
-# can I also extend it?
-# yes I can.
-ndvi_tiff <- extend(ndvi_tiff, ucsb_extent)
-plot(ndvi_tiff)
-
-# but the extents are still different
-ext(ucsb_extent)
-ext(ndvi_tiff)
-
-ucsb_extent <- ext(ndvi_tiff)
-
-ext(ucsb_extent)
-ext(ndvi_tiff)
-
 
 # calculate the NDVIs 
 # and fill in (extend) to the AOI
@@ -87,9 +102,10 @@ for (images in scene_paths) {
     new_filename <- (substr(images, 67,92))
     new_filename <- paste("output_data/ndvi/", new_filename, ".tif", sep="")
     print(new_filename)
-    plot(ndvi_tiff)
+    # plot(ndvi_tiff)
     ndvi_tiff <- extend(ndvi_tiff, ucsb_extent)
-    plot(ndvi_tiff)
+    # plot(ndvi_tiff)
+    ndvi_tiff <- ext(ucsb_extent)
     plot(ndvi_tiff)
     writeRaster(ndvi_tiff, new_filename, overwrite=TRUE)
         }
