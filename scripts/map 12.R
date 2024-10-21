@@ -67,8 +67,10 @@ plot(ndvi_tiff)
 ext(ucsb_extent) == ext(ndvi_tiff)
 
 # put it on there again:
+# dont do this 
+# ndvi_tiff <- ext(ucsb_extent)
 
-ndvi_tiff <- ext(ucsb_extent)
+ext(ndvi_tiff)<-ext(ucsb_extent)
 
 # now they are exactly the same extent
 ext(ucsb_extent)
@@ -76,8 +78,7 @@ str(ucsb_extent)
 ext(ndvi_tiff)
 
 # but the plot is broken.
-# why is my plot broken?
-# plot is broken because ndvi tiff became a spatextent not spatraster
+# why is my plot broken? not anymoreeeeeeeeee 
 plot(ndvi_tiff)
 
 
