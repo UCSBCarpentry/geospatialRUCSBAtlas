@@ -72,6 +72,18 @@ ext(ucsb_extent) == ext(ndvi_tiff)
 # bingo
 set.ext(ndvi_tiff, ext(ucsb_extent))
 
+# put it on there again:
+# don:t do this 
+# ndvi_tiff <- ext(ucsb_extent)
+
+ext(ndvi_tiff)<-ext(ucsb_extent)
+
+# now they are exactly the same extent
+ext(ucsb_extent)
+str(ucsb_extent)
+
+ext(ndvi_tiff)
+
 plot(ndvi_tiff)
 # now they are exactly the same extent
 ext(ucsb_extent) == ext(ndvi_tiff)
@@ -99,12 +111,11 @@ for (images in scene_paths) {
     ndvi_tiff <- (source_image[[8]] - source_image[[6]] / source_image[[8]] + source_image[[6]])
     new_filename <- (substr(images, 67,92))
     new_filename <- paste("output_data/ndvi/", new_filename, ".tif", sep="")
-    # plot(ndvi_tiff)
     ndvi_tiff <- extend(ndvi_tiff, ucsb_extent, snap="near")
-    # plot(ndvi_tiff)
     set.ext(ndvi_tiff, ext(ucsb_extent))
     print(new_filename)
     print(dim(ndvi_tiff))
+    # plot(ndvi_tiff)
     writeRaster(ndvi_tiff, new_filename, overwrite=TRUE)
         }
 
@@ -113,10 +124,16 @@ for (images in scene_paths) {
 # # get a list of the new files:
 ndvi_series_names <- list.files("output_data/ndvi")
 ndvi_series_names <- paste("output_data/ndvi/", ndvi_series_names, sep="")
+
+#check
 length(ndvi_series_names)
+str(ndvi_series_names)
+
+
 
 # build raster stack
 ndvi_series_stack <- rast(ndvi_series_names)
+ndvi_series_stack <- c(ndvi_series_names)
 
 # again: brick is outdated
 # ndvi_series_stack <- brick(ndvi_series_names, n1=20)
