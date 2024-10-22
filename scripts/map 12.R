@@ -103,6 +103,7 @@ for (images in scene_paths) {
     new_filename <- paste("output_data/ndvi/", new_filename, ".tif", sep="")
     ndvi_tiff <- extend(ndvi_tiff, ucsb_extent, snap="near")
     set.ext(ndvi_tiff, ext(ucsb_extent))
+    print(names(ndvi_tiff))
     print(new_filename)
     print(dim(ndvi_tiff))
     # plot(ndvi_tiff)
@@ -144,21 +145,26 @@ for (image in ndvi_series_names) {
 
 # reload the names
 ndvi_series_names <- list.files("output_data/ndvi")
-ndvi_series_names <- paste("output_data/ndvi/", ndvi_series_names, sep="")
-
+ndvi_series_paths <- paste("output_data/ndvi/", ndvi_series_names, sep="")
+ndvi_series_names
 
 # build raster stack with no errors
-ndvi_series_stack <- rast(ndvi_series_names)
-ndvi_series_stack <- c(ndvi_series_names)
+# errors out here
+# if i don't add the names, 
+ndvi_series_stack <- rast(ndvi_series_paths)
 
 # whooo hoooo!
+str(ndvi_series_stack)
+nlyr(ndvi_series_stack)
+names(ndvi_series_stack)
 
-# throws an error here, even if you hand-delete the non=conforming tiffs
-# now what do we do???????
+# pivot
+# comes from the lesson:
 ndvi_series_df <- as.data.frame(ndvi_series_stack, xy=TRUE) %>% 
   pivot_longer(-(x:y), names_to = "variable", values_to= "value")
 
-
+str(ndvi_series_df)
+unique(ndvi_series_df$variable)
 
 ggplot() +
   geom_raster(data = ndvi_series_df , aes(x = x, y = y, fill = value)) +
