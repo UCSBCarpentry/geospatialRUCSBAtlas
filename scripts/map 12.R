@@ -109,7 +109,7 @@ for (images in scene_paths) {
     print(names(ndvi_tiff))
     print(new_filename)
     print(dim(ndvi_tiff))
-    # plot(ndvi_tiff)
+    plot(ndvi_tiff)
     writeRaster(ndvi_tiff, new_path, overwrite=TRUE)
         }
 
@@ -173,6 +173,26 @@ ggplot() +
   geom_raster(data = ndvi_series_df , aes(x = x, y = y, fill = value)) +
   facet_wrap(~ variable)
 
+# we need to scale our output.
+# looks like by 100000
+summary(ndvi_series_df$value)
+ndvi_series_stack <- ndvi_series_stack/100000
+
+# remake our dataframe:
+ndvi_series_df <- as.data.frame(ndvi_series_stack, xy=TRUE) %>% 
+  pivot_longer(-(x:y), names_to = "variable", values_to= "value")
+
+# newly scaled plot, NDVI = 0:1
+# and a new color scheme
+# this is slow and the color scheme didn't work.
+ggplot() +
+  geom_raster(data = ndvi_series_df , aes(x = x, y = y, fill = value)) +
+  scale_color_gradient(low="red", high="green") +
+  facet_wrap(~ variable)
+
+# visually these are subtle, so to find
+# the 'greenest' months here, we can make
+# histograms
 # make bins
 
 # display the binned histograms of the NDVIs
