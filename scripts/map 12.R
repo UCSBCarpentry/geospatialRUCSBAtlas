@@ -22,8 +22,9 @@ tiff_path <- c("source_data/UCSB_campus_23-24_psscene_analytic_8b_sr_udm2/PSScen
 # brick is raster. rast is terra
 # the 2 different ndvis looks VERY different when
 # you do this raster math
-
+# for now we leave bricks behind
 # image <- brick(tiff_path, n1=8)
+
 image <- rast(tiff_path)
 plotRGB(image, r=6,g=3,b=1, stretch = "hist")
 image
@@ -34,7 +35,8 @@ ndvi_tiff <- (image[[8]] - image[[6]] / image[[8]] + image[[6]])
 
 plot(ndvi_tiff)
 # not sure how the columns get named "NIR" 
-# probably the first layer imported:
+# probably the first layer imported
+# we will circle back to that
 names(ndvi_tiff)
 ndvi_tiff
 
@@ -100,20 +102,21 @@ for (images in scene_paths) {
     source_image <- rast(images)
     ndvi_tiff <- (source_image[[8]] - source_image[[6]] / source_image[[8]] + source_image[[6]])
     new_filename <- (substr(images, 67,92))
-    new_filename <- paste("output_data/ndvi/", new_filename, ".tif", sep="")
+    new_path <- paste("output_data/ndvi/", new_filename, ".tif", sep="")
     ndvi_tiff <- extend(ndvi_tiff, ucsb_extent, snap="near")
     set.ext(ndvi_tiff, ext(ucsb_extent))
+    names(ndvi_tiff) <- substr(new_filename, 0,8)
     print(names(ndvi_tiff))
     print(new_filename)
     print(dim(ndvi_tiff))
     # plot(ndvi_tiff)
-    writeRaster(ndvi_tiff, new_filename, overwrite=TRUE)
+    writeRaster(ndvi_tiff, new_path, overwrite=TRUE)
         }
 
 # 3 or 4 of the resulting tiffs are wonky
 # their dimensions are wildly off.
 # but almost all of them are 2217 x 3541 pixels
-# get rid of the ondes that aren't
+# let's get rid of the ones that aren't:
 
 # # get a list of the new files:
 ndvi_series_names <- list.files("output_data/ndvi")
@@ -146,11 +149,9 @@ for (image in ndvi_series_names) {
 # reload the names
 ndvi_series_names <- list.files("output_data/ndvi")
 ndvi_series_paths <- paste("output_data/ndvi/", ndvi_series_names, sep="")
-ndvi_series_names
+length(ndvi_series_names)
 
 # build raster stack with no errors
-# errors out here
-# if i don't add the names, 
 ndvi_series_stack <- rast(ndvi_series_paths)
 
 # whooo hoooo!
@@ -159,7 +160,9 @@ nlyr(ndvi_series_stack)
 names(ndvi_series_stack)
 
 # pivot
-# comes from the lesson:
+# comes from the lesson
+# and because we are pivoting on the dates, multiple
+# rasters will get graphed together:
 ndvi_series_df <- as.data.frame(ndvi_series_stack, xy=TRUE) %>% 
   pivot_longer(-(x:y), names_to = "variable", values_to= "value")
 
