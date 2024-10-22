@@ -69,26 +69,16 @@ ndvi_tiff
 # extents are still different after extend:
 ext(ucsb_extent) == ext(ndvi_tiff)
 
-# bingo
+# so reset the extent back to the AOI
+# extent object:
 set.ext(ndvi_tiff, ext(ucsb_extent))
 
-# put it on there again:
-# don:t do this 
-# ndvi_tiff <- ext(ucsb_extent)
 
-ext(ndvi_tiff)<-ext(ucsb_extent)
-
-# now they are exactly the same extent
-ext(ucsb_extent)
-str(ucsb_extent)
-
-ext(ndvi_tiff)
-
-plot(ndvi_tiff)
 # now they are exactly the same extent
 ext(ucsb_extent) == ext(ndvi_tiff)
 
-(ndvi_tiff)
+plot(ndvi_tiff)
+dim(ndvi_tiff)
 
 
 # load 23-24 8-band rasters
@@ -119,7 +109,10 @@ for (images in scene_paths) {
     writeRaster(ndvi_tiff, new_filename, overwrite=TRUE)
         }
 
-
+# 3 or 4 of the resulting tiffs are wonky
+# their dimensions are wildly off.
+# but almost all of them are 2217 x 3541 pixels
+# get rid of the ondes that aren't
 
 # # get a list of the new files:
 ndvi_series_names <- list.files("output_data/ndvi")
@@ -128,17 +121,40 @@ ndvi_series_names <- paste("output_data/ndvi/", ndvi_series_names, sep="")
 #check
 length(ndvi_series_names)
 str(ndvi_series_names)
+valid_tiff <- c(2217,3541,1)
+str(valid_tiff)
+
+dim(ndvi_tiff) == valid_tiff
+test <- rast(ndvi_series_names[1])
+str(test)
+str(dim(test))
+
+# delete any files that arent't the standard 
+# resolution
+for (image in ndvi_series_names) {
+  test_size <- rast(image)
+  print(image)
+  #  print(dim(test_size))
+#  print(str(dim(test_size)))
+# length 1 qualifier 
+  test_result <- (dim(test_size) == valid_tiff)
+  print(test_result)  
+  ifelse((dim(test_size) == valid_tiff), print("A match!!!"), file.remove(image))
+}
+
+# reload the names
+ndvi_series_names <- list.files("output_data/ndvi")
+ndvi_series_names <- paste("output_data/ndvi/", ndvi_series_names, sep="")
 
 
-
-# build raster stack
+# build raster stack with no errors
 ndvi_series_stack <- rast(ndvi_series_names)
 ndvi_series_stack <- c(ndvi_series_names)
 
-# again: brick is outdated
-# ndvi_series_stack <- brick(ndvi_series_names, n1=20)
+# whooo hoooo!
 
 # throws an error here, even if you hand-delete the non=conforming tiffs
+# now what do we do???????
 ndvi_series_df <- as.data.frame(ndvi_series_stack, xy=TRUE) %>% 
   pivot_longer(-(x:y), names_to = "variable", values_to= "value")
 
