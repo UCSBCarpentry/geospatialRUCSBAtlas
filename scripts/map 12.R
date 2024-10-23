@@ -15,17 +15,16 @@ library(geojsonsf) # to handle geojson
 # we already know enough raster math to make our
 # own
 
-
-# make an NDVI for 1 file
-tiff_path <- c("source_data/UCSB_campus_23-24_psscene_analytic_8b_sr_udm2/PSScene/20230912_175450_00_2439_3B_AnalyticMS_SR_8b_clip.tif")
-
 # brick is raster. rast is terra
 # the 2 different ndvis looks VERY different when
 # you do this raster math
 # for now we leave bricks behind
 # image <- brick(tiff_path, n1=8)
 
-image <- rast(tiff_path)
+# make an NDVI for 1 file
+tiff_path <- c("source_data/UCSB_campus_23-24_psscene_analytic_8b_sr_udm2/PSScene/")
+
+image <- rast(paste(tiff_path, "20230912_175450_00_2439_3B_AnalyticMS_SR_8b_clip.tif", sep=""))
 plotRGB(image, r=6,g=3,b=1, stretch = "hist")
 image
 
@@ -188,6 +187,7 @@ plot(ndvi_series_stack)
 # my calculated NDVIs were 1 <> 70999
 # highest 3rd quartile = 4592
 # maybe 10,000 should be max?
+# 20,000? (since that's the max below 70,000?)
 
 
 # pivot
@@ -222,6 +222,16 @@ ggplot() +
   geom_raster(data = ndvi_series_df , aes(x = x, y = y, fill = value)) +
   scale_color_gradient(low="red", high="green") +
   facet_wrap(~ variable)
+
+# what's wrong with April?   #############################################
+ndvi_tiff_path <- c("output_data/NDVI/")
+image <- rast(paste(ndvi_tiff_path, "20240427_175907_21_24c5_3B.tif", sep=""))
+str(image)
+plot(image)
+
+apr_image <- rast(paste(tiff_path, "20240427_175907_21_24c5_3B.tif", sep=""))
+
+
 
 # visually these are subtle, so to find
 # the 'greenest' months here, we can make
