@@ -2,6 +2,9 @@
 # let's build monthly NDVI's for campus
 # as in episode 12 
 
+# clean the environment and hidden objects
+rm(list=ls())
+
 library(scales)
 library(tidyr)
 library(dplyr)
