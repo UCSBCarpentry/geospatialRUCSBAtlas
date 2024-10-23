@@ -34,6 +34,8 @@ image
 ndvi_tiff <- (image[[8]] - image[[6]] / image[[8]] + image[[6]])
 
 plot(ndvi_tiff)
+summary(values(ndvi_tiff))
+
 # not sure how the columns get named "NIR" 
 # probably the first layer imported
 # we will circle back to that
@@ -81,6 +83,21 @@ ext(ucsb_extent) == ext(ndvi_tiff)
 
 plot(ndvi_tiff)
 dim(ndvi_tiff)
+str(ndvi_tiff)
+names(ndvi_tiff)
+
+# let's set up a better colorscheme for our later ggplots
+ndvi_tiff_df <- as.data.frame(ndvi_tiff, xy=TRUE) %>% 
+  pivot_longer(-(x:y), names_to = "variable", values_to= "value")
+
+str(ndvi_tiff_df)
+
+ggplot() +
+  geom_raster(data = ndvi_tiff_df , aes(x = x, y = y, fill = value)) +
+  scale_fill_viridis_c(option="D")
+
+
+
 
 
 # load 23-24 8-band rasters
@@ -159,6 +176,11 @@ str(ndvi_series_stack)
 nlyr(ndvi_series_stack)
 names(ndvi_series_stack)
 
+# one raster has outliers. NDVI = 71000
+summary(values(ndvi_series_stack))
+
+plot(ndvi_series_stack)
+
 # pivot
 # comes from the lesson
 # and because we are pivoting on the dates, multiple
@@ -169,6 +191,8 @@ ndvi_series_df <- as.data.frame(ndvi_series_stack, xy=TRUE) %>%
 str(ndvi_series_df)
 unique(ndvi_series_df$variable)
 
+
+# this output is really dark.
 ggplot() +
   geom_raster(data = ndvi_series_df , aes(x = x, y = y, fill = value)) +
   facet_wrap(~ variable)
