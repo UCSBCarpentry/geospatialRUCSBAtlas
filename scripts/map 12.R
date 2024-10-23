@@ -86,16 +86,14 @@ dim(ndvi_tiff)
 str(ndvi_tiff)
 names(ndvi_tiff)
 
-# let's set up a better colorscheme for our later ggplots
+# this works in ggplot too
 ndvi_tiff_df <- as.data.frame(ndvi_tiff, xy=TRUE) %>% 
   pivot_longer(-(x:y), names_to = "variable", values_to= "value")
 
 str(ndvi_tiff_df)
 
 ggplot() +
-  geom_raster(data = ndvi_tiff_df , aes(x = x, y = y, fill = value)) +
-  scale_fill_viridis_c(option="D")
-
+  geom_raster(data = ndvi_tiff_df , aes(x = x, y = y, fill = value)) 
 
 
 
@@ -115,6 +113,7 @@ dir.create("output_data/ndvi", showWarnings = FALSE)
 # calculate the NDVIs 
 # and fill in (extend) to the AOI
 # loop
+# this takes a while
 for (images in scene_paths) {
     source_image <- rast(images)
     ndvi_tiff <- (source_image[[8]] - source_image[[6]] / source_image[[8]] + source_image[[6]])
@@ -174,12 +173,22 @@ ndvi_series_stack <- rast(ndvi_series_paths)
 # whooo hoooo!
 str(ndvi_series_stack)
 nlyr(ndvi_series_stack)
+# notice there are duplicate column names / dates
+# this turns out to be a feature!
 names(ndvi_series_stack)
 
 # one raster has outliers. NDVI = 71000
+# that outlier causes my ggplot to be overly dark.
 summary(values(ndvi_series_stack))
 
+# it's one of the April 27 images:
 plot(ndvi_series_stack)
+
+# can I just cut off everything above a certain number?
+# my calculated NDVIs were 1 <> 70999
+# highest 3rd quartile = 4592
+# maybe 10,000 should be max?
+
 
 # pivot
 # comes from the lesson
@@ -198,7 +207,7 @@ ggplot() +
   facet_wrap(~ variable)
 
 # we need to scale our output.
-# looks like by 100000
+# looks like by 100000?
 summary(ndvi_series_df$value)
 ndvi_series_stack <- ndvi_series_stack/100000
 
