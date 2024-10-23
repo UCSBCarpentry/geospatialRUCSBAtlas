@@ -4,6 +4,7 @@
 
 library(scales)
 library(tidyr)
+library(dplyr)
 library(ggplot2)
 # library(raster)
 library(terra)
@@ -120,7 +121,7 @@ for (images in scene_paths) {
     new_path <- paste("output_data/ndvi/", new_filename, ".tif", sep="")
     ndvi_tiff <- extend(ndvi_tiff, ucsb_extent, snap="near")
     set.ext(ndvi_tiff, ext(ucsb_extent))
-    names(ndvi_tiff) <- substr(new_filename, 0,8)
+    names(ndvi_tiff) <- substr(new_filename, 0,14)
     print(names(ndvi_tiff))
     print(new_filename)
     print(dim(ndvi_tiff))
@@ -183,31 +184,40 @@ summary(values(ndvi_series_stack))
 # it's one of the April 27 images:
 plot(ndvi_series_stack)
 
+
+
+# pivot
+# comes from the lesson
+ndvi_series_df <- as.data.frame(ndvi_series_stack, xy=TRUE) %>% 
+  pivot_longer(-(x:y), names_to = "variable", values_to= "value")
+
+str(ndvi_series_df)
+summary(ndvi_series_df)
+
+
 # can I just cut off everything above a certain number?
 # my calculated NDVIs were 1 <> 70999
 # highest 3rd quartile = 4592
 # maybe 10,000 should be max?
 # 20,000? (since that's the max below 70,000?)
 
+# this doesn't do it.
+narrower_df <- filter(ndvi_series_df, value > 20000, na.rm = FALSE)
+summary(narrower_df)  
 
-# pivot
-# comes from the lesson
-# and because we are pivoting on the dates, multiple
-# rasters will get graphed together:
-ndvi_series_df <- as.data.frame(ndvi_series_stack, xy=TRUE) %>% 
-  pivot_longer(-(x:y), names_to = "variable", values_to= "value")
 
+summary(ndvi_series_df)
 str(ndvi_series_df)
 unique(ndvi_series_df$variable)
+unique(ndvi_series_df$value)
 
-
-# this output is really dark.
+# this is the output that is really dark.
 ggplot() +
   geom_raster(data = ndvi_series_df , aes(x = x, y = y, fill = value)) +
   facet_wrap(~ variable)
 
-# we need to scale our output.
-# looks like by 100000?
+# we also need to scale our output.
+# looks like by 100000? 10000?
 summary(ndvi_series_df$value)
 ndvi_series_stack <- ndvi_series_stack/100000
 
@@ -225,11 +235,16 @@ ggplot() +
 
 # what's wrong with April?   #############################################
 ndvi_tiff_path <- c("output_data/NDVI/")
-image <- rast(paste(ndvi_tiff_path, "20240427_175907_21_24c5_3B.tif", sep=""))
-str(image)
-plot(image)
+apr_ndvi <- rast(paste(ndvi_tiff_path, "20240427_175907_21_24c5_3B.tif", sep=""))
+str(apr_ndvi)
+plot(apr_ndvi)
 
-apr_image <- rast(paste(tiff_path, "20240427_175907_21_24c5_3B.tif", sep=""))
+apr_image <- rast(paste(tiff_path, "20240427_175907_21_24c5_3B_AnalyticMS_SR_8b_clip.tif", sep=""))
+plotRGB(apr_image, r=6,g=3,b=1, stretch = "hist")
+# visually there's nothing going on
+# does my 'feature' about combining layers actually
+# add values together as they are stacking up?
+
 
 
 
