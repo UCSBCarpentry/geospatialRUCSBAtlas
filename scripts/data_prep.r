@@ -27,7 +27,7 @@ dir.create("source_data", showWarnings = FALSE)
 
 # hi-res UCSB Campus DEM ####################################
 # Download the data from the Google Drive
-drive_download("https://drive.google.com/drive/folders/1_NWRIonW03jm5MdP9tq-zJjkfDjFCWEm?usp=sharing",
+drive_download("https://drive.google.com/file/d/1GtF1mdjcDRNBB5wQaKzSKrvzwAQ2iEXh/view?usp=drive_link",
                 "downloaded_data/campus_DEM.zip", overwrite=TRUE)
 
 
@@ -163,9 +163,7 @@ trees_url <- "https://services1.arcgis.com/4TXrdeWh0RyCqPgB/ArcGIS/rest/services
 # says arc_open is not a function in arcgisutils
 # its part of a function in arcgislayers 
 # remote::install_github("r-argis/arcgis", dependencies = TRUE)
-trees_layer <- arc_open(trees_url)
-str(trees_layer)
-class(trees_layer)
+#trees_layer <- arc_open(trees_url)
 
 # not quite sure how to get this FeatureServer
 # into a usable format
