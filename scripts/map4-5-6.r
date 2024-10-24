@@ -1,4 +1,5 @@
-# map 7 
+# map 4-5-6 is a tryptic,
+# zooming in to campus
 # the zoom to Cali locator sheet
 
 # we crop the rasters before reprojecting them.
@@ -330,9 +331,9 @@ colnames(places)
 
 
 ggplot() +
-  geom_spatvector(data = places) +
   geom_spatraster(data = zoom_2_hillshade,
-                  aes(fill=hillshade))
+                  aes(fill=hillshade)) +
+geom_spatvector(data = places, fill=NA) 
   
 #######################
 # is the alpha doing anything here?
@@ -341,15 +342,15 @@ ggplot() +
               aes(fill=hillshade)) +
     scale_fill_viridis_c() +
   scale_alpha(range = c(0.15, 0.65), guide="none")+
-  geom_spatvector(data=places)
+  geom_spatvector(data=places, fill=NA)
 
 
 ggplot() +
   geom_spatraster(data = zoom_2_hillshade,
                   aes(fill=hillshade))+
       scale_fill_viridis_c() +
-  scale_alpha(range = c(0.15, 0.65), guide="none")
-
+  scale_alpha(range = c(0.15, 0.65), guide="none") +
+geom_spatvector(data=places, fill=NA)
 
 zoom_2_plot <- ggplot() +
   geom_raster(data = zoom_2_hillshade,
@@ -357,6 +358,7 @@ zoom_2_plot <- ggplot() +
   scale_fill_viridis_c() +
   scale_alpha(range = c(0.15, 0.65), guide="none") +
   geom_spatvector(data=campus_extent) +
+  geom_spatvector(data=places, fill=NA) +
   labs(title = "Bite of California",
        subtitle = "Zoom 2")
 
