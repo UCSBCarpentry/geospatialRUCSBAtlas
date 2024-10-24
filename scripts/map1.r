@@ -13,7 +13,9 @@ library(sf)
 # set up objects
 
 #vector layers
+
 buildings <- st_read("source_data/campus_buildings/Campus_Buildings.shp")
+iv_buildings <- st_read("source_data/iv_buildings/CA_Structures_ExportFeatures.shp")
 # walkways <- 
 bikeways <- st_read("source_data/bike_paths/bikelanescollapsedv8.shp")
 habitat <- st_read("source_data/NCOS_bird_observations/NCOS_Shorebird_Foraging_Habitat.shp")
@@ -22,23 +24,42 @@ habitat <- st_read("source_data/NCOS_bird_observations/NCOS_Shorebird_Foraging_H
 
 # basic terra plots
 plot(buildings)
+plot(iv_buildings)
 plot(bikeways)
 plot(habitat)
+
 
 # overlays as in episode 8
 ggplot() +
   geom_sf(data=habitat) +
   geom_sf(data=buildings) +
+  geom_sf(data=iv_buildings) +
   geom_sf(data=bikeways) +
   coord_sf()
 
+ggsave("images/map1.1.png", plot=last_plot())
+
+#which buildings are on top?
+# the last ones added
 ggplot() +
   geom_sf(data=habitat, color="yellow") +
   geom_sf(data=buildings) +
+  geom_sf(data=iv_buildings, color="light gray") +
   geom_sf(data=bikeways, color="blue") +
   coord_sf()
 
-ggsave("images/map1.1.png", plot=last_plot())
+# so visually let's put the non-campus gray
+# buildings below our campus buildings
+ggplot() +
+  geom_sf(data=habitat, color="yellow") +
+  geom_sf(data=iv_buildings, color="light gray") +
+  geom_sf(data=buildings) +
+  geom_sf(data=bikeways, color="blue") +
+  coord_sf() + 
+  ggtitle("Map 1.2")
+
+ggsave("images/map1.2.png", plot=last_plot())
+
 
 
 # the background setup is bathymetry and topography
@@ -233,6 +254,7 @@ campus_hillshade_df <-
 
 # reproject the vectors
 buildings <- st_transform(buildings, campus_projection)
+iv_buildings <- st_transform(iv_buildings, campus_projection)
 habitat <- st_transform(habitat, campus_projection)
 bikeways <- st_transform(bikeways, campus_projection)
 
@@ -244,6 +266,7 @@ ggplot() +
   geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = bathymetry)) +
   scale_fill_viridis_c(na.value="NA") +
   labs(title="Map 1", subtitle="Version 3") +
+  geom_sf(data=iv_buildings, color=alpha("light gray", .1), fill=NA) +
   geom_sf(data=buildings, color ="hotpink") +
   geom_sf(data=habitat, color="darkorchid1") +
   geom_sf(data=bikeways, color="yellow") +
