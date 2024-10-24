@@ -28,7 +28,7 @@ trees <- vect("source_data/trees/DTK_012116.shp")
 # Bikes
 bikes <- vect("source_data/bike_paths/bikelanescollapsedv8.shp")
 # Streams
-streams <- vect("source_data/california_streams/California_Streams.shp")
+# streams <- vect("source_data/california_streams/California_Streams.shp")
 # Coastline polygon
 coastline <- vect("source_data/california_coastline/3853-s3_2002_s3_reg_pacific_ocean_lines.shp")
 
@@ -38,8 +38,8 @@ plot(trees)
 crs(trees, describe=TRUE)
 plot(bikes)
 crs(bikes, describe=TRUE)
-plot(streams) # Takes a lot of time, heavy file, yeah she hefty -KL
-crs(streams, describe=TRUE)
+#plot(streams) # Takes a lot of time, heavy file, yeah she hefty -KL
+#crs(streams, describe=TRUE)
 plot(coastline)
 crs(coastline, describe=TRUE)
 
