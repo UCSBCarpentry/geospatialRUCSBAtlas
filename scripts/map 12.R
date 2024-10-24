@@ -128,7 +128,7 @@ for (images in scene_paths) {
     print(names(ndvi_tiff))
     print(new_filename)
     print(dim(ndvi_tiff))
-    plot(ndvi_tiff)
+#    plot(ndvi_tiff)
     writeRaster(ndvi_tiff, new_path, overwrite=TRUE)
         }
 
@@ -152,16 +152,13 @@ test <- rast(ndvi_series_names[1])
 str(test)
 str(dim(test))
 
-# delete any files that arent't the standard 
+# delete any files that aren't the standard 
 # resolution
 for (image in ndvi_series_names) {
   test_size <- rast(image)
-  print(image)
-  #  print(dim(test_size))
-#  print(str(dim(test_size)))
-# length 1 qualifier 
-  test_result <- (dim(test_size) == valid_tiff)
-  print(test_result)  
+  # length 1 qualifier 
+   test_result <- (dim(test_size) == valid_tiff)
+   print(test_result)  
   ifelse((dim(test_size) == valid_tiff), print("A match!!!"), file.remove(image))
 }
 
@@ -176,9 +173,12 @@ ndvi_series_stack <- rast(ndvi_series_paths)
 # whooo hoooo!
 str(ndvi_series_stack)
 nlyr(ndvi_series_stack)
-# notice there are duplicate column names / dates
+summary(values(ndvi_series_stack))
+
+
+# duplicate column names / dates can be made
 # this turns out to be a feature!
-names(ndvi_series_stack)
+# need to put it back in later
 
 # one raster has outliers. NDVI = 71000
 # that outlier causes my ggplot to be overly dark.
@@ -186,8 +186,6 @@ summary(values(ndvi_series_stack))
 
 # it's one of the April 27 images:
 plot(ndvi_series_stack)
-
-
 
 # pivot
 # comes from the lesson
@@ -214,27 +212,11 @@ str(ndvi_series_df)
 unique(ndvi_series_df$variable)
 unique(ndvi_series_df$value)
 
-# this is the output that is really dark.
+# this is the output that is really dark.   ### and slow
 ggplot() +
   geom_raster(data = ndvi_series_df , aes(x = x, y = y, fill = value)) +
   facet_wrap(~ variable)
 
-# we also need to scale our output.
-# looks like by 100000? 10000?
-summary(ndvi_series_df$value)
-ndvi_series_stack <- ndvi_series_stack/100000
-
-# remake our dataframe:
-ndvi_series_df <- as.data.frame(ndvi_series_stack, xy=TRUE) %>% 
-  pivot_longer(-(x:y), names_to = "variable", values_to= "value")
-
-# newly scaled plot, NDVI = 0:1
-# and a new color scheme
-# this is slow and the color scheme didn't work.
-ggplot() +
-  geom_raster(data = ndvi_series_df , aes(x = x, y = y, fill = value)) +
-  scale_color_gradient(low="red", high="green") +
-  facet_wrap(~ variable)
 
 # what's wrong with April?   #############################################
 ndvi_tiff_path <- c("output_data/NDVI/")
@@ -256,7 +238,36 @@ plotRGB(apr_image, r=6,g=3,b=1, stretch = "hist")
 # histograms
 # make bins
 
+# this default one really shows how much the outlier is affecting us
+ggplot(ndvi_series_df) +
+  geom_histogram(aes(value)) + 
+  facet_wrap(~variable)
+
+
 # display the binned histograms of the NDVIs
+# we can use cut to make 10 bins
+
+ndvi_series_binned_df <-  ndvi_series_df %>% 
+  mutate(bins = cut(value, breaks=10)) 
+
+ggplot(ndvi_series_binned_df) +
+  geom_bar(aes(bins)) + 
+  facet_wrap(~variable)
+
+# that's better. And shows us where we can make custom bins
+summary(ndvi_series_binned_df)
+
+local_ndvi_breaks <- c(-1, 0, .001, .01, .1, .11, .115, .2, 1)
+
+ndvi_series_custom_binned_df <-  ndvi_series_df %>% 
+  mutate(bins = cut(value, breaks=local_ndvi_breaks)) 
+
+ggplot(ndvi_series_custom_binned_df, aes(x=bins)) +
+  geom_bar() + 
+  facet_wrap(~variable)
+
+
+
 
 # Julian dates: that's in the lesson, but ours uses calendar dates
 # challenge: change object names to Julian dates
