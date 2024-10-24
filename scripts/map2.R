@@ -253,7 +253,7 @@ map2_v1
 
 # Adding title, subtitle and title for the axes
 map2_v2 <- map2_v1 +
-  labs(title = 'Stylized thematic map of UCSB campus',
+  labs(title = 'Map 2: Stylized thematic map of UCSB campus',
        subtitle = 'Trees, bike paths, and water',
        x = 'Longitude', y = 'Latitude')
 map2_v2
@@ -325,7 +325,7 @@ map2_v5 <- ggplot() +
                                  'Streams' = 'cadetblue3',
                                  'Ocean' = 'dodgerblue')) +
   theme_minimal() +
-  labs(title = 'Stylized thematic map of UCSB campus',
+  labs(title = 'Map 2: Stylized thematic map of UCSB campus',
        subtitle = 'Trees, bike paths, and water. (v.5)',
        x = 'Longitude', y = 'Latitude') +
   theme(
