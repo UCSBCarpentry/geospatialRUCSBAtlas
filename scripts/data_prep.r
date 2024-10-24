@@ -189,6 +189,24 @@ curl_download("https://data-cdfw.opendata.arcgis.com/api/download/v1/items/92b18
 unzip("downloaded_data/california_streams.zip", exdir="source_data/california_streams", overwrite = TRUE)
 file.remove("downloaded_data/california_streams.zip")
 
+# Streams Map 2 
+#hefty so do it in dataprep instead
+#doesnt this mean 
+streams <- vect("source_data/california_streams/California_Streams.shp")
+plot(streams) # Takes a lot of time, heavy file, yeah she hefty -KL
+crs(streams, describe=TRUE)
+ext(streams)
+
+#do the thing with the extent and match it to trees 
+trees <- vect("source_data/trees/DTK_012116.shp")
+streams_crop <- crop(streams, trees)
+plot(trees)
+crs(trees, describe=TRUE)
+ext(trees)
+
+streams_crop <- crop(streams, trees) %>% 
+  writeVector("source_data/california_streams/streams_crop.shp", overwrite = TRUE)
+
 # * Pacific Ocean Lines https://geodata.library.ucsb.edu/catalog/3853-s3_2002_s3_reg_pacific_ocean_lines
 curl_download("https://geodata.library.ucsb.edu/download/file/3853-s3_2002_s3_reg_pacific_ocean_lines-shapefile.zip",
               "downloaded_data/3853-s3_2002_s3_reg_pacific_ocean-shapefile.zip")
