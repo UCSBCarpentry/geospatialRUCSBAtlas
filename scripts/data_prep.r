@@ -27,14 +27,16 @@ dir.create("source_data", showWarnings = FALSE)
 
 # hi-res UCSB Campus DEM ####################################
 # Download the data from the Google Drive
-drive_download("https://drive.google.com/file/d/1GtF1mdjcDRNBB5wQaKzSKrvzwAQ2iEXh/view?usp=drive_link",
+drive_download("https://drive.google.com/file/d/1bkIVwJESL99Kd5N9_0QqwctgmpXYFbR8/view?usp=sharing",
                 "downloaded_data/campus_DEM.zip", overwrite=TRUE)
 
-
 # Unzip the archive
-unzip("downloaded_data/campus_DEM.zip", exdir = "downloaded_data") # The zip archive on the GDrive has one extra level of nesting
+unzip("downloaded_data/campus_DEM.zip", 
+      exdir = "downloaded_data",
+      overwrite = TRUE) 
 
 # Rename the file and put it in the source_data folder
+# note the extra level of nesting
 file.copy(from='downloaded_data/greatercampusDEM/greatercampusDEM/greatercampusDEM_1_1.tif', 
             to='source_data/campus_DEM.tif')
 
@@ -47,17 +49,19 @@ file.remove("downloaded_data/campus_DEM.zip")
 
 # here's where we need curl: so it doesn't time out
 curl_download("https://pubs.usgs.gov/ds/781/OffshoreCoalOilPoint/data/Bathymetry_OffshoreCoalOilPoint.zip", 
-              "downloaded_data/Bathymetry_OffshoreCoalOilPoint.zip")
+              "downloaded_data/Bathymetry_OffshoreCoalOilPoint.zip", quiet=FALSE)
 
 # Unzip the archive
-unzip("downloaded_data/Bathymetry_OffshoreCoalOilPoint.zip", exdir = "downloaded_data/bathymetry") # The zip archive on the GDrive has one extra level of nesting
+unzip("downloaded_data/Bathymetry_OffshoreCoalOilPoint.zip", 
+      exdir = "downloaded_data/bathymetry",
+      overwrite = TRUE) 
 
 # copy the file needed for episode 3
 file.copy(from='downloaded_data/bathymetry/Bathymetry_2m_OffshoreCoalOilPoint.tif', 
             to='source_data/SB_bath_2m.tif')
 
 # Delete the zip archive
-file.remove("downloaded_data/Bathymetry_OffshoreCoalOilPoint.zip")
+# file.remove("downloaded_data/Bathymetry_OffshoreCoalOilPoint.zip")
 
 # largest extent raster
 # global shaded relief from NaturalEarth
@@ -157,7 +161,7 @@ unzip("downloaded_data/NCOS_Shorebird_Foraging_Habitat.zip", exdir = "source_dat
 # https://ucsb.maps.arcgis.com/home/item.html?id=c6eb1b782f674be082f9eb764314dda5
 
 # there's a version of this with a trailing 0
-trees_url <- "https://services1.arcgis.com/4TXrdeWh0RyCqPgB/ArcGIS/rest/services/Treekeeper_012116/FeatureServer/0"
+# trees_url <- "https://services1.arcgis.com/4TXrdeWh0RyCqPgB/ArcGIS/rest/services/Treekeeper_012116/FeatureServer/0"
 
 # this breaks:
 # says arc_open is not a function in arcgisutils
@@ -189,15 +193,16 @@ curl_download("https://data-cdfw.opendata.arcgis.com/api/download/v1/items/92b18
 unzip("downloaded_data/california_streams.zip", exdir="source_data/california_streams", overwrite = TRUE)
 file.remove("downloaded_data/california_streams.zip")
 
-# Streams Map 2 
-#hefty so do it in dataprep instead
-#doesnt this mean 
+# It's very large, so let's crop it here in data prep
+# so map 2 makes itself faster later on:
+
 streams <- vect("source_data/california_streams/California_Streams.shp")
-plot(streams) # Takes a lot of time, heavy file, yeah she hefty -KL
+
+# crop California streams
+# to the extent of
+# UCSB trees:
 crs(streams, describe=TRUE)
 ext(streams)
-
-#do the thing with the extent and match it to trees 
 trees <- vect("source_data/trees/DTK_012116.shp")
 streams_crop <- crop(streams, trees)
 plot(trees)
@@ -208,10 +213,10 @@ streams_crop <- crop(streams, trees) %>%
   writeVector("source_data/california_streams/streams_crop.shp", overwrite = TRUE)
 
 # * Pacific Ocean Lines https://geodata.library.ucsb.edu/catalog/3853-s3_2002_s3_reg_pacific_ocean_lines
-curl_download("https://geodata.library.ucsb.edu/download/file/3853-s3_2002_s3_reg_pacific_ocean_lines-shapefile.zip",
-              "downloaded_data/3853-s3_2002_s3_reg_pacific_ocean-shapefile.zip")
-unzip("downloaded_data/3853-s3_2002_s3_reg_pacific_ocean-shapefile.zip", exdir="source_data/california_coastline", overwrite = TRUE)
-file.remove("downloaded_data/3853-s3_2002_s3_reg_pacific_ocean-shapefile.zip")
+# curl_download("https://geodata.library.ucsb.edu/download/file/3853-s3_2002_s3_reg_pacific_ocean_lines-shapefile.zip",
+#              "downloaded_data/3853-s3_2002_s3_reg_pacific_ocean-shapefile.zip")
+#unzip("downloaded_data/3853-s3_2002_s3_reg_pacific_ocean-shapefile.zip", exdir="source_data/california_coastline", overwrite = TRUE)
+#file.remove("downloaded_data/3853-s3_2002_s3_reg_pacific_ocean-shapefile.zip")
 
 # Foraging Habitat?
 # AOI's (Can be used later for clipping extents)
@@ -223,11 +228,6 @@ file.remove("downloaded_data/3853-s3_2002_s3_reg_pacific_ocean-shapefile.zip")
 drive_download("https://drive.google.com/file/d/1_Rt6HGF4LsIbZPMP6vZFm67H5MlzlIW1/view?usp=drive_link", 
               "downloaded_data/bike_paths.zip", overwrite=TRUE)
 unzip("downloaded_data/bike_paths.zip", exdir = "source_data/bike_paths/", overwrite=TRUE)
-
-# ("source_data/bike_paths/bikelanescollapsedv8.shp")
-
-
-
 
 
 
@@ -265,7 +265,8 @@ campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4, fun=mean,
 #a: so that learners can run this faster.
 
 
-# above or below here?
+# make hillshades for map 1
+# and episode 1
 aspect <- terrain(campus_DEM_downsampled, 
                   v="aspect", unit="radians", neighbors=8, 
                   filename="source_data/aspect.tif", overwrite = TRUE)
@@ -293,18 +294,4 @@ bathymetry <-
 # downsample it so it's runnable
 bathymetry_downsample <- aggregate(bathymetry, fact = 4)
 writeRaster(bathymetry_downsample, "source_data/SB_bath.tif", filetype="GTiff", overwrite=TRUE)
-
-# ep 5
-# downsample the West Campus CIRGIS multi-band image
-# natural_color <- brick("source_data/cirgis2020/w_campus.tif")
-# nbands(natural_color)
-# x <- nrow(natural_color) / 10
-# y <- ncol(natural_color) / 10
-# new_res <- raster(nrow = x, ncol = y)
-# extent(new_res) <- extent(natural_color)
-# natural_color_down <- resample(natural_color, new_res, method="bilinear") 
-# nbands(natural_color_down)
-# writeRaster(natural_color_down, "output_data/w_campus.tif", format="GTiff", overwrite=TRUE)
-# I made this in ArcGIS because SLOWWWWWWWWW.....
-# w_campus_1ft.tif
 
