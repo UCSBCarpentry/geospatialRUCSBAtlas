@@ -217,10 +217,13 @@ streams_crop <- crop(streams, trees) %>%
   writeVector("source_data/california_streams/streams_crop.shp", overwrite = TRUE)
 
 # * Pacific Ocean Lines https://geodata.library.ucsb.edu/catalog/3853-s3_2002_s3_reg_pacific_ocean_lines
-# curl_download("https://geodata.library.ucsb.edu/download/file/3853-s3_2002_s3_reg_pacific_ocean_lines-shapefile.zip",
-#              "downloaded_data/3853-s3_2002_s3_reg_pacific_ocean-shapefile.zip")
-#unzip("downloaded_data/3853-s3_2002_s3_reg_pacific_ocean-shapefile.zip", exdir="source_data/california_coastline", overwrite = TRUE)
-#file.remove("downloaded_data/3853-s3_2002_s3_reg_pacific_ocean-shapefile.zip")
+# geodata URLs are not static
+
+# so google drive it is:
+drive_download("https://drive.google.com/file/d/1-uMzG_chfHqiIQgoluQzA-iemLA5tY8Z/view?usp=sharing",
+               "downloaded_data/pacific_ocean-shapefile.zip", overwrite=TRUE)
+
+unzip("downloaded_data/pacific_ocean-shapefile.zip", exdir="source_data/california_coastline", overwrite = TRUE)
 
 # Foraging Habitat?
 # AOI's (Can be used later for clipping extents)
