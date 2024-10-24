@@ -27,8 +27,10 @@ dir.create("source_data", showWarnings = FALSE)
 
 # hi-res UCSB Campus DEM ####################################
 # Download the data from the Google Drive
-drive_download("https://drive.google.com/file/d/1bkIVwJESL99Kd5N9_0QqwctgmpXYFbR8/view?usp=sharing",
+drive_download("https://drive.google.com/drive/folders/1_NWRIonW03jm5MdP9tq-zJjkfDjFCWEm?usp=sharing",
                 "downloaded_data/campus_DEM.zip", overwrite=TRUE)
+
+
 # Unzip the archive
 unzip("downloaded_data/campus_DEM.zip", exdir = "downloaded_data") # The zip archive on the GDrive has one extra level of nesting
 
