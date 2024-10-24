@@ -278,4 +278,4 @@ ggsave("images/map1.3.png", plot=last_plot())
 # customize the y graticule to be xx.xx and smaller
 # and further format the vectors?
 
-object_test <-
+
