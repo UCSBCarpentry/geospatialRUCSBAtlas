@@ -274,7 +274,8 @@ ggplot() +
 
 ggsave("images/map1.3.png", plot=last_plot())
 
-# now we need to clip to the extent that we want
-# customize the graticule
-# further format the color ramps?
+# next we need to
+# customize the y graticule to be xx.xx and smaller
+# and further format the vectors?
 
+object_test <-

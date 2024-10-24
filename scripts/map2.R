@@ -30,7 +30,7 @@ bikes <- vect("source_data/bike_paths/bikelanescollapsedv8.shp")
 # Streams
 streams <- vect("source_data/california_streams/California_Streams.shp")
 # Coastline polygon
-coastline <- vect("source_data/california_coastline/3853-s3_2002_s3_reg_pacific_ocean_lines.shp")
+coastline <- vect("source_data/california_coastline/3853-s3_2002_s3_reg_pacific_ocean.shp")
 
 
 # Let's take a quick first look at our data and find out their projections
@@ -40,7 +40,7 @@ plot(bikes)
 crs(bikes, describe=TRUE)
 plot(streams) # Takes a lot of time, heavy file, yeah she hefty -KL
 crs(streams, describe=TRUE)
-plot(coastline)
+# plot(coastline) 
 crs(coastline, describe=TRUE)
 
 # We can see the different CRS our data has:
@@ -94,7 +94,8 @@ ggplot() +
   geom_spatvector(data=trees, colour='green4') +
   geom_spatvector(data=streams_crop, , colour='lightblue') +
   geom_spatvector(data = bikes_crop, colour='black') +
-  geom_spatvector(data=coastline_crop, colour='darkblue')
+  geom_spatvector(data=coastline_crop, colour='darkblue') +
+  ggtitle("Map 2 v 0.1")
   
 
 # But we see that the current extent used is too narrow, we almost can't see
@@ -123,7 +124,8 @@ ggplot() +
   geom_spatvector(data = trees, colour='green4') +
   geom_spatvector(data = streams_crop, , colour='lightblue') +
   geom_spatvector(data = bikes_crop, colour='black') +
-  geom_spatvector(data = coastline_crop, colour='darkblue')
+  geom_spatvector(data = coastline_crop, colour='darkblue') +
+  ggtitle("Map 2 v 0.2")
 
 
 # We will come back to stylize our map even more, but for now, let's explore
@@ -189,7 +191,10 @@ ggplot() +
   scale_colour_manual(name = "Legend",
                       values = c('Trees' = 'green4', 
                                  'Streams' = 'cadetblue3')) +
+  ggtitle("Map2 v.0.3") +
   theme_minimal()
+
+
 
 ## Challenge: What is the difference between setting the color of the trees
 #   inside the aes of the geom_spatvector layer and inside the scale_color_manual
@@ -253,7 +258,7 @@ map2_v1
 
 # Adding title, subtitle and title for the axes
 map2_v2 <- map2_v1 +
-  labs(title = 'Map 2: Stylized thematic map of UCSB campus',
+  labs(title = 'Map 2 v2: Stylized thematic map of UCSB campus',
        subtitle = 'Trees, bike paths, and water',
        x = 'Longitude', y = 'Latitude')
 map2_v2
@@ -274,10 +279,9 @@ map2_v3 <- map2_v2 +
   scale_y_continuous(expand = c(0, 0))
 map2_v3
   
-# Finally, adding a scale and a compass
+# Finally, adding a scale
 map2_v4 <- map2_v3 +
-  annotation_scale(location = 'bl', width_hint = 0.167) +
-  annotation_north_arrow(location = 'bl', which_north = 'true', pad_x = unit(0, 'in'), pad_y = unit(0.3, 'in'), style = north_arrow_fancy_orienteering)
+  annotation_scale(location = 'bl', width_hint = 0.1)
 map2_v4
 
 # Save this plot
@@ -336,8 +340,7 @@ map2_v5 <- ggplot() +
   ) +
   scale_x_continuous(expand = c(0, 0)) +
   scale_y_continuous(expand = c(0, 0)) +
-  annotation_scale(location = 'bl', width_hint = 0.167) +
-  annotation_north_arrow(location = 'bl', which_north = 'true', pad_x = unit(0, 'in'), pad_y = unit(0.3, 'in'), style = north_arrow_fancy_orienteering)
+  annotation_scale(location = 'bl', width_hint = 0.167)
 
 map2_v5
 

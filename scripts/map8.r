@@ -1,7 +1,8 @@
-# map 7
-# an alternate to map 1
-# for the bottom of the page on map 3
+# map 8 actually
+# most recent planet image
 
+# for the episode about RGBs and multi-band rasters
+# episode 5
 
 library(terra)
 

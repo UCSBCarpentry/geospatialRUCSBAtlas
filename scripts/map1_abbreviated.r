@@ -30,7 +30,7 @@ ggplot() +
   geom_sf(data=bikeways, color="blue") +
   coord_sf()
 
-ggsave("images/map1.1.png", plot=last_plot())
+ggsave("images/map1a.1.png", plot=last_plot())
 
 
 # rasters
@@ -49,12 +49,6 @@ custom_bins <- c(-3, 4.9, 5, 7.5, 10, 25, 40, 70, 100, 150, 200)
 # campus_DEM
 campus_projection <- crs(campus_DEM)
 bath <- project(bath, campus_projection)
-
-#################################
-# this still won't work because the extents are different.
-# ep_4 is where these files, CRS, extent, and resolution 
-# get all matched
-
 
 # load campus_bathymetry raster from output folder
 # remember: this is the one we cropped, so the 2 extents are the same.
@@ -138,17 +132,18 @@ ggplot() +
   labs(title="Map 1", subtitle="Version 2: Continuous") +
         coord_quickmap()
   
-# overlay the vectors
-# reproject the vectors
-buildings <- st_transform(buildings, campus_projection)
-habitat <- st_transform(habitat, campus_projection)
-bikeways <- st_transform(bikeways, campus_projection)
 
 # bring back the hillshade from ep1-2
 campus_hillshade_df <- 
   rast("source_data/campus_hillshade.tif") %>% 
   as.data.frame(xy = TRUE) %>% 
   rename(campus_hillshade = hillshade) # rename to match code later
+
+# overlay the vectors
+# reproject the vectors
+buildings <- st_transform(buildings, campus_projection)
+habitat <- st_transform(habitat, campus_projection)
+bikeways <- st_transform(bikeways, campus_projection)
 
 #update color scheme for contrast 
 # +hillshade
@@ -157,14 +152,11 @@ ggplot() +
   geom_raster(data = campus_hillshade_df, aes(x=x, y=y, alpha = campus_hillshade), show.legend = FALSE) +
   geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = bathymetry)) +
   scale_fill_viridis_c(na.value="NA") +
-  labs(title="Map 1", subtitle="Version 3") +
   geom_sf(data=buildings, color ="hotpink") +
   geom_sf(data=habitat, color="darkorchid1") +
   geom_sf(data=bikeways, color="yellow") +
+  labs(title="Map 1", subtitle="Version 3") +
   coord_sf()
 
 ggsave("images/map1.3.png", plot=last_plot())
-
-# now we need to clip to the extent that we want
-# customize the graticule
-# further format the color ramps?
+object_test_abb <- ls()
