@@ -16,16 +16,19 @@
 			"installVscDebugger": true,
 			"installBspm": true
 		},
-		"ghcr.io/rocker-org/devcontainer-features/r-packages:1": {
-        	"packages": "terra,tidyverse,sf,curl,googledrive,arcgisutils"
+		"ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {
+			"packages": "r-cran-terra,r-cran-tidyverse,r-cran-sf,r-cran-curl,r-cran-googledrive,r-cran-arcgisutils"
     	},
 		"ghcr.io/rocker-org/devcontainer-features/rstudio-server:latest": {},
 		"ghcr.io/rocker-org/devcontainer-features/r-history:0": {}
 	},
+	"overrideFeatureInstallOrder": [
+		"ghcr.io/rocker-org/devcontainer-features/r-apt"
+	],
 	"forwardPorts": [8787],
-	"postAttachCommand": {
-        "rstudio-start": "rserver"
-    },
+	// "postAttachCommand": {
+	//     "rstudio-start": "rserver"
+	// },
 	"portsAttributes": {
         "8787": {
             "label": "RStudio IDE"
