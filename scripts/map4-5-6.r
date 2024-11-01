@@ -108,7 +108,7 @@ ggsave("images/map5.png", plot=last_plot())
 # overview
 # this one arrived as a hillshade.
 # maybe this should actually be made from the west_us?
-world <- rast("downloaded_data/GRAY_HR_SR_OB.tif")
+world <- rast("source_data/global_raster/GRAY_HR_SR_OB.tif")
 plot(world)
 
 # world <- project(world, my_crs)
