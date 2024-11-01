@@ -67,7 +67,7 @@ file.copy(from='downloaded_data/bathymetry/Bathymetry_2m_OffshoreCoalOilPoint.ti
 # global shaded relief from NaturalEarth
 curl_download("https://naciscdn.org/naturalearth/10m/raster/GRAY_HR_SR_OB.zip",
               "downloaded_data/global_raster.zip")
-unzip("downloaded_data/global_raster.zip", exdir="downloaded_data", overwrite = TRUE)
+unzip("downloaded_data/global_raster.zip", exdir="source_data/global_raster", overwrite = TRUE)
 
 
 # Elevation in the Western United States 90m DEM
