@@ -30,8 +30,7 @@ grays <- colorRampPalette(c("black", "white"))(255)
 # ###########################
 # Map 6
 # Zoom 3: campus
-# campus_DEM in episode 2
-campus_DEM <- rast("output_data/campus_DEM.tif") 
+campus_DEM <- rast("source_data/campus_DEM.tif") 
 
 # we are going to reuse this CRS throughout
 my_crs = crs(campus_DEM)

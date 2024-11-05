@@ -94,8 +94,6 @@ plot(bath)
 crs(campus_DEM) == crs(bath)
 
 #################################
-# this still won't work because the extents are different.
-# plot(bath + campus_DEM)
 
 # Julien solved this in ep_4
 # for these files, CRS, extent, and resolution all match:
@@ -105,18 +103,20 @@ crs(campus_DEM) == crs(bath)
 crs(campus_DEM) == crs(bath)
 
 # do they have the same extents?
-extent(campus_DEM)
-== SpatExtent(bath)
+ext(campus_DEM) == ext(bath)
 
+campus_bath <- crop(x=bath, y=campus_DEM)
+plot(campus_bath)
 
-
+# save campus bathymetry here
+writeRaster(campus_bath, "output_data/campus_bath.tif", filetype="GTiff", overwrite=TRUE)
 
 # make dataframes
 campus_DEM_df <- as.data.frame(campus_DEM, xy=TRUE) %>%
   rename(elevation = greatercampusDEM_1_1) # rename to match code later
 str(campus_DEM_df)
 
-campus_bath_df <- as.data.frame(bath, xy=TRUE) %>%
+campus_bath_df <- as.data.frame(campus_bath, xy=TRUE) %>%
   rename(bathymetry = SB_bath_2m)
 str(campus_bath_df)
 
