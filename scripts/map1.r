@@ -104,6 +104,13 @@ crs(campus_DEM) == crs(bath)
 # do they have the same projections?
 crs(campus_DEM) == crs(bath)
 
+# do they have the same extents?
+extent(campus_DEM)
+== SpatExtent(bath)
+
+
+
+
 # make dataframes
 campus_DEM_df <- as.data.frame(campus_DEM, xy=TRUE) %>%
   rename(elevation = greatercampusDEM_1_1) # rename to match code later
@@ -185,12 +192,12 @@ ggplot() +
   coord_quickmap()
 
 # switch the order
-# not sure why 16. Not sure how it gets on both layers
+# Not sure how it gets on both layers
 # not sure why it's so so ugly
 ggplot() +
     geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
     geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = binned_bath)) +
-    scale_fill_manual(values = terrain.colors(16)) +
+    scale_fill_manual(values = terrain.colors(19)) +
     coord_quickmap()
   
 ggplot() +
@@ -205,18 +212,7 @@ ggplot() +
 names(campus_DEM)
 names(campus_bath)
 
-# geom_spatraster is tidyterra. that's why this one doesn't work.
-#ggplot() +
-#  geom_spatraster(data = campus_DEM, aes(fill = greatercampusDEM_1_1)) +
-#  geom_spatraster(data = campus_bath, aes(fill = SB_bath_2m)) +
-#  scale_fill_viridis_c(na.value="NA") +
-#  geom_sf(data=habitat, color="yellow") +
-#  geom_sf(data=buildings) +
-#  geom_sf(data=bikeways, color="blue") +
-#    coord_sf()
-
-
-# this is whack
+# they won't overlay because
 # you need to re-project
 ggplot() +
   geom_sf(data=habitat, color="yellow") +
@@ -227,6 +223,14 @@ ggplot() +
   scale_fill_viridis_c(na.value="NA") +
     coord_sf()
 
+# reproject the vectors
+buildings <- st_transform(buildings, campus_projection)
+iv_buildings <- st_transform(iv_buildings, campus_projection)
+habitat <- st_transform(habitat, campus_projection)
+bikeways <- st_transform(bikeways, campus_projection)
+
+
+
 #bring back the hillshade
 #open file from ep1-2
 
@@ -235,19 +239,8 @@ campus_hillshade_df <-
   as.data.frame(xy = TRUE) %>% 
   rename(campus_hillshade = hillshade) # rename to match code later
 
-  str(campus_hillshade_df)
+str(campus_hillshade_df)
 
-#idk if I have to match the dem bins here too but just in case
-# custom_DEM_bins <- c(-3, -.01, .01, 2, 3, 4, 5, 10, 40, 200)
-# campus_hillshade_df <- campus_hillshade_df %>% 
-#  mutate(binned_DEM = cut(hillshade, breaks = custom_DEM_bins))
-
-
-# reproject the vectors
-buildings <- st_transform(buildings, campus_projection)
-iv_buildings <- st_transform(iv_buildings, campus_projection)
-habitat <- st_transform(habitat, campus_projection)
-bikeways <- st_transform(bikeways, campus_projection)
 
 #update color scheme for contrast 
 # +hillshade
