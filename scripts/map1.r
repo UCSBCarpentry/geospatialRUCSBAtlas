@@ -72,7 +72,7 @@ custom_bins <- c(-3, 4.9, 5, 7.5, 10, 25, 40, 70, 100, 150, 200)
 
 
 
-campus_DEM <- rast("output_data/campus_DEM.tif") 
+campus_DEM <- rast("source_data/campus_DEM.tif") 
 crs(campus_DEM)
 
 # does bathymetry still needs to be re-projected in order to overlay?
@@ -101,24 +101,15 @@ crs(campus_DEM) == crs(bath)
 # for these files, CRS, extent, and resolution all match:
 
 
-# reload rasters
-# from output folder
-campus_DEM <- rast("output_data/campus_DEM.tif")
-plot(campus_DEM)
-# remember: this is the one we cropped, so the 2 extents are the same.
-campus_bath <- rast("output_data/campus_bath.tif")
-plot(campus_bath)
-
-
 # do they have the same projections?
-crs(campus_DEM) == crs(campus_bath)
+crs(campus_DEM) == crs(bath)
 
 # make dataframes
 campus_DEM_df <- as.data.frame(campus_DEM, xy=TRUE) %>%
   rename(elevation = greatercampusDEM_1_1) # rename to match code later
 str(campus_DEM_df)
 
-campus_bath_df <- as.data.frame(campus_bath, xy=TRUE) %>%
+campus_bath_df <- as.data.frame(bath, xy=TRUE) %>%
   rename(bathymetry = SB_bath_2m)
 str(campus_bath_df)
 
