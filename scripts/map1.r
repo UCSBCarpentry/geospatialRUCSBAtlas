@@ -105,8 +105,8 @@ crs(campus_DEM) == crs(bath)
 crs(campus_DEM) == crs(bath)
 
 # do they have the same extents?
-extent(campus_DEM)
-== SpatExtent(bath)
+# I think this may be off 
+extent(campus_DEM)== SpatExtent(bath)
 
 
 
