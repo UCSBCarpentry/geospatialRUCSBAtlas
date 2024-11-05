@@ -105,6 +105,7 @@ crs(campus_DEM) == crs(bath)
 # do they have the same extents?
 ext(campus_DEM) == ext(bath)
 
+
 campus_bath <- crop(x=bath, y=campus_DEM)
 plot(campus_bath)
 
