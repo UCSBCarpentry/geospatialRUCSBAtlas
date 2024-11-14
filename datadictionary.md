@@ -79,14 +79,31 @@ Links are to their original source:
 * Pirate MapBox themed basemap?
 
 ### Object list
-"biked_df"       "bikes"          "bikes_crop"     "bikes_lines"    "bikes_proj"    
-"coastline"      "coastline_crop" "coastline_proj" "ext_trees"      "ht_0"          
-"map2_v1"        "map2_v2"        "map2_v3"        "map2_v4"        "map2_v5"       
-"new_ext"        "perc_0"         "streams"        "streams_crop"   "top5_species"  
-"total"          "trees"          "trees_filt"     "xrange"         "yrange"  
+* biked_df
+bikes
+bikes_crop
+bikes_lines
+bikes_proj    
+coastline      
+coastline_crop
+coastline_proj
+ext_trees
+ht_0          
+
+* output gggraphics:
+   ** "map2_v1"        "map2_v2"        "map2_v3"        "map2_v4"        "map2_v5"       
+
+"new_ext"        "perc_0"         
+"streams"        "streams_crop"   
+
+"top5_species"  
+"total"          "trees"          "trees_filt"     
+
+"xrange"         "yrange"  
 
 
 ## Map 3: Page with 4 insets
+Most of these will be used in Episodes 1 and 2
 
 ### Object list
  "bath_clipped"       "bath_df"            "bath_rast"          "campus_bath_df"    
@@ -112,7 +129,10 @@ Links are to their original source:
  ## Map 7
  
  ## Map 8
- Current planet image
+ ###Current planet image
+ Initially, we will use pre-packaged downloaded images from Planet.
+ 4- or 8-channel imagery will maps directly to the RGB- and 
+ NDVI- portions of the lesson (Episodes 5 and 12)
  
  ## Map 12
  aligns with Episode 12
