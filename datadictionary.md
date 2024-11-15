@@ -134,6 +134,19 @@ Most of these will be used in Episodes 1 and 2
  4- or 8-channel imagery will maps directly to the RGB- and 
  NDVI- portions of the lesson (Episodes 5 and 12)
  
+ ## Map 11
+ ### Re-projecting rasters
+ Episode 3s and 11 is where this happens in the lesson.
+ 3 is re-projecting
+ 11 is cropping to a vector
+ There is a purposeful mis-match in the lesson between the hillshades
+ and the elevations. What should be our equivelent?
+ We have already encountered projection mis-matches in any number of 
+ maps before here.but should we make one up?
+ Ep 3: Project to overlay Planet raster under / over the campus hillshade?
+ Ep 11: Crop as we do in Map 4-5-6?
+
+ 
  ## Map 12
  aligns with Episode 12
  
