@@ -29,10 +29,14 @@ dir.create("source_data", showWarnings = FALSE)
 # Download the data from the Google Drive
 drive_download("https://drive.google.com/file/d/1bkIVwJESL99Kd5N9_0QqwctgmpXYFbR8/view?usp=sharing",
                 "downloaded_data/campus_DEM.zip", overwrite=TRUE)
+
 # Unzip the archive
-unzip("downloaded_data/campus_DEM.zip", exdir = "downloaded_data") # The zip archive on the GDrive has one extra level of nesting
+unzip("downloaded_data/campus_DEM.zip", 
+      exdir = "downloaded_data",
+      overwrite = TRUE) 
 
 # Rename the file and put it in the source_data folder
+# note the extra level of nesting
 file.copy(from='downloaded_data/greatercampusDEM/greatercampusDEM/greatercampusDEM_1_1.tif', 
             to='source_data/campus_DEM.tif')
 
@@ -45,34 +49,38 @@ file.remove("downloaded_data/campus_DEM.zip")
 
 # here's where we need curl: so it doesn't time out
 curl_download("https://pubs.usgs.gov/ds/781/OffshoreCoalOilPoint/data/Bathymetry_OffshoreCoalOilPoint.zip", 
-              "downloaded_data/Bathymetry_OffshoreCoalOilPoint.zip")
+              "downloaded_data/Bathymetry_OffshoreCoalOilPoint.zip", quiet=FALSE)
 
 # Unzip the archive
-unzip("downloaded_data/Bathymetry_OffshoreCoalOilPoint.zip", exdir = "downloaded_data/bathymetry") # The zip archive on the GDrive has one extra level of nesting
+unzip("downloaded_data/Bathymetry_OffshoreCoalOilPoint.zip", 
+      exdir = "downloaded_data/bathymetry",
+      overwrite = TRUE) 
 
 # copy the file needed for episode 3
 file.copy(from='downloaded_data/bathymetry/Bathymetry_2m_OffshoreCoalOilPoint.tif', 
             to='source_data/SB_bath_2m.tif')
 
 # Delete the zip archive
-file.remove("downloaded_data/Bathymetry_OffshoreCoalOilPoint.zip")
+# file.remove("downloaded_data/Bathymetry_OffshoreCoalOilPoint.zip")
 
 # largest extent raster
 # global shaded relief from NaturalEarth
 curl_download("https://naciscdn.org/naturalearth/10m/raster/GRAY_HR_SR_OB.zip",
               "downloaded_data/global_raster.zip")
-unzip("downloaded_data/global_raster.zip", exdir="downloaded_data", overwrite = TRUE)
+unzip("downloaded_data/global_raster.zip", exdir="source_data/global_raster", overwrite = TRUE)
 
 
 # Elevation in the Western United States 90m DEM
 # to prep for SLO/SB/VEN/LA/OC/SD region extent on map 7 
-# https://www.sciencebase.gov/catalog/item/542aebf9e4b057766eed286a
+#https://www.sciencebase.gov/catalog/item/542aebf9e4b057766eed286a
 # this is a big, unwieldy file
-curl_download("https://www.sciencebase.gov/catalog/file/get/542aebf9e4b057766eed286a", 
-              "downloaded_data/dem90_hf.zip")
+drive_download("https://drive.google.com/file/d/1aFqCondOLoXZW5iS1QOKit1txVDDdJ6h/view?usp=drive_link",
+               "downloaded_data/dem90_hf.zip", overwrite=TRUE)
+
 unzip("downloaded_data/dem90_hf.zip", exdir="source_data", overwrite = TRUE)
 
-
+# Delete the zip archive
+file.remove("downloaded_data/dem90_hf.zip")
 
 # Get Campus Imagery
 # *********************
@@ -84,7 +92,24 @@ drive_download("https://drive.google.com/file/d/13ceWKBnTABOH5C9KDeBIJysSdjWuBMA
 unzip("downloaded_data/w_campus_1ft.zip",
       exdir="source_data", overwrite = TRUE)
 
+### UCSB Campus Map 12 23-24 PS Scene and GeoJSON
 
+#Planet Scene 23-24
+drive_download("https://drive.google.com/file/d/1-eeyJvCGqPgx7UJ7st-Vu8__e3dujQVx/view?usp=drive_link",
+               "downloaded_data/UCSB_campus_23-24_psscene_analytic_8b_sr_udm2.zip",
+               overwrite = TRUE)
+
+unzip("downloaded_data/UCSB_campus_23-24_psscene_analytic_8b_sr_udm2.zip",
+      exdir="source_data/UCSB_campus_23-24_psscene_analytic_8b_sr_udm2",
+      overwrite = TRUE)
+
+#delete zip archive
+file.remove("downloaded_data/UCSB_campus_23-24_psscene_analytic_8b_sr_udm2.zip")
+
+#UCSB_60KM Geojson
+drive_download("https://drive.google.com/file/d/1-gAC4BRkcJXxGWUb73h2pa1QfyQ9y9yk/view?usp=drive_link",
+               "source_data/ucsb_60sqkm_planet_extent.geojson",
+               overwrite = TRUE)
 
 
 # Planet 50cm NCOS?
@@ -124,6 +149,10 @@ drive_download("https://drive.google.com/file/d/1ssytmTbpC1rpT5b-h8AxtvSgNrsGQVN
                "downloaded_data/NCOS_Shorebird_Foraging_Habitat.zip", overwrite = TRUE)
 unzip("downloaded_data/NCOS_Shorebird_Foraging_Habitat.zip", exdir = "source_data/NCOS_bird_observations") 
 
+# get IV buildings
+drive_download("https://drive.google.com/file/d/1-splwT-DNa6kFgqhaP8OTx_TkECfTo42/view?usp=sharing",
+               "downloaded_data/iv_buildings.zip", overwrite=TRUE)
+unzip("downloaded_data/iv_buildings.zip", exdir = "source_data") 
 
 # POINTS
 # NCOS Planted Trees???
@@ -136,12 +165,13 @@ unzip("downloaded_data/NCOS_Shorebird_Foraging_Habitat.zip", exdir = "source_dat
 # https://ucsb.maps.arcgis.com/home/item.html?id=c6eb1b782f674be082f9eb764314dda5
 
 # there's a version of this with a trailing 0
-trees_url <- "https://services1.arcgis.com/4TXrdeWh0RyCqPgB/ArcGIS/rest/services/Treekeeper_012116/FeatureServer/0"
+# trees_url <- "https://services1.arcgis.com/4TXrdeWh0RyCqPgB/ArcGIS/rest/services/Treekeeper_012116/FeatureServer/0"
 
 # this breaks:
-trees_layer <- arc_open(trees_url)
-str(trees_layer)
-class(trees_layer)
+# says arc_open is not a function in arcgisutils
+# its part of a function in arcgislayers 
+# remote::install_github("r-argis/arcgis", dependencies = TRUE)
+#trees_layer <- arc_open(trees_url)
 
 # not quite sure how to get this FeatureServer
 # into a usable format
@@ -167,27 +197,44 @@ curl_download("https://data-cdfw.opendata.arcgis.com/api/download/v1/items/92b18
 unzip("downloaded_data/california_streams.zip", exdir="source_data/california_streams", overwrite = TRUE)
 file.remove("downloaded_data/california_streams.zip")
 
-# * Pacific Ocean Polygon https://geodata.library.ucsb.edu/catalog/3853-s3_2002_s3_reg_pacific_ocean
-curl_download("https://geodata.library.ucsb.edu/download/file/3853-s3_2002_s3_reg_pacific_ocean-shapefile.zip",
-              "downloaded_data/3853-s3_2002_s3_reg_pacific_ocean-shapefile.zip")
-unzip("downloaded_data/3853-s3_2002_s3_reg_pacific_ocean-shapefile.zip", exdir="source_data/california_coastline", overwrite = TRUE)
-file.remove("downloaded_data/3853-s3_2002_s3_reg_pacific_ocean-shapefile.zip")
+# It's very large, so let's crop it here in data prep
+# so map 2 makes itself faster later on:
+
+streams <- vect("source_data/california_streams/California_Streams.shp")
+
+# crop California streams
+# to the extent of
+# UCSB trees:
+crs(streams, describe=TRUE)
+ext(streams)
+trees <- vect("source_data/trees/DTK_012116.shp")
+streams_crop <- crop(streams, trees)
+plot(trees)
+crs(trees, describe=TRUE)
+ext(trees)
+
+streams_crop <- crop(streams, trees) %>% 
+  writeVector("source_data/california_streams/streams_crop.shp", overwrite = TRUE)
+
+# * Pacific Ocean Lines https://geodata.library.ucsb.edu/catalog/3853-s3_2002_s3_reg_pacific_ocean_lines
+# geodata URLs are not static
+
+# so google drive it is:
+drive_download("https://drive.google.com/file/d/1-uMzG_chfHqiIQgoluQzA-iemLA5tY8Z/view?usp=sharing",
+               "downloaded_data/pacific_ocean-shapefile.zip", overwrite=TRUE)
+
+unzip("downloaded_data/pacific_ocean-shapefile.zip", exdir="source_data/california_coastline", overwrite = TRUE)
 
 # Foraging Habitat?
 # AOI's (Can be used later for clipping extents)
 #       (You should create them in this script)
 
 
-# LINES
+# LINES - this is bike paths
 # X-drive?
 drive_download("https://drive.google.com/file/d/1_Rt6HGF4LsIbZPMP6vZFm67H5MlzlIW1/view?usp=drive_link", 
               "downloaded_data/bike_paths.zip", overwrite=TRUE)
 unzip("downloaded_data/bike_paths.zip", exdir = "source_data/bike_paths/", overwrite=TRUE)
-
-# ("source_data/bike_paths/bikelanescollapsedv8.shp")
-
-
-
 
 
 
@@ -215,8 +262,6 @@ unzip("downloaded_data/tl_2023_06_place.zip", exdir="source_data/cal_pop_places"
 # create a hillshade for our area of an appropriate resolution
 
 # downsizing the campus DEM so that it's more usable
-# this nested folder structure, r does not like
-   # ^^ because you had the path wrong
 campus_DEM <- rast("downloaded_data/greatercampusDEM/greatercampusDEM/greatercampusDEM_1_1.tif")
 
 campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4, fun=mean,
@@ -227,7 +272,8 @@ campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4, fun=mean,
 #a: so that learners can run this faster.
 
 
-# above or below here?
+# make hillshades for map 1
+# and episode 1
 aspect <- terrain(campus_DEM_downsampled, 
                   v="aspect", unit="radians", neighbors=8, 
                   filename="source_data/aspect.tif", overwrite = TRUE)
@@ -240,18 +286,13 @@ plot(slope)
 
 hillShade <- shade(slope, aspect, 
                    angle=40, direction=170, normalize=TRUE, 
-                   filename="source_data/hillshade.tiff", overwrite = TRUE)
+                   filename="source_data/campus_hillshade.tif", overwrite = TRUE)
 grays <- colorRampPalette(c("black", "white"))(255)
 plot(hillShade, col=grays)
 
 # campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4,
 #                                     filename = "source_data/campus_DEM.tif",
 #                                     overwrite = TRUE)
-
-#  JB -- this is already done above 
-# unzip("source_data/Bathymetry_OffshoreCoalOilPoint.zip",
-#       overwrite = TRUE, 
-#       exdir = "source_data/Bathymetry_OffshoreCoalOilPoint")
 
 # Ep 3: Reprojecting Rasters
 bathymetry <- 
@@ -260,18 +301,4 @@ bathymetry <-
 # downsample it so it's runnable
 bathymetry_downsample <- aggregate(bathymetry, fact = 4)
 writeRaster(bathymetry_downsample, "source_data/SB_bath.tif", filetype="GTiff", overwrite=TRUE)
-
-# ep 5
-# downsample the West Campus CIRGIS multi-band image
-# natural_color <- brick("source_data/cirgis2020/w_campus.tif")
-# nbands(natural_color)
-# x <- nrow(natural_color) / 10
-# y <- ncol(natural_color) / 10
-# new_res <- raster(nrow = x, ncol = y)
-# extent(new_res) <- extent(natural_color)
-# natural_color_down <- resample(natural_color, new_res, method="bilinear") 
-# nbands(natural_color_down)
-# writeRaster(natural_color_down, "output_data/w_campus.tif", format="GTiff", overwrite=TRUE)
-# I made this in ArcGIS because SLOWWWWWWWWW.....
-# w_campus_1ft.tif
 

@@ -26,6 +26,10 @@ Links are to their original source:
     * California State Waters Map Series, Offshore of Coal Oil Point, Block ID 63
   * we will need 3 tiffs out of data_prep.r for these
 
+
+
+
+
 ## Map 1
 * Shapefiles
   * Walkways
@@ -48,16 +52,106 @@ Links are to their original source:
   * Rasters
   * Planet SkySat images?
   
+### Object list
+"bath"                
+"bikeways"            
+"buildings"           
+"campus_bath"        
+"campus_bath_df"      
+"campus_DEM"          
+"campus_DEM_df"       
+"campus_hillshade_df"
+"campus_projection"   
+"custom_bath_bins"   
+"custom_bins"         
+"custom_DEM_bins"    
+"custom_sea_bins"     
+"habitat"             
+"sea_level"           
+"sea_level_0"        
+"sea_level_df"  
+
+
 ## Map 2
 * Trees
 * Water
 * Bikeways
 * Pirate MapBox themed basemap?
 
+### Object list
+* biked_df
+bikes
+bikes_crop
+bikes_lines
+bikes_proj    
+coastline      
+coastline_crop
+coastline_proj
+ext_trees
+ht_0          
+
+* output gggraphics:
+   ** "map2_v1"        "map2_v2"        "map2_v3"        "map2_v4"        "map2_v5"       
+
+"new_ext"        "perc_0"         
+"streams"        "streams_crop"   
+
+"top5_species"  
+"total"          "trees"          "trees_filt"     
+
+"xrange"         "yrange"  
+
+
 ## Map 3: Page with 4 insets
+Most of these will be used in Episodes 1 and 2
+
+### Object list
+ "bath_clipped"       "bath_df"            "bath_rast"          "campus_bath_df"    
+ "campus_border"      "campus_border_poly" "campus_DEM"         "campus_DEM_df"     
+ "custom_bath_bins"   "custom_bins"        "reprojected_bath"  
+
 ### Map 4-5-6: 
 * Zoom in to site
   * Western North America
   * Bite of California
   * Extended Campus
 * with little red extent boxes indicating the areas of zoom
+
+#### Ojbect list
+ "aligned_zoom"        "campus_DEM"          "campus_extent"       "campus_hillshade"   
+ "grays"               "my_crs"              "places"              "tryptic"            
+ "world"               "zoom_1"              "zoom_1_df"           "zoom_1_extent"      
+ "zoom_1_plot"         "zoom_2"              "zoom_2_aspect"       "zoom_2_cropped"     
+ "zoom_2_df"           "zoom_2_extent"       "zoom_2_hillshade"    "zoom_2_hillshade_df"
+ "zoom_2_plot"         "zoom_2_slope"        "zoom_3"              "zoom_3_df"          
+ "zoom_3_fake_aoi"     "zoom_3_hillshade_df" "zoom_3_plot" 
+ 
+ ## Map 7
+ 
+ ## Map 8
+ ###Current planet image
+ Initially, we will use pre-packaged downloaded images from Planet.
+ 4- or 8-channel imagery will maps directly to the RGB- and 
+ NDVI- portions of the lesson (Episodes 5 and 12)
+ 
+ ## Map 11
+ ### Re-projecting rasters
+ Episode 3s and 11 is where this happens in the lesson.
+ 3 is re-projecting
+ 11 is cropping to a vector
+ There is a purposeful mis-match in the lesson between the hillshades
+ and the elevations. What should be our equivelent?
+ We have already encountered projection mis-matches in any number of 
+ maps before here.but should we make one up?
+ Ep 3: Project to overlay Planet raster under / over the campus hillshade?
+ Ep 11: Crop as we do in Map 4-5-6?
+
+ 
+ ## Map 12
+ aligns with Episode 12
+ 
+ ### Object list
+ 
+ 
+ 
+ 

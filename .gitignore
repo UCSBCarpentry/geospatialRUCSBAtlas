@@ -6,7 +6,9 @@
 source_data/**
 downloaded_data/**
 *.qgz
-output_data/
+
+output_data/**
+!output_data/.gitkeep
 
 # Mac stuff
 .DS_Store

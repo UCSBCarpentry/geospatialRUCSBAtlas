@@ -17,7 +17,7 @@ library(tidyverse)
 library(terra)     # Required for loading vector data with vect() function
 library(tidyterra) # Required for using geom_spatvector() with ggplot
 library(ggspatial) # Required for map scale -annotation_scale()- and compass -annotation_north_arrow()-
-library(ggnewscale) # Required for maping multiple scales in ggplot
+library(ggnewscale) # Required for mapping multiple scales in ggplot
 
 
 
@@ -30,7 +30,7 @@ bikes <- vect("source_data/bike_paths/bikelanescollapsedv8.shp")
 # Streams
 streams <- vect("source_data/california_streams/California_Streams.shp")
 # Coastline polygon
-coastline <- vect("source_data/california_coastline/3853-s3_2002_s3_reg_pacific_ocean.shp")
+coastline <- vect("source_data/california_coastline/3853-s3_2002_s3_reg_pacific_ocean_lines.shp")
 
 
 # Let's take a quick first look at our data and find out their projections
@@ -38,8 +38,11 @@ plot(trees)
 crs(trees, describe=TRUE)
 plot(bikes)
 crs(bikes, describe=TRUE)
-plot(streams) # Takes a lot of time, heavy file
+# plot(streams) 
 crs(streams, describe=TRUE)
+# plot(coastline) 
+#plot(streams)
+#crs(streams, describe=TRUE)
 plot(coastline)
 crs(coastline, describe=TRUE)
 
@@ -59,6 +62,7 @@ crs(coastline, describe=TRUE)
 # get the crs from that SpatVector
 bikes_proj <- project(bikes, trees)
 coastline_proj <- project(coastline, trees)
+
 
 ## Challenge: Do we need to reproject the streams data?
 
@@ -88,11 +92,13 @@ streams_crop <- crop(streams, trees)
 coastline_crop <- crop(coastline_proj, trees)
 
 # With this dataset, let's do a first test of how our map would look like
+# question, what in the queens english? 
 ggplot() +
   geom_spatvector(data=trees, colour='green4') +
   geom_spatvector(data=streams_crop, , colour='lightblue') +
   geom_spatvector(data = bikes_crop, colour='black') +
-  geom_spatvector(data=coastline_crop, colour='darkblue')
+  geom_spatvector(data=coastline_crop, colour='darkblue') +
+  ggtitle("Map 2 v 0.1")
   
 
 # But we see that the current extent used is too narrow, we almost can't see
@@ -121,7 +127,8 @@ ggplot() +
   geom_spatvector(data = trees, colour='green4') +
   geom_spatvector(data = streams_crop, , colour='lightblue') +
   geom_spatvector(data = bikes_crop, colour='black') +
-  geom_spatvector(data = coastline_crop, colour='darkblue')
+  geom_spatvector(data = coastline_crop, colour='darkblue') +
+  ggtitle("Map 2 v 0.2")
 
 
 # We will come back to stylize our map even more, but for now, let's explore
@@ -181,13 +188,16 @@ ggplot() +
 # Increasing the width of the lines that represent the streams and including
 # it in the legend
 ggplot() +
-  geom_spatvector(data=trees_filt, aes(size=HT, colour = 'Trees')) +
+  geom_spatvector(data=trees_filt, aes(size=HT, colour = 'Trees'), alpha = 0.5) +
   scale_size_continuous(range = c(0, 2), name = 'Tree Height (ft)') +
   geom_spatvector(data=streams_crop, aes(colour = 'Streams'), linewidth = 2, alpha=0.6) +
   scale_colour_manual(name = "Legend",
                       values = c('Trees' = 'green4', 
                                  'Streams' = 'cadetblue3')) +
+  ggtitle("Map2 v.0.3") +
   theme_minimal()
+
+
 
 ## Challenge: What is the difference between setting the color of the trees
 #   inside the aes of the geom_spatvector layer and inside the scale_color_manual
@@ -195,7 +205,7 @@ ggplot() +
 
 # Including the bike paths
 ggplot() +
-  geom_spatvector(data=trees_filt, aes(size=HT, colour = 'Trees')) +
+  geom_spatvector(data=trees_filt, aes(size=HT, colour = 'Trees'),alpha=0.5) +
   scale_size_continuous(range = c(0, 2), name = 'Tree Height (ft)') +
   geom_spatvector(data=streams_crop, aes(colour = 'Streams'), , linewidth = 2, alpha=0.6) +
   geom_spatvector(data=bikes_crop, aes(colour = 'Bike Paths'), linewidth = 1) +
@@ -223,7 +233,7 @@ bikes_lines <- disagg(bikes_crop)
 
 # Trying again the same plot to check the differences
 ggplot() +
-  geom_spatvector(data=trees_filt, aes(size=HT, colour='Trees')) +
+  geom_spatvector(data=trees_filt, aes(size=HT, colour='Trees'), alpha=0.5) +
   scale_size_continuous(range = c(0, 2), name = 'Tree Height (ft)') +
   geom_spatvector(data=streams_crop, aes(colour = 'Streams'), , linewidth = 2, alpha=0.4) +
   geom_spatvector(data=bikes_lines, aes(colour = 'Bike Paths'), linewidth = 1) +
@@ -236,22 +246,22 @@ ggplot() +
 # Finally adding the coastline geometry and legend.
 # Save this plot in an object so we don't have to repeat the same code
 map2_v1 <- ggplot() +
-  geom_spatvector(data=trees_filt, aes(size=HT, colour = 'Trees')) +
+  geom_spatvector(data=trees_filt, aes(size=HT, colour = 'Trees'),alpha = 0.5) +
   scale_size_continuous(range = c(0, 2), name = 'Tree Height (ft)') +
   geom_spatvector(data=streams_crop, aes(colour = 'Streams'), , linewidth = 2, alpha=0.6) +
   geom_spatvector(data=bikes_lines, aes(colour = 'Bike Paths'), linewidth = 1) +
-  geom_spatvector(data=coastline_crop, aes(colour = 'Ocean'), linewidth = 1, fill = 'lightblue1') +
+  geom_spatvector(data=coastline_crop, aes(colour = 'Ocean'), linewidth = 1, fill = 'dodgerblue') +
   scale_colour_manual(name = "Legend",
                     values = c('Trees' = 'green4', 
                                'Bike Paths' = 'black',
                                'Streams' = 'cadetblue3',
-                               'Ocean' = 'lightblue1')) +
+                               'Ocean' = 'dodgerblue')) +
   theme_minimal()
 map2_v1
 
 # Adding title, subtitle and title for the axes
 map2_v2 <- map2_v1 +
-  labs(title = 'Stylized thematic map of UCSB campus',
+  labs(title = 'Map 2 v2: Stylized thematic map of UCSB campus',
        subtitle = 'Trees, bike paths, and water',
        x = 'Longitude', y = 'Latitude')
 map2_v2
@@ -272,10 +282,9 @@ map2_v3 <- map2_v2 +
   scale_y_continuous(expand = c(0, 0))
 map2_v3
   
-# Finally, adding a scale and a compass
+# Finally, adding a scale
 map2_v4 <- map2_v3 +
-  annotation_scale(location = 'bl', width_hint = 0.167) +
-  annotation_north_arrow(location = 'bl', which_north = 'true', pad_x = unit(0, 'in'), pad_y = unit(0.3, 'in'), style = north_arrow_fancy_orienteering)
+  annotation_scale(location = 'bl', width_hint = 0.1)
 map2_v4
 
 # Save this plot
@@ -312,19 +321,19 @@ trees_filt$SPP_grouped <- ifelse(trees_filt$SPP %in% top5_species,
 
 # Finally, making the plot with the same aesthetics as the previous one
 map2_v5 <- ggplot() +
-  geom_spatvector(data=trees_filt, aes(colour = SPP_grouped), alpha=0.5, size=0.5) +
+  geom_spatvector(data=trees_filt, aes(colour = SPP_grouped), alpha=0.6, size=0.5) +
   scale_color_viridis_d(name = 'Tree species') +
   new_scale_color() +
   geom_spatvector(data=streams_crop, aes(colour = 'Streams'), , linewidth = 2, alpha=0.6) +
   geom_spatvector(data=bikes_lines, aes(colour = 'Bike Paths'), linewidth = 1) +
-  geom_spatvector(data=coastline_crop, aes(colour = 'Ocean'), linewidth = 1, fill = 'lightblue1') +
+  geom_spatvector(data=coastline_crop, aes(colour = 'Ocean'), linewidth = 1, fill = 'dodgerblue') +
   scale_colour_manual(name = "Legend",
                       values = c('Bike Paths' = 'black',
                                  'Streams' = 'cadetblue3',
-                                 'Ocean' = 'lightblue1')) +
+                                 'Ocean' = 'dodgerblue')) +
   theme_minimal() +
-  labs(title = 'Stylized thematic map of UCSB campus',
-       subtitle = 'Trees, bike paths, and water',
+  labs(title = 'Map 2: Stylized thematic map of UCSB campus',
+       subtitle = 'Trees, bike paths, and water. (v.5)',
        x = 'Longitude', y = 'Latitude') +
   theme(
     plot.title = element_text(hjust = 0.5),
@@ -334,8 +343,7 @@ map2_v5 <- ggplot() +
   ) +
   scale_x_continuous(expand = c(0, 0)) +
   scale_y_continuous(expand = c(0, 0)) +
-  annotation_scale(location = 'bl', width_hint = 0.167) +
-  annotation_north_arrow(location = 'bl', which_north = 'true', pad_x = unit(0, 'in'), pad_y = unit(0.3, 'in'), style = north_arrow_fancy_orienteering)
+  annotation_scale(location = 'bl', width_hint = 0.167)
 
 map2_v5
 

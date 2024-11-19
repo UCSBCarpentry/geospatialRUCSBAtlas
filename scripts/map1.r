@@ -13,7 +13,9 @@ library(sf)
 # set up objects
 
 #vector layers
+
 buildings <- st_read("source_data/campus_buildings/Campus_Buildings.shp")
+iv_buildings <- st_read("source_data/iv_buildings/CA_Structures_ExportFeatures.shp")
 # walkways <- 
 bikeways <- st_read("source_data/bike_paths/bikelanescollapsedv8.shp")
 habitat <- st_read("source_data/NCOS_bird_observations/NCOS_Shorebird_Foraging_Habitat.shp")
@@ -22,23 +24,42 @@ habitat <- st_read("source_data/NCOS_bird_observations/NCOS_Shorebird_Foraging_H
 
 # basic terra plots
 plot(buildings)
+plot(iv_buildings)
 plot(bikeways)
 plot(habitat)
+
 
 # overlays as in episode 8
 ggplot() +
   geom_sf(data=habitat) +
   geom_sf(data=buildings) +
+  geom_sf(data=iv_buildings) +
   geom_sf(data=bikeways) +
   coord_sf()
 
+ggsave("images/map1.1.png", plot=last_plot())
+
+#which buildings are on top?
+# the last ones added
 ggplot() +
   geom_sf(data=habitat, color="yellow") +
   geom_sf(data=buildings) +
+  geom_sf(data=iv_buildings, color="light gray") +
   geom_sf(data=bikeways, color="blue") +
   coord_sf()
 
-ggsave("images/map1.1.png", plot=last_plot())
+# so visually let's put the non-campus gray
+# buildings below our campus buildings
+ggplot() +
+  geom_sf(data=habitat, color="yellow") +
+  geom_sf(data=iv_buildings, color="light gray") +
+  geom_sf(data=buildings) +
+  geom_sf(data=bikeways, color="blue") +
+  coord_sf() + 
+  ggtitle("Map 1.2")
+
+ggsave("images/map1.2.png", plot=last_plot())
+
 
 
 # the background setup is bathymetry and topography
@@ -51,7 +72,7 @@ custom_bins <- c(-3, 4.9, 5, 7.5, 10, 25, 40, 70, 100, 150, 200)
 
 
 
-campus_DEM <- rast("output_data/campus_DEM.tif") 
+campus_DEM <- rast("source_data/campus_DEM.tif") 
 crs(campus_DEM)
 
 # does bathymetry still needs to be re-projected in order to overlay?
@@ -73,28 +94,23 @@ plot(bath)
 crs(campus_DEM) == crs(bath)
 
 #################################
-# this still won't work because the extents are different.
-plot(bath + campus_DEM)
 
 # Julien solved this in ep_4
 # for these files, CRS, extent, and resolution all match:
 
 
-# I need to get projection and resolution objects somewhere.
-# so I 'copy' the one that I already have:
-(my_projection <- raster("output_data/campus_DEM.tif") %>%
-  crs()) 
+# do they have the same projections?
+crs(campus_DEM) == crs(bath)
 
-# reload rasters
-# from output folder
-campus_DEM <- rast("output_data/campus_DEM.tif")
-plot(campus_DEM)
-# remember: this is the one we cropped, so the 2 extents are the same.
-campus_bath <- rast("output_data/campus_bathymetry.tif")
+# do they have the same extents?
+ext(campus_DEM) == ext(bath)
+
+
+campus_bath <- crop(x=bath, y=campus_DEM)
 plot(campus_bath)
 
-# do they have the same projections?
-crs(campus_DEM) == crs(campus_bath)
+# save campus bathymetry here
+writeRaster(campus_bath, "output_data/campus_bath.tif", filetype="GTiff", overwrite=TRUE)
 
 # make dataframes
 campus_DEM_df <- as.data.frame(campus_DEM, xy=TRUE) %>%
@@ -177,12 +193,12 @@ ggplot() +
   coord_quickmap()
 
 # switch the order
-# not sure why 16. Not sure how it gets on both layers
+# Not sure how it gets on both layers
 # not sure why it's so so ugly
 ggplot() +
     geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
     geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = binned_bath)) +
-    scale_fill_manual(values = terrain.colors(16)) +
+    scale_fill_manual(values = terrain.colors(19)) +
     coord_quickmap()
   
 ggplot() +
@@ -197,18 +213,7 @@ ggplot() +
 names(campus_DEM)
 names(campus_bath)
 
-# geom_spatraster is tidyterra. that's why this one doesn't work.
-ggplot() +
-  geom_spatraster(data = campus_DEM, aes(fill = greatercampusDEM_1_1)) +
-  geom_spatraster(data = campus_bath, aes(fill = SB_bath_2m)) +
-  scale_fill_viridis_c(na.value="NA") +
-  geom_sf(data=habitat, color="yellow") +
-  geom_sf(data=buildings) +
-  geom_sf(data=bikeways, color="blue") +
-    coord_sf()
-
-
-# this is whack
+# they won't overlay because
 # you need to re-project
 ggplot() +
   geom_sf(data=habitat, color="yellow") +
@@ -221,19 +226,41 @@ ggplot() +
 
 # reproject the vectors
 buildings <- st_transform(buildings, campus_projection)
+iv_buildings <- st_transform(iv_buildings, campus_projection)
 habitat <- st_transform(habitat, campus_projection)
 bikeways <- st_transform(bikeways, campus_projection)
 
+
+
+#bring back the hillshade
+#open file from ep1-2
+
+campus_hillshade_df <- 
+  rast("source_data/campus_hillshade.tif") %>% 
+  as.data.frame(xy = TRUE) %>% 
+  rename(campus_hillshade = hillshade) # rename to match code later
+
+str(campus_hillshade_df)
+
+
+#update color scheme for contrast 
+# +hillshade
 ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
+  geom_raster(data = campus_hillshade_df, aes(x=x, y=y, alpha = campus_hillshade), show.legend = FALSE) +
   geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = bathymetry)) +
   scale_fill_viridis_c(na.value="NA") +
-  geom_sf(data=buildings) +
-  geom_sf(data=habitat, color="yellow") +
-  geom_sf(data=buildings) +
-  geom_sf(data=bikeways, color="black") +
+  labs(title="Map 1", subtitle="Version 3") +
+  geom_sf(data=iv_buildings, color=alpha("light gray", .1), fill=NA) +
+  geom_sf(data=buildings, color ="hotpink") +
+  geom_sf(data=habitat, color="darkorchid1") +
+  geom_sf(data=bikeways, color="yellow") +
   coord_sf()
 
+ggsave("images/map1.3.png", plot=last_plot())
 
-# now we need to clip to the extent that we want
-# further format the color ramps
+# next we need to
+# customize the y graticule to be xx.xx and smaller
+# and further format the vectors?
+
+
