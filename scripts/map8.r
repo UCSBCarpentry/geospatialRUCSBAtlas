@@ -1,5 +1,5 @@
 # map 8 actually
-# most recent planet image
+# multi-band imagery
 
 # for the episode about RGBs and multi-band rasters
 # episode 5

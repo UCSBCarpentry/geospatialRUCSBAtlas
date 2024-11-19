@@ -17,7 +17,8 @@ library(geojsonsf) # to handle geojson
 
 # NDVIs were premade in the Carpentries lesson, but
 # we already know enough raster math to make our
-# own
+# own, as in 
+# episode 4
 
 # brick is raster. rast is terra
 # the 2 different ndvis looks VERY different when
@@ -28,13 +29,17 @@ library(geojsonsf) # to handle geojson
 # make an NDVI for 1 file
 tiff_path <- c("source_data/UCSB_campus_23-24_psscene_analytic_8b_sr_udm2/PSScene/")
 
+
 image <- rast(paste(tiff_path, "20230912_175450_00_2439_3B_AnalyticMS_SR_8b_clip.tif", sep=""))
+# this is ala-episode 5
 plotRGB(image, r=6,g=3,b=1, stretch = "hist")
 image
 
+summary(image)
+
 # here is the NDVI calculation:
 #(NIR - Red) / (NIR + Red)
-ndvi_tiff <- (image[[8]] - image[[6]] / image[[8]] + image[[6]])
+ndvi_tiff <- ((image[[8]] - image[[6]]) / (image[[8]] + image[[6]]))
 
 plot(ndvi_tiff)
 summary(values(ndvi_tiff))
@@ -105,6 +110,7 @@ ggplot() +
 # loop over the files and build a raster stack
 
 # get a file list
+# ep 12
 scene_paths <- list.files("source_data/UCSB_campus_23-24_psscene_analytic_8b_sr_udm2/PSScene",
                           full.names = TRUE,
                           pattern = "8b_clip.tif")
@@ -119,10 +125,10 @@ dir.create("output_data/ndvi", showWarnings = FALSE)
 # this takes a while
 for (images in scene_paths) {
     source_image <- rast(images)
-    ndvi_tiff <- (source_image[[8]] - source_image[[6]] / source_image[[8]] + source_image[[6]])
+    ndvi_tiff <- ((source_image[[8]] - source_image[[6]]) / (source_image[[8]] + source_image[[6]]))
     new_filename <- (substr(images, 67,92))
     new_path <- paste("output_data/ndvi/", new_filename, ".tif", sep="")
-    ndvi_tiff <- extend(ndvi_tiff, ucsb_extent, snap="near")
+    ndvi_tiff <- extend(ndvi_tiff, ucsb_extent, fill=NA, snap="near")
     set.ext(ndvi_tiff, ext(ucsb_extent))
     names(ndvi_tiff) <- substr(new_filename, 0,14)
     print(names(ndvi_tiff))
@@ -132,6 +138,8 @@ for (images in scene_paths) {
     writeRaster(ndvi_tiff, new_path, overwrite=TRUE)
         }
 
+
+
 # 3 or 4 of the resulting tiffs are wonky
 # their dimensions are wildly off.
 # but almost all of them are 2217 x 3541 pixels
@@ -140,6 +148,11 @@ for (images in scene_paths) {
 # # get a list of the new files:
 ndvi_series_names <- list.files("output_data/ndvi")
 ndvi_series_names <- paste("output_data/ndvi/", ndvi_series_names, sep="")
+
+ndvi_series_names
+testraster <- rast("output_data/ndvi/20230912_175450_00_2439_3B.tif")
+summary(testraster)
+
 
 #check
 length(ndvi_series_names)
@@ -165,27 +178,29 @@ for (image in ndvi_series_names) {
 # reload the names
 ndvi_series_names <- list.files("output_data/ndvi")
 ndvi_series_paths <- paste("output_data/ndvi/", ndvi_series_names, sep="")
+
+# now we can see there are 4 fewer tiffs.
 length(ndvi_series_names)
 
-# build raster stack with no errors
+# now we can build a raster stack with no errors
 ndvi_series_stack <- rast(ndvi_series_paths)
 
-# whooo hoooo!
+summary(ndvi_series_stack[,1])
+
+# whooo hoooo! no errors ... but ...
 str(ndvi_series_stack)
 nlyr(ndvi_series_stack)
+# but it's crapped out:
 summary(values(ndvi_series_stack))
-
+# or is it:
+plot(ndvi_series_stack)
 
 # duplicate column names / dates can be made
 # this turns out to be a feature!
 # need to put it back in later
 
-# one raster has outliers. NDVI = 71000
-# that outlier causes my ggplot to be overly dark.
-summary(values(ndvi_series_stack))
 
-# it's one of the April 27 images:
-plot(ndvi_series_stack)
+# looks like maybe I need to deal with NAs?
 
 # pivot
 # comes from the lesson
@@ -195,34 +210,16 @@ ndvi_series_df <- as.data.frame(ndvi_series_stack, xy=TRUE) %>%
 str(ndvi_series_df)
 summary(ndvi_series_df)
 
-
-# can I just cut off everything above a certain number?
-# my calculated NDVIs were 1 <> 70999
-# highest 3rd quartile = 4592
-# maybe 10,000 should be max?
-# 20,000? (since that's the max below 70,000?)
-
-# this doesn't do it.
-narrower_df <- filter(ndvi_series_df, value > 20000, na.rm = FALSE)
-summary(narrower_df)  
-
-
-summary(ndvi_series_df)
 str(ndvi_series_df)
 unique(ndvi_series_df$variable)
 unique(ndvi_series_df$value)
 
-# this is the output that is really dark.   ### and slow
+# this output is really slow
 ggplot() +
   geom_raster(data = ndvi_series_df , aes(x = x, y = y, fill = value)) +
   facet_wrap(~ variable)
 
 
-# what's wrong with April?   #############################################
-ndvi_tiff_path <- c("output_data/NDVI/")
-apr_ndvi <- rast(paste(ndvi_tiff_path, "20240427_175907_21_24c5_3B.tif", sep=""))
-str(apr_ndvi)
-plot(apr_ndvi)
 
 apr_image <- rast(paste(tiff_path, "20240427_175907_21_24c5_3B_AnalyticMS_SR_8b_clip.tif", sep=""))
 plotRGB(apr_image, r=6,g=3,b=1, stretch = "hist")
@@ -237,8 +234,10 @@ plotRGB(apr_image, r=6,g=3,b=1, stretch = "hist")
 # the 'greenest' months here, we can make
 # histograms
 # make bins
+# OR figure the mean NDVI for each image as in ep 14.
 
-# this default one really shows how much the outlier is affecting us
+# this default one shows us what?
+# a fatter and pretty tall April?
 ggplot(ndvi_series_df) +
   geom_histogram(aes(value)) + 
   facet_wrap(~variable)
@@ -265,15 +264,24 @@ ndvi_series_custom_binned_df <-  ndvi_series_df %>%
 ggplot(ndvi_series_custom_binned_df, aes(x=bins)) +
   geom_bar() + 
   facet_wrap(~variable)
+# this is still a visual judgement call.
+
+
+# this is the OR from above.
+# make a dataframe of average NDVI
+# and plot them
+# this is direct from ep. 14
+# but is broke
+avg_NDVI <- global(ndvi_series_stack, mean, na.rm=FALSE)
+str(avg_NDVI)
 
 
 
-
-# Julian dates: that's in the lesson, but ours uses calendar dates
+# Julian dates: that's in the lesson, mean()# Julian dates: that's in the lesson, but ours uses calendar dates
 # challenge: change object names to Julian dates
 
 # What month was the Greenest?
 
-# we'll need weather data
-
+# we'll need weather data to mimic the lesson.
+# or use our brains and eyes to define 
 # when was it rainiest?
