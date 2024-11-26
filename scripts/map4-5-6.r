@@ -12,7 +12,7 @@ library(terra)
 library(geojsonsf)
 library(sf)
 library(ggplot2)
-#library(tidyterra)
+library(tidyterra)
 library(dplyr)
 # needed to lay out multiple baseplots with par()?
 library(cowplot)
@@ -314,9 +314,11 @@ ggsave(
 )
 
 
-# q: what is this? I don't see it in the localdata drive? 
-# a: census data. For labels. data prep under '# california populated places'
-# polygons
+# load 
+# 'california populated places'
+# which is census data. Use these for some placename labels and
+# visual polygons styled similar to the IV building outlines
+# on map 1.
 places <- vect("source_data/cal_pop_places/tl_2023_06_place.shp")
 plot(places)
 
