@@ -29,9 +29,10 @@ library(geojsonsf) # to handle geojson
 # make an NDVI for 1 file
 tiff_path <- c("source_data/UCSB_campus_23-24_psscene_analytic_8b_sr_udm2/PSScene/")
 
-
+# for reference, plot one of our 8 band files with
+# semi-natural color
 image <- rast(paste(tiff_path, "20230912_175450_00_2439_3B_AnalyticMS_SR_8b_clip.tif", sep=""))
-# this is ala-episode 5
+# ala-episode 5
 plotRGB(image, r=6,g=3,b=1, stretch = "hist")
 image
 
@@ -125,7 +126,8 @@ dir.create("output_data/ndvi", showWarnings = FALSE)
 # this takes a while
 for (images in scene_paths) {
     source_image <- rast(images)
-    ndvi_tiff <- ((source_image[[8]] - source_image[[6]]) / (source_image[[8]] + source_image[[6]]))
+    ndvi_tiff <- ((source_image[[8]] - source_image[[6]]) / (source_image[[8]] + source_image[[6]])) %>% 
+      round(2)
     new_filename <- (substr(images, 67,92))
     new_path <- paste("output_data/ndvi/", new_filename, ".tif", sep="")
     ndvi_tiff <- extend(ndvi_tiff, ucsb_extent, fill=NA, snap="near")
@@ -151,10 +153,11 @@ ndvi_series_names <- paste("output_data/ndvi/", ndvi_series_names, sep="")
 
 ndvi_series_names
 testraster <- rast("output_data/ndvi/20230912_175450_00_2439_3B.tif")
-summary(testraster)
+summary(values(testraster))
 
 
-#check
+# check the files's resolutions and 
+# keep only the 2217x3541 ones.
 length(ndvi_series_names)
 str(ndvi_series_names)
 valid_tiff <- c(2217,3541,1)
@@ -200,8 +203,6 @@ plot(ndvi_series_stack)
 # need to put it back in later
 
 
-# looks like maybe I need to deal with NAs?
-
 # pivot
 # comes from the lesson
 ndvi_series_df <- as.data.frame(ndvi_series_stack, xy=TRUE) %>% 
@@ -221,15 +222,9 @@ ggplot() +
 
 
 
-apr_image <- rast(paste(tiff_path, "20240427_175907_21_24c5_3B_AnalyticMS_SR_8b_clip.tif", sep=""))
-plotRGB(apr_image, r=6,g=3,b=1, stretch = "hist")
 # visually there's nothing going on
 # does my 'feature' about combining layers actually
 # add values together as they are stacking up?
-
-
-
-
 # visually these are subtle, so to find
 # the 'greenest' months here, we can make
 # histograms
@@ -273,17 +268,26 @@ ggplot(ndvi_series_custom_binned_df, aes(x=bins)) +
 # and plot them
 avg_NDVI <- global(ndvi_series_stack, mean, na.rm=TRUE)
 
-avg_NDVI
 ## that passes the smell test! April and September(?)
+avg_NDVI
 
+str(avg_NDVI)
+plot(avg_NDVI$mean)
 
-colnames(avg_NDVI[1])<- "Image"
+# need to access the row names.
+row.names(avg_NDVI)
+
+ndvi_months <- c(row.names(avg_NDVI))
+avg_NDVI <- mutate(avg_NDVI, months=ndvi_months)
+str(avg_NDVI)
+
+avg_NDVI
+
+# I just can't get these to plot logically.
 plot(avg_NDVI)
-ggplot(avg_NDVI, aes(
-  x=Image,
-  y=mean
-  
-))
+ggplot(avg_NDVI, aes(x=months, y=mean) +
+    geom_point())
+
 
 
 
