@@ -270,7 +270,7 @@ ggplot() +
   geom_raster(data = campus_hillshade_df, aes(x=x, y=y, alpha = campus_hillshade), show.legend = FALSE) +
   geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = bathymetry)) +
   scale_y_continuous(labels = number_format(accuracy = 0.01)) +
-  scale_fill_viridis_c(na.value="NA") +
+  scale_fill_viridis_c(na.value="NA", guide = guide_legend("elevation (US ft)"))+
   labs(title="Map 1", subtitle="Version 3") +
   geom_sf(data=iv_buildings, color=alpha("light gray", .1), fill=NA) +
   geom_sf(data=buildings, color ="hotpink") +
