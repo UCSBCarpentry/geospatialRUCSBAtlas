@@ -9,6 +9,7 @@ library(raster)
 # library(rgdal)
 library(terra)
 library(sf)
+library(scales)
 
 # set up objects
 
@@ -249,7 +250,7 @@ ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
   geom_raster(data = campus_hillshade_df, aes(x=x, y=y, alpha = campus_hillshade), show.legend = FALSE) +
   geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = bathymetry)) +
-  scale_fill_viridis_c(na.value="NA") +
+  scale_fill_viridis_c(na.value="NA", label = function(y) sprintf("%.2f", y)) +
   labs(title="Map 1", subtitle="Version 3") +
   geom_sf(data=iv_buildings, color=alpha("light gray", .1), fill=NA) +
   geom_sf(data=buildings, color ="hotpink") +
