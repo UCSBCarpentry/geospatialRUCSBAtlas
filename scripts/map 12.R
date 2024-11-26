@@ -268,12 +268,22 @@ ggplot(ndvi_series_custom_binned_df, aes(x=bins)) +
 
 
 # this is the OR from above.
-# make a dataframe of average NDVI
+# visually we can't see the greenest, so 
+# let's make a dataframe of average NDVI
 # and plot them
-# this is direct from ep. 14
-# but is broke
-avg_NDVI <- global(ndvi_series_stack, mean, na.rm=FALSE)
-str(avg_NDVI)
+avg_NDVI <- global(ndvi_series_stack, mean, na.rm=TRUE)
+
+avg_NDVI
+## that passes the smell test! April and September(?)
+
+
+colnames(avg_NDVI[1])<- "Image"
+plot(avg_NDVI)
+ggplot(avg_NDVI, aes(
+  x=Image,
+  y=mean
+  
+))
 
 
 
