@@ -26,3 +26,64 @@ ggplot() +
   geom_sf(data=habitat, color="darkorchid1") +
   geom_sf(data=bikeways, color="yellow") +
   coord_sf()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+############Narrative
+
+# facet wrapped NDVIs from ep. 12
+
+# formatted map of same
+
+# theme void 
+# turns off a lot of stuff
+
+# another way to suppress x and y labels
+# Kristi's map 1 solution goes here:
+
+
+
+
+# back to the narrative:
+ggplot() +
+  geom_raster(data = "??????????" , aes(x = x, y = y, fill = value)) +
+  facet_wrap(~variable) +
+  ggtitle("NDVI", subtitle = "blah blah") + 
+  theme_void() + 
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5))
