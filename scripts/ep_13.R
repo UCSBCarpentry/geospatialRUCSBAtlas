@@ -129,4 +129,4 @@ ggplot() +
 #facet wrap ndvi thing 
 #adjust color ramp? 
 #facet wrap? egh 
-#julian date thing (not julien)
+#julian day thing (not julien)
