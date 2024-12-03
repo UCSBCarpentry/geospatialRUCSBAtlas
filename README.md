@@ -66,24 +66,27 @@ file?](https://drive.google.com/file/d/1ssytmTbpC1rpT5b-h8AxtvSgNrsGQVNY/view?us
 – yes bird habitats
 
 ### Map 3 An atlas page layout with 4 insets:
+Each inset (4-5-6) is a png created by map4-5-6.r.
+The final ggplots in that script are the inputs for
+map 3.
 
 #### map 4 California Overview
-Vertical 3x4
+Portrait 3x4
 Western US
 
 #### map 5 The Bite of California
-Vertical 3x4
+Portrait 3x4
 Needs to be further zoomed in. 
 
 #### map 6 Extended Campus
 (issue #14)
 Landscape 4x3 \* extended campus will have maptiles background? \*
-Bacara-ish to 254/101 
+Bacara-ish to 154/101 
 
 Maps 4-5-6: ![Triplet zoom in](/images/3-zoom.png "Draft zoom.")
 
 #### 7 Campus Detail
-Wide Landscape \* A stripped down version of #1
+Wide Landscape 9x16ish? \* A stripped down version of #1
 
 
 ### Map 3 sketch:

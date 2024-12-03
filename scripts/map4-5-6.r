@@ -130,11 +130,6 @@ polys(zoom_3_fake_aoi, border="red", lwd=4)
 
 
 
-# page layout start
-# ##########################
-
-par(mfrow = c(1,3))
-
 plot(zoom_1, col=grays)
 polys(zoom_3_fake_aoi,  border="red", lwd=4)
 
@@ -143,11 +138,6 @@ polys(campus_extent,  border="red", lwd=4)
 
 plot(campus_DEM)
 
-par(mfrow = c(1,1))
-
-# now save this tryptic to an intermediate file
-png("images/map_7_1.png", width=1900)
-par(mfrow = c(1,3))
 
 plot(zoom_1, col=grays)
 polys(zoom_3_fake_aoi, col="red")
@@ -156,11 +146,6 @@ plot(zoom_2_cropped, col=grays)
 polys(campus_extent, col="red")
 
 plot(campus_DEM, col=grays)
-
-dev.off()
-
-# reset par when you're done
-par(mfrow = c(1,1))
 
 
 ####################################
@@ -198,9 +183,6 @@ zoom_3 <- rast("source_data/campus_hillshade.tif")
 plot(zoom_3, col = grays)
 
 
-# again save tryptic to an intermediate file
-png("images/map_7_2.png", width=1900)
-par(mfrow = c(1,3))
 
 plot(zoom_1, col = grays)
 polys(zoom_2_extent, border="red",lwd=5)
@@ -210,11 +192,6 @@ polys(campus_extent, border="red", lwd=5)
 
 zoom_3 <- rast("source_data/campus_hillshade.tif")
 plot(zoom_3, col = grays)
-
-dev.off()
-
-# reset par when you're done
-par(mfrow = c(1,1))
 
 
 
@@ -294,25 +271,6 @@ zoom_3_plot <- ggplot()+
 zoom_3_plot
 
 
-# ggarrange() for ggplots instead of par()
-tryptic <- list(zoom_1_plot, zoom_2_plot, zoom_3_plot)
-
-map_7_3_tryptic <- ggarrange(plotlist = tryptic, 
-                             align="h", 
-                             ncol=3,
-                             labels = "Map 7.3: Zoom")
-
-map_7_3_tryptic
-
-# Save this plot
-ggsave(
-  "images/map7_3.png",
-  plot = map_7_3_tryptic,
-  width = 10, height = 7,
-  dpi = 500,
-  units = 'in'
-)
-
 
 # load 
 # 'california populated places'
@@ -361,18 +319,10 @@ zoom_2_plot <- ggplot() +
   geom_spatvector(data=campus_extent) +
   geom_spatvector(data=places, fill=NA) +
   labs(title = "Bite of California",
-       subtitle = "Zoom 2")
+       subtitle = "Map 5. Zoom 2")
 
   
-# this doesn't work anymore. try cowplot
-par(mfrow = c(1,3))
 zoom_1_plot
 zoom_2_plot
 zoom_3_plot
 
-# reset par when you're done
-par(mfrow = c(1,1))
-
-# cowplot output
-aligned_zoom <- align_plots(zoom_1_plot, zoom_2_plot, zoom_3_plot, align = "h")
-draw_plot(aligned_zoom)
