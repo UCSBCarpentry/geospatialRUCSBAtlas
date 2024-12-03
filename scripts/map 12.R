@@ -2,6 +2,9 @@
 # let's build monthly NDVI's for campus
 # as in episode 12 
 
+# to answer the question:
+# What month was the greenest?
+
 # clean the environment and hidden objects
 rm(list=ls())
 
@@ -200,6 +203,9 @@ plot(ndvi_series_stack)
 
 #kristi got a series of ndvis after running line 199
 ggsave("images/ndvi_series_stack.png", plot=last_plot())
+
+
+
 # duplicate column names / dates can be made
 # this turns out to be a feature!
 # need to put it back in later
@@ -217,7 +223,19 @@ str(ndvi_series_df)
 unique(ndvi_series_df$variable)
 unique(ndvi_series_df$value)
 
-# this output is really slow
+
+### let's crop this and remake the dataframe so that the ggplot 
+# facet_wrap runs in a reasonable amount of time.
+ncos_extent <- vect("source_data/ncos_aoi.geojson")
+ncos_extent <- project(ncos_extent, ndvi_series_stack)
+
+ndvi_series_stack <- crop(ndvi_series_stack, ncos_extent)
+ndvi_series_df <- as.data.frame(ndvi_series_stack, xy=TRUE, na.rm=FALSE) %>% 
+  pivot_longer(-(x:y), names_to = "variable", values_to= "value")
+
+str(ndvi_series_df)
+
+# this is the output is we are trying to speed up
 ggplot() +
   geom_raster(data = ndvi_series_df , aes(x = x, y = y, fill = value)) +
   facet_wrap(~ variable)
@@ -271,9 +289,6 @@ ggplot(ndvi_series_custom_binned_df, aes(x=bins)) +
 avg_NDVI <- global(ndvi_series_stack, mean, na.rm=TRUE)
 
 ## that passes the smell test! April and September(?)
-avg_NDVI
-
-str(avg_NDVI)
 plot(avg_NDVI$mean)
 
 # need to access the row names.
@@ -291,7 +306,9 @@ summary(avg_NDVI)
 #KL -where did the y value's mean come from?
 #Error message says need finite ylim values, is it NAs? 
 plot(avg_NDVI)
-ggplot(avg_NDVI, aes(x=months, y=mean) +
+avg_NDVI_df <- as.data.frame(avg_NDVI, rm.na=FALSE)
+
+ggplot(avg_NDVI_df, aes(x=months, y=mean) +
     geom_point())
 
 
