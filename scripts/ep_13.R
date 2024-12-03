@@ -11,6 +11,15 @@ library(dplyr)
 #recreate necessary objects for map 1
 #possible take the reprojections from map 4-5-6 instead
 # - campus_crs,campus_crs (formerly my_crs)
+
+campus_DEM <- rast("source_data/campus_DEM.tif") 
+crs(campus_DEM)
+
+#load in campus_bath made in map 1
+bath <- rast("output_data/campus_bath.tif")
+
+crs(campus_DEM) == crs(bath)
+
 #map 1: suppressing x and y 
 #teachable moment: 
 ggplot() +
