@@ -5,13 +5,14 @@
 #############################################
 # setup for each episode
 
-#library(raster)
-#library(rgdal)
 library(tidyverse)
 library(terra)
 library(RColorBrewer)
 
 # setwd("C:/users/your_file_path")
+
+# start fresh
+rm(list=ls())
 
 #############################################
 # ep. 1
@@ -23,29 +24,32 @@ describe("source_data/campus_DEM.tif")
 campus_DEM <- rast("source_data/campus_DEM.tif")
 
 # run the object, units are in feet
-# 5 feet x 5 feet pixels
+# 20 feet x 20 feet pixels
 campus_DEM
 
 # get summary of object, min and max make sense for UCSB
 summary(campus_DEM)
 
 # we know there's a deeper hole than .1 feet, so...
+
 # can force it to calculate on all pixels
-summary(campus_DEM, maxsamp = ncell(campus_DEM))
+summary(values(campus_DEM))
+
 
 # or do that the tidy way with pipes
-# and get different format output
 campus_DEM %>%  
-  ncell() %>% 
+  values() %>% 
   summary()
 
 # summary plots require a dataframe
-campus_DEM_df <- as.data.frame(campus_DEM, xy = TRUE)
+# (if we remove the NA's that screws up the narrative later)
+campus_DEM_df <- as.data.frame(campus_DEM, xy = TRUE, na.rm=FALSE)
 
 # both summaries and str of the dataframe
 # show you the name of the layer you'll need to 
 # refer to.
 str(campus_DEM_df)
+summary(campus_DEM_df)
 
 #change the elevation field named greatercampusdem_1_1 to elevation 
 #we will stick to this naming convention the rest of the lesson
@@ -53,53 +57,78 @@ names(campus_DEM_df)[names(campus_DEM_df) == 'greatercampusDEM_1_1'] <- 'elevati
 
 ggplot() + geom_raster(data = campus_DEM_df, 
               aes(x=x, y=y, fill = elevation)) +
-  scale_fill_viridis_c() 
+ scale_fill_viridis_c() 
 
 
-# faster base R plot
+
++
+coord_quickmap()
+
+
+# faster terra plot (hey, I thought plot was base)
 # also doesn't force you to remember the name of
 # the data layer
+# all of a sudden this is funny:
 plot(campus_DEM)
 
 # Check CRS ####
 # https://epsg.io/2874
 crs(campus_DEM, proj = TRUE)
+crs(campus_DEM)
 
 
-# If you want to rename the columns
-colnames(campus_DEM_df)
+# min and max values
+minmax(campus_DEM)
+# these are showing NaN now:
+max(values(campus_DEM))
 
-# rename the column so it makes more sense.
-colnames(campus_DEM_df) <- c('x', 'y', 'elevation')
+campus_DEM <- setMinMax(campus_DEM)
 
-str(campus_DEM_df)
+nlyr(campus_DEM)
 
-# now plot with that new name
-ggplot() +
-  geom_raster(data = campus_DEM_df, 
-              aes(x=x, y=y, fill = elevation)) +
-  scale_fill_viridis_c()
+str(campus_DEM)
 
-#I dont think we have any NAs 
-# deal with no data
+# NAs tend to be the data
 # that tends to be the part around the edges
+# but they don't have to be.
 ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
   scale_fill_viridis_c(na.value = "deeppink") 
 
-# We can check that with math:
+
+# We can maybe find one that doesn't have any to 
+# demonstrate this as zero:
 sum(is.na(campus_DEM_df$elevation))
 
+# the lesson pulls in a rgb raster at this point:
+
+######################
+
+############
+# challenge: look at a different raster's nodata values?
+
+
+### bad data example goes here.
+
+###################
 
 
 # histogram to look at the elevation distribution
+
+# for argument's sake, this should be a different dataset. 
+# like a DSM instead of DEM??
+
+ggplot() +
+  geom_histogram(data = campus_DEM_df, aes(elevation))
+
 ggplot() +
   geom_histogram(data = campus_DEM_df, aes(elevation), bins = 5)
 
 ggplot() +
-  geom_histogram(data = campus_DEM_df, aes(elevation), bins = 50)
+  geom_histogram(data = campus_DEM_df, aes(elevation), bins = 20)
 
-
+# at some point, the negative values disappear from the visualization
+# that's not helpful.
 
 
 # this essentially begins ep. 2
