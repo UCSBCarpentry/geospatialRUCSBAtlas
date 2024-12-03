@@ -33,16 +33,16 @@ grays <- colorRampPalette(c("black", "white"))(255)
 campus_DEM <- rast("source_data/campus_DEM.tif") 
 
 # we are going to reuse this CRS throughout
-my_crs = crs(campus_DEM)
-str(my_crs)
+campus_crs = crs(campus_DEM)
+str(campus_crs)
 plot(campus_DEM)
 
 # we'll need a polygon that's the extent
 # of campus
 campus_extent <- ext(campus_DEM)
-campus_extent <- vect(campus_extent, crs=my_crs)
+campus_extent <- vect(campus_extent, crs=campus_crs)
 plot(campus_extent)
-campus_extent <- project(campus_extent, my_crs)
+campus_extent <- project(campus_extent, campus_crs)
 plot(campus_extent)
 
 
@@ -77,7 +77,7 @@ zoom_2_cropped <- crop(x=zoom_2, y=zoom_2_extent)
 plot(zoom_2_cropped)
 
 # put the extent back into the default projection
-zoom_2_extent <- project(zoom_2_extent, my_crs)
+zoom_2_extent <- project(zoom_2_extent, campus_crs)
 
 # project --cali_zoom_2-- into my standard crs
 # downsample before projecting:
@@ -91,8 +91,8 @@ zoom_3_fake_aoi <- vect("scripts/socal_aoi.geojson")
 # the above didn't work because the crs's don't match:
 crs(zoom_2_cropped) == crs(zoom_3_fake_aoi)
 
-zoom_3_fake_aoi <- project(zoom_3_fake_aoi, crs(my_crs))
-zoom_2_cropped <- project(zoom_2_cropped, my_crs)
+zoom_3_fake_aoi <- project(zoom_3_fake_aoi, crs(campus_crs))
+zoom_2_cropped <- project(zoom_2_cropped, campus_crs)
 
 # aesthetically, at this point
 # we can start to use the extent of campus
@@ -110,7 +110,7 @@ ggsave("images/map5.png", plot=last_plot())
 world <- rast("source_data/global_raster/GRAY_HR_SR_OB.tif")
 plot(world)
 
-# world <- project(world, my_crs)
+# world <- project(world, campus_crs)
 # clip first instead
 zoom_1_extent <- geojson_sf("scripts/cali_overview.geojson")
 zoom_1_extent <- vect(zoom_1_extent)
@@ -121,8 +121,8 @@ polys(zoom_1_extent)
 
 zoom_1 <- crop(x=world, y=zoom_1_extent)
 
-zoom_1_extent <- project(zoom_1_extent, my_crs)
-zoom_1 <- project(zoom_1, my_crs)
+zoom_1_extent <- project(zoom_1_extent, campus_crs)
+zoom_1 <- project(zoom_1, campus_crs)
 
 plot(zoom_1)
 polys(zoom_3_fake_aoi, border="red", lwd=4)
@@ -215,7 +215,7 @@ zoom_1_plot <- ggplot() +
   geom_spatvector(data=zoom_2_extent, fill="NA") +
     scale_fill_viridis_c() +
   theme_dark() +
-  coord_sf(crs=my_crs) + 
+  coord_sf(crs=campus_crs) + 
   ggtitle("California", subtitle = "Map 4, Zoom 1")
 
 zoom_1_plot
@@ -242,7 +242,7 @@ zoom_2_plot <- ggplot() +
   scale_alpha(range = c(0.05, 0.5), guide="none") +
 #  geom_spatvector(data=campus_extent) +
   theme_dark()+
-  coord_sf(crs=my_crs)+
+  coord_sf(crs=campus_crs)+
   ggtitle("The Bite of California", subtitle = "Map 5, Zoom 2")
 
 zoom_2_plot
@@ -265,7 +265,7 @@ zoom_3_plot <- ggplot()+
   scale_fill_viridis_c() +
   scale_alpha(range = c(0.15, 0.65), guide="none")+
   theme_dark() +
-  coord_sf(crs=my_crs) +
+  coord_sf(crs=campus_crs) +
   ggtitle("UCSB and vicinity", subtitle="Map 6, Zoom 3")
 
 zoom_3_plot
