@@ -198,6 +198,8 @@ summary(values(ndvi_series_stack))
 # or is it:
 plot(ndvi_series_stack)
 
+#kristi got a series of ndvis after running line 199
+ggsave("images/ndvi_series_stack.png", plot=last_plot())
 # duplicate column names / dates can be made
 # this turns out to be a feature!
 # need to put it back in later
@@ -286,6 +288,8 @@ summary(avg_NDVI)
 
 
 # I just can't get these to plot logically.
+#KL -where did the y value's mean come from?
+#Error message says need finite ylim values, is it NAs? 
 plot(avg_NDVI)
 ggplot(avg_NDVI, aes(x=months, y=mean) +
     geom_point())
