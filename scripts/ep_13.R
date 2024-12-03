@@ -125,3 +125,8 @@ ggplot() +
   theme_void() + 
   theme(plot.title = element_text(hjust = 0.5),
         plot.subtitle = element_text(hjust = 0.5))
+
+#facet wrap ndvi thing 
+#adjust color ramp? 
+#facet wrap? egh 
+#julian day thing (not julien)
