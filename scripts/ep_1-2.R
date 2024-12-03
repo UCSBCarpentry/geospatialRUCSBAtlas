@@ -106,9 +106,37 @@ sum(is.na(campus_DEM_df$elevation))
 
 ############
 # challenge: look at a different raster's nodata values?
+campus_bath <- rast("source_data/SB_bath.tif")
+crs(campus_bath)
+str(campus_bath)
+colnames(campus_bath)
 
+campus_bath_df <- as.data.frame(campus_bath, xy=TRUE, na.rm=FALSE)
+str(campus_bath_df)
+
+# does this one have NA's?
+sum(is.na(campus_bath_df$SB_bath_2m))
+summary(campus_bath)
+
+# you betcha.
+# 69366 of them
 
 ### bad data example goes here.
+# both these warning messages tells us there's more going on.
+# ie: values out of scale range
+ggplot() +
+  geom_histogram(data = campus_DEM_df, aes(elevation))
+
+ggplot() +
+  geom_histogram(data = campus_bath_df, aes(SB_bath_2m))
+
+# crs() and str() don't tell us what bad data values are.
+
+describe("source_data/SB_bath.tif")
+# [61] "  NoData Value=nan" 
+describe("source_data/campus_DEM.tif")
+# [64] "  NoData Value=nan"
+
 
 ###################
 
