@@ -264,9 +264,9 @@ ggsave("images/map1.3.png", plot=last_plot())
 
 # next we need to refine the plot and labels
 # Not a publication ready graphic (yet) ~episode 13
-# customize the x and y graticule to be xx.xx and smaller
-# remove the x and y axis labels 
-# customize the legend title to include units of elevation
+# customize the x and y graticule to be xx.xx and smaller -> number_format()
+# remove the x and y axis labels -> axis.title.x/y = element_blank()
+# customize the legend title to include units of elevation -> guide_legend()
 
 ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
