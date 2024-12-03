@@ -31,6 +31,7 @@ Links are to their original source:
 
 
 ## Map 1
+* we could use a my_crs here.
 * Shapefiles
   * Walkways
   * Buildings
@@ -61,7 +62,7 @@ Links are to their original source:
 "campus_DEM"          
 "campus_DEM_df"       
 "campus_hillshade_df"
-"campus_projection"   
+"campus_projection"   -- this is whatever campus_DEM is when it comes out of episode 1.
 "custom_bath_bins"   
 "custom_bins"         
 "custom_DEM_bins"    
@@ -119,7 +120,7 @@ Most of these will be used in Episodes 1 and 2
 
 #### Ojbect list
  "aligned_zoom"        "campus_DEM"          "campus_extent"       "campus_hillshade"   
- "grays"               "my_crs"              "places"              "tryptic"            
+ "grays"               "campus_crs"              "places"              "tryptic"            
  "world"               "zoom_1"              "zoom_1_df"           "zoom_1_extent"      
  "zoom_1_plot"         "zoom_2"              "zoom_2_aspect"       "zoom_2_cropped"     
  "zoom_2_df"           "zoom_2_extent"       "zoom_2_hillshade"    "zoom_2_hillshade_df"
@@ -145,6 +146,9 @@ Most of these will be used in Episodes 1 and 2
  maps before here.but should we make one up?
  Ep 3: Project to overlay Planet raster under / over the campus hillshade?
  Ep 11: Crop as we do in Map 4-5-6?
+
+### Objects
+campus_crs: the native CRS of campus_DEM
 
  
  ## Map 12
