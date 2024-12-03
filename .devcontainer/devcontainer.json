@@ -1,0 +1,60 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/rocker-org/devcontainer-templates/tree/main/src/r-ver
+{
+	"name": "R (rocker/r-ver base)",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"build" : {
+		"dockerfile": "Dockerfile"
+	},
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	"features": {
+		"ghcr.io/rocker-org/devcontainer-features/r-apt:0": {
+			"vscodeRSupport": "full",
+			"installDevTools": true,
+			"installRMarkdown": true,
+			"installRadian": true,
+			"installVscDebugger": true,
+			"installBspm": true
+		},
+		"ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {
+			"packages": "r-cran-terra,r-cran-tidyverse,r-cran-sf,r-cran-curl,r-cran-googledrive,r-cran-arcgisutils,r-cran-raster,r-cran-cowplot,r-cran-tidyterra,r-cran-geojsonsf"
+    	},
+		"ghcr.io/rocker-org/devcontainer-features/rstudio-server:latest": {},
+		"ghcr.io/rocker-org/devcontainer-features/r-history:0": {}
+	},
+	"overrideFeatureInstallOrder": [
+		"ghcr.io/rocker-org/devcontainer-features/r-apt"
+	],
+	"forwardPorts": [8787],
+	// "postAttachCommand": {
+	//     "rstudio-start": "rserver"
+	// },
+	"portsAttributes": {
+        "8787": {
+            "label": "RStudio IDE"
+        }
+    },
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "R -q -e 'renv::install()'",
+
+	// Configure tool-specific properties.
+	"customizations": {
+		// Settings for VS Code.
+		"vscode": {
+			"extensions": [
+				"RDebugger.r-debugger"
+			],
+			"settings": {
+				"r.rterm.linux": "/usr/local/bin/radian",
+				"r.bracketedPaste": true,
+				"r.plot.useHttpgd": true
+			}
+		}
+	}
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
+}
