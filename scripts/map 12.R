@@ -282,6 +282,8 @@ avg_NDVI <- mutate(avg_NDVI, months=ndvi_months)
 str(avg_NDVI)
 
 avg_NDVI
+summary(avg_NDVI)
+
 
 # I just can't get these to plot logically.
 plot(avg_NDVI)
