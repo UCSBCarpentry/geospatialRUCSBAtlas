@@ -287,8 +287,10 @@ ggplot(ndvi_series_custom_binned_df, aes(x=bins)) +
 # let's make a dataframe of average NDVI
 # and plot them
 avg_NDVI <- global(ndvi_series_stack, mean, na.rm=TRUE)
-
 ## that passes the smell test! April and September(?)
+
+
+# but this plot makes no sense
 plot(avg_NDVI$mean)
 
 # need to access the row names.
@@ -306,6 +308,7 @@ summary(avg_NDVI)
 #KL -where did the y value's mean come from?
 #Error message says need finite ylim values, is it NAs? 
 plot(avg_NDVI)
+
 avg_NDVI_df <- as.data.frame(avg_NDVI, rm.na=FALSE)
 
 ggplot(avg_NDVI_df, aes(x=months, y=mean) +
