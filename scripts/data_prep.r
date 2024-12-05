@@ -110,6 +110,10 @@ file.remove("downloaded_data/UCSB_campus_23-24_psscene_analytic_8b_sr_udm2.zip")
 drive_download("https://drive.google.com/file/d/1-gAC4BRkcJXxGWUb73h2pa1QfyQ9y9yk/view?usp=drive_link",
                "source_data/ucsb_60sqkm_planet_extent.geojson",
                overwrite = TRUE)
+# NCOS AOI
+drive_download("https://drive.google.com/open?id=12TtsAjq3MbALF9gaqo_JUxLBzBonaWev&usp=drive_fs",
+               "source_data/ncos_aoi.geojson",
+               overwrite = TRUE)
 
 
 # Planet 50cm NCOS?
