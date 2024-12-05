@@ -301,16 +301,20 @@ ggplot(ndvi_series_custom_binned_df, aes(x=bins)) +
 avg_NDVI <- global(ndvi_series_stack, mean, na.rm=TRUE)
 ## that passes the smell test! April and September(?)
 
-
-# but this plot makes no sense
-plot(avg_NDVI$mean)
-
-# need to access the row names.
-row.names(avg_NDVI)
+str(avg_NDVI)
+ncol(avg_NDVI)
 
 ndvi_months <- c(row.names(avg_NDVI))
 avg_NDVI <- mutate(avg_NDVI, months=ndvi_months)
 str(avg_NDVI)
+
+colnames(avg_NDVI) <- c("MeanNDVI", "Month")
+# but this plot makes no sense
+plot(avg_NDVI)
+avg_NDVI
+
+
+
 
 avg_NDVI
 summary(avg_NDVI)
@@ -319,17 +323,16 @@ summary(avg_NDVI)
 # I just can't get these to plot logically.
 #KL -where did the y value's mean come from?
 #Error message says need finite ylim values, is it NAs? 
-plot(avg_NDVI)
+plot(avg_NDVI$mean)
 
 avg_NDVI_df <- as.data.frame(avg_NDVI, rm.na=FALSE)
-
-ggplot(avg_NDVI_df, aes(x=months, y=mean) +
-    geom_point())
-
+str(avg_NDVI_df)
+ggplot(avg_NDVI_df, mapping = aes(Month, MeanNDVI, geom_point(MeanNDVI)))
 
 
 
-# Julian dates: that's in the lesson, mean()# Julian dates: that's in the lesson, but ours uses calendar dates
+
+# Julian dates: that's in the lesson, mean()# Jugeom_point()# Julian dates: that's in the lesson, mean()# Julian dates: that's in the lesson, but ours uses calendar dates
 # challenge: change object names to Julian dates
 
 # What month was the Greenest?
