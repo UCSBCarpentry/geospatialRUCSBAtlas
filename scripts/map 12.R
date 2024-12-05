@@ -43,10 +43,19 @@ summary(image)
 
 # here is the NDVI calculation:
 #(NIR - Red) / (NIR + Red)
-ndvi_tiff <- ((image[[8]] - image[[6]]) / (image[[8]] + image[[6]]))
+ndvi_tiff <- ((image[[8]] - image[[6]]) / (image[[8]] + image[[6]]))*10000 
 
 plot(ndvi_tiff)
 summary(values(ndvi_tiff))
+str(ndvi_tiff)
+class(ndvi_tiff)
+str(ndvi_tiff$nir)
+values(ndvi_tiff)
+
+# convert to integer for speed
+# this doesn't work
+# ndvi_tiff <- as.integer(ndvi_tiff)
+
 
 # not sure how the columns get named "NIR" 
 # probably the first layer imported
@@ -104,6 +113,7 @@ ndvi_tiff_df <- as.data.frame(ndvi_tiff, xy=TRUE) %>%
 
 str(ndvi_tiff_df)
 
+
 ggplot() +
   geom_raster(data = ndvi_tiff_df , aes(x = x, y = y, fill = value)) 
 
@@ -129,8 +139,7 @@ dir.create("output_data/ndvi", showWarnings = FALSE)
 # this takes a while
 for (images in scene_paths) {
     source_image <- rast(images)
-    ndvi_tiff <- ((source_image[[8]] - source_image[[6]]) / (source_image[[8]] + source_image[[6]])) %>% 
-      round(2)
+    ndvi_tiff <- ((source_image[[8]] - source_image[[6]]) / (source_image[[8]] + source_image[[6]]))
     new_filename <- (substr(images, 67,92))
     new_path <- paste("output_data/ndvi/", new_filename, ".tif", sep="")
     ndvi_tiff <- extend(ndvi_tiff, ucsb_extent, fill=NA, snap="near")
@@ -139,7 +148,6 @@ for (images in scene_paths) {
     print(names(ndvi_tiff))
     print(new_filename)
     print(dim(ndvi_tiff))
-#    plot(ndvi_tiff)
     writeRaster(ndvi_tiff, new_path, overwrite=TRUE)
         }
 
@@ -230,9 +238,12 @@ ncos_extent <- vect("source_data/ncos_aoi.geojson")
 ncos_extent <- project(ncos_extent, ndvi_series_stack)
 
 ndvi_series_stack <- crop(ndvi_series_stack, ncos_extent)
+
+# make the files 4x smaller:
+ndvi_series_stack <- aggregate(ndvi_series_stack, fact=4, fun="mean")
+
 ndvi_series_df <- as.data.frame(ndvi_series_stack, xy=TRUE, na.rm=FALSE) %>% 
   pivot_longer(-(x:y), names_to = "variable", values_to= "value")
-
 str(ndvi_series_df)
 
 # this is the output is we are trying to speed up
@@ -286,6 +297,7 @@ ggplot(ndvi_series_custom_binned_df, aes(x=bins)) +
 # visually we can't see the greenest, so 
 # let's make a dataframe of average NDVI
 # and plot them
+# this is from ep. 14:
 avg_NDVI <- global(ndvi_series_stack, mean, na.rm=TRUE)
 ## that passes the smell test! April and September(?)
 
