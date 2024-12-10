@@ -61,9 +61,6 @@ ggplot() + geom_raster(data = campus_DEM_df,
 
 
 
-+
-coord_quickmap()
-
 
 # faster terra plot (hey, I thought plot was base)
 # also doesn't force you to remember the name of
@@ -201,8 +198,8 @@ campus_DEM_df <- campus_DEM_df %>%
 
 # this shows sea level at 2-5 ft
 ggplot() + 
-  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) 
-  + coord_quickmap()
+  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
+  coord_quickmap()
 
 
 # challenge
@@ -250,6 +247,8 @@ ggplot() +
 
 describe("source_data/campus_hillshade.tif")
 
+campus_hillshade_df
+
 campus_hillshade_df <- 
   rast("source_data/campus_hillshade.tif") %>% 
   as.data.frame(xy = TRUE)
@@ -259,21 +258,21 @@ str(campus_hillshade_df)
 # plot the hillshade
 ggplot() + 
   geom_raster(data = campus_hillshade_df, 
-              aes(x=x, y=y, fill = campus_hillshade)) 
-  #coord_quickmap()
+              aes(x=x, y=y, fill = hillshade)) +
+  coord_quickmap()
 
 # overlay
 # not sure if this is displaying as desired
 ggplot() + 
     geom_raster(data=campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
     geom_raster(data = campus_hillshade_df, 
-              aes(x=x, y=y, alpha = campus_hillshade)) +
+              aes(x=x, y=y, alpha = hillshade)) +
     scale_fill_viridis_c() + 
   ggtitle("Elevation and Hillshade") 
   #coord_quickmap()
 
-#kristi had enough stopped here
 # I'm not sure this graph does anything for us anymore
+# it would if it displayed the red. 
 ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
   scale_fill_gradient2(na.value = "lightgray", 
