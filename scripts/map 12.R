@@ -2,6 +2,9 @@
 # let's build monthly NDVI's for campus
 # as in episode 12 
 
+# to answer the question:
+# What month was the greenest?
+
 # clean the environment and hidden objects
 rm(list=ls())
 
@@ -17,7 +20,8 @@ library(geojsonsf) # to handle geojson
 
 # NDVIs were premade in the Carpentries lesson, but
 # we already know enough raster math to make our
-# own
+# own, as in 
+# episode 4
 
 # brick is raster. rast is terra
 # the 2 different ndvis looks VERY different when
@@ -28,16 +32,30 @@ library(geojsonsf) # to handle geojson
 # make an NDVI for 1 file
 tiff_path <- c("source_data/UCSB_campus_23-24_psscene_analytic_8b_sr_udm2/PSScene/")
 
+# for reference, plot one of our 8 band files with
+# semi-natural color
 image <- rast(paste(tiff_path, "20230912_175450_00_2439_3B_AnalyticMS_SR_8b_clip.tif", sep=""))
+# ala-episode 5
 plotRGB(image, r=6,g=3,b=1, stretch = "hist")
 image
 
+summary(image)
+
 # here is the NDVI calculation:
 #(NIR - Red) / (NIR + Red)
-ndvi_tiff <- (image[[8]] - image[[6]] / image[[8]] + image[[6]])
+ndvi_tiff <- ((image[[8]] - image[[6]]) / (image[[8]] + image[[6]]))*10000 
 
 plot(ndvi_tiff)
 summary(values(ndvi_tiff))
+str(ndvi_tiff)
+class(ndvi_tiff)
+str(ndvi_tiff$nir)
+values(ndvi_tiff)
+
+# convert to integer for speed
+# this doesn't work
+# ndvi_tiff <- as.integer(ndvi_tiff)
+
 
 # not sure how the columns get named "NIR" 
 # probably the first layer imported
@@ -95,6 +113,7 @@ ndvi_tiff_df <- as.data.frame(ndvi_tiff, xy=TRUE) %>%
 
 str(ndvi_tiff_df)
 
+
 ggplot() +
   geom_raster(data = ndvi_tiff_df , aes(x = x, y = y, fill = value)) 
 
@@ -105,6 +124,7 @@ ggplot() +
 # loop over the files and build a raster stack
 
 # get a file list
+# ep 12
 scene_paths <- list.files("source_data/UCSB_campus_23-24_psscene_analytic_8b_sr_udm2/PSScene",
                           full.names = TRUE,
                           pattern = "8b_clip.tif")
@@ -119,18 +139,19 @@ dir.create("output_data/ndvi", showWarnings = FALSE)
 # this takes a while
 for (images in scene_paths) {
     source_image <- rast(images)
-    ndvi_tiff <- (source_image[[8]] - source_image[[6]] / source_image[[8]] + source_image[[6]])
+    ndvi_tiff <- ((source_image[[8]] - source_image[[6]]) / (source_image[[8]] + source_image[[6]]))
     new_filename <- (substr(images, 67,92))
     new_path <- paste("output_data/ndvi/", new_filename, ".tif", sep="")
-    ndvi_tiff <- extend(ndvi_tiff, ucsb_extent, snap="near")
+    ndvi_tiff <- extend(ndvi_tiff, ucsb_extent, fill=NA, snap="near")
     set.ext(ndvi_tiff, ext(ucsb_extent))
     names(ndvi_tiff) <- substr(new_filename, 0,14)
     print(names(ndvi_tiff))
     print(new_filename)
     print(dim(ndvi_tiff))
-#    plot(ndvi_tiff)
     writeRaster(ndvi_tiff, new_path, overwrite=TRUE)
         }
+
+
 
 # 3 or 4 of the resulting tiffs are wonky
 # their dimensions are wildly off.
@@ -141,7 +162,13 @@ for (images in scene_paths) {
 ndvi_series_names <- list.files("output_data/ndvi")
 ndvi_series_names <- paste("output_data/ndvi/", ndvi_series_names, sep="")
 
-#check
+ndvi_series_names
+testraster <- rast("output_data/ndvi/20230912_175450_00_2439_3B.tif")
+summary(values(testraster))
+
+
+# check the files's resolutions and 
+# keep only the 2217x3541 ones.
 length(ndvi_series_names)
 str(ndvi_series_names)
 valid_tiff <- c(2217,3541,1)
@@ -165,27 +192,32 @@ for (image in ndvi_series_names) {
 # reload the names
 ndvi_series_names <- list.files("output_data/ndvi")
 ndvi_series_paths <- paste("output_data/ndvi/", ndvi_series_names, sep="")
+
+# now we can see there are 4 fewer tiffs.
 length(ndvi_series_names)
 
-# build raster stack with no errors
+# now we can build a raster stack with no errors
 ndvi_series_stack <- rast(ndvi_series_paths)
 
-# whooo hoooo!
+summary(ndvi_series_stack[,1])
+
+# whooo hoooo! no errors ... but ...
 str(ndvi_series_stack)
 nlyr(ndvi_series_stack)
+# but it's crapped out:
 summary(values(ndvi_series_stack))
+# or is it:
+plot(ndvi_series_stack)
+
+#kristi got a series of ndvis after running line 199
+ggsave("images/ndvi_series_stack.png", plot=last_plot())
+
 
 
 # duplicate column names / dates can be made
 # this turns out to be a feature!
 # need to put it back in later
 
-# one raster has outliers. NDVI = 71000
-# that outlier causes my ggplot to be overly dark.
-summary(values(ndvi_series_stack))
-
-# it's one of the April 27 images:
-plot(ndvi_series_stack)
 
 # pivot
 # comes from the lesson
@@ -195,50 +227,43 @@ ndvi_series_df <- as.data.frame(ndvi_series_stack, xy=TRUE) %>%
 str(ndvi_series_df)
 summary(ndvi_series_df)
 
-
-# can I just cut off everything above a certain number?
-# my calculated NDVIs were 1 <> 70999
-# highest 3rd quartile = 4592
-# maybe 10,000 should be max?
-# 20,000? (since that's the max below 70,000?)
-
-# this doesn't do it.
-narrower_df <- filter(ndvi_series_df, value > 20000, na.rm = FALSE)
-summary(narrower_df)  
-
-
-summary(ndvi_series_df)
 str(ndvi_series_df)
 unique(ndvi_series_df$variable)
 unique(ndvi_series_df$value)
 
-# this is the output that is really dark.   ### and slow
+
+### let's crop this and remake the dataframe so that the ggplot 
+# facet_wrap runs in a reasonable amount of time.
+ncos_extent <- vect("source_data/ncos_aoi.geojson")
+ncos_extent <- project(ncos_extent, ndvi_series_stack)
+
+ndvi_series_stack <- crop(ndvi_series_stack, ncos_extent)
+
+# make the files 4x smaller:
+ndvi_series_stack <- aggregate(ndvi_series_stack, fact=4, fun="mean")
+
+ndvi_series_df <- as.data.frame(ndvi_series_stack, xy=TRUE, na.rm=FALSE) %>% 
+  pivot_longer(-(x:y), names_to = "variable", values_to= "value")
+str(ndvi_series_df)
+
+# this is the output is we are trying to speed up
 ggplot() +
   geom_raster(data = ndvi_series_df , aes(x = x, y = y, fill = value)) +
   facet_wrap(~ variable)
 
 
-# what's wrong with April?   #############################################
-ndvi_tiff_path <- c("output_data/NDVI/")
-apr_ndvi <- rast(paste(ndvi_tiff_path, "20240427_175907_21_24c5_3B.tif", sep=""))
-str(apr_ndvi)
-plot(apr_ndvi)
 
-apr_image <- rast(paste(tiff_path, "20240427_175907_21_24c5_3B_AnalyticMS_SR_8b_clip.tif", sep=""))
-plotRGB(apr_image, r=6,g=3,b=1, stretch = "hist")
 # visually there's nothing going on
 # does my 'feature' about combining layers actually
 # add values together as they are stacking up?
-
-
-
-
 # visually these are subtle, so to find
 # the 'greenest' months here, we can make
 # histograms
 # make bins
+# OR figure the mean NDVI for each image as in ep 14.
 
-# this default one really shows how much the outlier is affecting us
+# this default one shows us what?
+# a fatter and pretty tall April?
 ggplot(ndvi_series_df) +
   geom_histogram(aes(value)) + 
   facet_wrap(~variable)
@@ -265,15 +290,53 @@ ndvi_series_custom_binned_df <-  ndvi_series_df %>%
 ggplot(ndvi_series_custom_binned_df, aes(x=bins)) +
   geom_bar() + 
   facet_wrap(~variable)
+# this is still a visual judgement call.
+
+
+# this is the OR from above.
+# visually we can't see the greenest, so 
+# let's make a dataframe of average NDVI
+# and plot them
+# this is from ep. 14:
+avg_NDVI <- global(ndvi_series_stack, mean, na.rm=TRUE)
+## that passes the smell test! April and September(?)
+
+str(avg_NDVI)
+ncol(avg_NDVI)
+
+ndvi_months <- c(row.names(avg_NDVI))
+avg_NDVI <- mutate(avg_NDVI, months=ndvi_months)
+str(avg_NDVI)
+
+colnames(avg_NDVI) <- c("MeanNDVI", "Month")
+# but this plot makes no sense
+plot(avg_NDVI)
+avg_NDVI
 
 
 
 
-# Julian dates: that's in the lesson, but ours uses calendar dates
+avg_NDVI
+summary(avg_NDVI)
+
+
+# I just can't get these to plot logically.
+#KL -where did the y value's mean come from?
+#Error message says need finite ylim values, is it NAs? 
+plot(avg_NDVI$mean)
+
+avg_NDVI_df <- as.data.frame(avg_NDVI, rm.na=FALSE)
+str(avg_NDVI_df)
+ggplot(avg_NDVI_df, mapping = aes(Month, MeanNDVI, geom_point(MeanNDVI)))
+
+
+
+
+# Julian dates: that's in the lesson, mean()# Jugeom_point()# Julian dates: that's in the lesson, mean()# Julian dates: that's in the lesson, but ours uses calendar dates
 # challenge: change object names to Julian dates
 
 # What month was the Greenest?
 
-# we'll need weather data
-
+# we'll need weather data to mimic the lesson.
+# or use our brains and eyes to define 
 # when was it rainiest?

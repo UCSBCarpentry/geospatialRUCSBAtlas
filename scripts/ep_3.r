@@ -11,7 +11,7 @@ library(terra)
 # clean the environment and hidden objects
 rm(list=ls())
 
-# set up objects from previous maps
+# set up objects from previous episodes
 
 # create the campus DEM
 campus_DEM <- rast("source_data/campus_DEM.tif")

@@ -9,6 +9,7 @@ library(raster)
 # library(rgdal)
 library(terra)
 library(sf)
+library(scales)
 
 # set up objects
 
@@ -245,12 +246,14 @@ str(campus_hillshade_df)
 
 #update color scheme for contrast 
 # +hillshade
+# trying with the scales library to shorten the x, y to 2 decimals
 ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
   geom_raster(data = campus_hillshade_df, aes(x=x, y=y, alpha = campus_hillshade), show.legend = FALSE) +
   geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = bathymetry)) +
-  scale_fill_viridis_c(na.value="NA") +
-  labs(title="Map 1", subtitle="Version 3") +
+  scale_fill_viridis_c(na.value="NA")+ 
+  labs(title="Map 1", subtitle="Version 3",
+       labels =label_number(scale = 1/1000)) +
   geom_sf(data=iv_buildings, color=alpha("light gray", .1), fill=NA) +
   geom_sf(data=buildings, color ="hotpink") +
   geom_sf(data=habitat, color="darkorchid1") +
@@ -259,8 +262,23 @@ ggplot() +
 
 ggsave("images/map1.3.png", plot=last_plot())
 
-# next we need to
-# customize the y graticule to be xx.xx and smaller
-# and further format the vectors?
+# next we need to refine the plot and labels
+# Not a publication ready graphic (yet) ~episode 13
+# customize the x and y graticule to be xx.xx and smaller -> number_format()
+# remove the x and y axis labels -> axis.title.x/y = element_blank()
+# customize the legend title to include units of elevation -> guide_legend()
 
+ggplot() +
+  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
+  geom_raster(data = campus_hillshade_df, aes(x=x, y=y, alpha = campus_hillshade), show.legend = FALSE) +
+  geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = bathymetry)) +
+  scale_y_continuous(labels = number_format(accuracy = 0.01)) +
+  scale_fill_viridis_c(na.value="NA", guide = guide_legend("elevation (US ft)"))+
+  labs(title="Map 1", subtitle="Version 3") + theme(axis.title.x=element_blank(),
+                                                    axis.title.y=element_blank())+
+  geom_sf(data=iv_buildings, color=alpha("light gray", .1), fill=NA) +
+  geom_sf(data=buildings, color ="hotpink") +
+  geom_sf(data=habitat, color="darkorchid1") +
+  geom_sf(data=bikeways, color="yellow") +
+  coord_sf()
 
