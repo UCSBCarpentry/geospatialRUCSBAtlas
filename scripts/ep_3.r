@@ -160,6 +160,12 @@ writeRaster(bath_clipped, "output_data/campus_bathymetry.tif",
             filetype="GTiff",
             overwrite=TRUE)
 
+# and the DEM:
+writeRaster(campus_DEM, "output_data/campus_DEM.tif",
+            filetype="GTiff",
+            overwrite=TRUE)
+
+
 # Note that with the terra package, we could have done both reprojection and cropping at the same time by running:
 # reprojected_bath <- project(bath_rast, campus_DEM)
 
@@ -167,7 +173,9 @@ campus_bath_df <- as.data.frame(bath_clipped, xy=TRUE)
 str(campus_bath_df)
 colnames(campus_bath_df)
 
-# now we have a smaller campus bathymetry file:
+
+
+# now we have a smaller campus bathymetry dataframe:
 ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
   geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = SB_bath_2m)) +

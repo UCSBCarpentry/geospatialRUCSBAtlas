@@ -31,12 +31,15 @@ campus_DEM
 campus_bath
 # Yes
 
+# don't want to read that? Test that:
+crs(campus_DEM) == crs(campus_bath)
+
+
 campus_DEM %>%  
   ncell()
 
 summary(campus_DEM)
 str(campus_DEM)
-crs(campus_DEM)
 
 campus_DEM_df <- as.data.frame(campus_DEM, xy=TRUE) %>%
   rename(elevation = greatercampusDEM_1_1) # rename to match code later
@@ -108,10 +111,13 @@ ggplot() +
 # write a new geoTIFF with the new 
 # sea level = 0 version of the data
 
+writeRaster(campus_DEM, "output_data/campus_sea_level_DEM.tif",
+            filetype="GTiff",
+            overwrite=TRUE)
 
 
 # ep 4 challenge to add:
 # bare earth vs canopy for 2 different sources?
 # necessarily up in the hills? Or for buildings
 # on campus?
-
+# we've already visualized that the campus DEM is a DSM, that is, treetops.

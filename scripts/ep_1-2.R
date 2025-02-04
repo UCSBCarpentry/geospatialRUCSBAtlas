@@ -247,12 +247,12 @@ ggplot() +
 
 describe("source_data/campus_hillshade.tif")
 
-campus_hillshade_df
 
 campus_hillshade_df <- 
   rast("source_data/campus_hillshade.tif") %>% 
   as.data.frame(xy = TRUE)
 
+campus_hillshade_df
 str(campus_hillshade_df)
 
 # plot the hillshade
