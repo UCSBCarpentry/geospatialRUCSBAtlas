@@ -57,7 +57,8 @@ names(campus_DEM_df)[names(campus_DEM_df) == 'greatercampusDEM_1_1'] <- 'elevati
 
 ggplot() + geom_raster(data = campus_DEM_df, 
               aes(x=x, y=y, fill = elevation)) +
- scale_fill_viridis_c() 
+ scale_fill_viridis_c() +
+  coord_sf()
 
 
 
@@ -268,8 +269,8 @@ ggplot() +
     geom_raster(data = campus_hillshade_df, 
               aes(x=x, y=y, alpha = hillshade)) +
     scale_fill_viridis_c() + 
-  ggtitle("Elevation and Hillshade") 
-  #coord_quickmap()
+  ggtitle("Elevation and Hillshade") +
+  coord_quickmap()
 
 # I'm not sure this graph does anything for us anymore
 # it would if it displayed the red. 
@@ -289,16 +290,21 @@ summary(campus_DEM_df)
 
 # this attempts to find only negative elevations,
 # but it doesn't work.
-has.neg <- apply(campus_DEM_df, 1, function(campus_DEM_df) any(campus_DEM_df$elevation < 0))
+# has.neg <- apply(campus_DEM_df, 1, function(campus_DEM_df) any(campus_DEM_df$elevation < 0))
 
 # challenge:
 # how many pixels are below 3.1 feet (1 m)?
 below_3 <- apply(campus_DEM_df, 1, function(campus_DEM_df) any(campus_DEM_df < 3.12))
 
+pixel_count <- nrow(campus_DEM_df) 
+pixel_count
+
 length(which(below_3))
 
-
-
+# that's the same number. we must have done something wrong. 
+#
+#negative_only <- filter()
+# we still need to count the negatives.
 
 #############################################
 # ep. 2
@@ -311,7 +317,7 @@ unique(campus_DEM_df$elevation)
 campus_DEM_df %>% 
   group_by(elevation) %>% 
   count()
-# that's still too many. this is part
+# that's still too many? It's very few on Feb 4. this is part
 # of why bins are handy
 plot(campus_DEM_df$binned_DEM)
 

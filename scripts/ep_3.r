@@ -26,7 +26,7 @@ custom_bins <- c(-3, -.01, .01, 2, 3, 4, 5, 10, 40, 200)
 campus_DEM_df <- campus_DEM_df %>% 
   mutate(binned_DEM = cut(elevation, breaks = custom_bins))
 
-
+str(campus_DEM_df)
 
 # ep3 is reprojections. We need a raster in a different projection.
 # how about bathymetry?
@@ -34,6 +34,7 @@ campus_DEM_df <- campus_DEM_df %>%
 # make it the tidy way, so that there's not an extra object
 bath_rast <- rast("source_data/SB_bath.tif")  
 bath_rast 
+campus_DEM
 
 bath_df <-  bath_rast %>% 
   as.data.frame(xy=TRUE) %>% 
