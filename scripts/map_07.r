@@ -13,6 +13,9 @@ library(sf)
 # clean the environment and hidden objects
 rm(list=ls())
 
+current_sheet <- 7
+
+
 #vector layers
 buildings <- st_read("source_data/campus_buildings/Campus_Buildings.shp")
 bikeways <- st_read("source_data/bike_paths/bikelanescollapsedv8.shp")

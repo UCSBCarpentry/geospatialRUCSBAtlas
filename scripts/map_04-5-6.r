@@ -8,6 +8,8 @@
 # clean the environment and hidden objects
 rm(list=ls())
 
+current_sheet <- 4
+
 library(terra)
 library(geojsonsf)
 library(sf)
