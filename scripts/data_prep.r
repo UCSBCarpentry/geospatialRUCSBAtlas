@@ -118,6 +118,7 @@ drive_download("https://drive.google.com/open?id=12TtsAjq3MbALF9gaqo_JUxLBzBonaW
 
 # Planet 50cm NCOS?
 # Where art thou NCOS_07_25-26_2023.tif
+# https://drive.google.com/open?id=1DFQpenwhWQQ1RWAiIQ4S31TYCDk05HCU&usp=drive_fs
 # with arc.open()
 # the planet will have a funny band combo
 # when it first opens
