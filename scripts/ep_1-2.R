@@ -57,7 +57,7 @@ names(campus_DEM_df)[names(campus_DEM_df) == 'greatercampusDEM_1_1'] <- 'elevati
 
 ggplot() + geom_raster(data = campus_DEM_df, 
               aes(x=x, y=y, fill = elevation)) +
- scale_fill_viridis_c() +
+# scale_fill_viridis_c() +
   coord_sf()
 
 

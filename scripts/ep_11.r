@@ -4,12 +4,15 @@
 # library(raster)
 library(tidyverse)
 library(terra)
+library(sf)
+library(geojsonsf)
 
-getwd()
+# clean the environment and hidden objects
+rm(list=ls())
+
 
 # output will be a side-by-side raster of 2 drastically different
 # resolutions
-
 # get a box 
 sb_channel_extent <- geojson_sf("scripts/socal_aoi.geojson") %>% 
   vect()
@@ -49,11 +52,11 @@ colnames(zoom_2_df)
 # this geojson is the extent we want to crop to
 # in the lesson, it would be the HARV AOI 1-polygon shapefile
 
+zoom_2_extent <- ext(zoom_2)
+zoom_2_cropped <- crop(x=zoom_2, y=ext(zoom_2))
 
-zoom_2_cropped <- crop(x=zoom_2, y=zoom_2_extent)
-
-ggplot() +
-  geom_raster(data = zoom_2_df, aes(x=x, y=y, fill = dem90_hf))
+#ggplot() +
+#  geom_raster(data = zoom_2_df, aes(x=x, y=y, fill = dem90_hf))
 
 
 
