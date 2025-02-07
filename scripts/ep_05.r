@@ -2,6 +2,11 @@
 # multi-band rasters
 # ie: color
 
+# clean the environment and hidden objects
+rm(list=ls())
+
+current_episode <- 5
+
 
 library(terra)
 library(tidyverse)
@@ -36,17 +41,17 @@ class(natural_color)
 natural_color
 NCOS
 
-# brick maybe no more. it's from raster
+# brick is from raster
 # a brick is a new class for us
 # nl is the number of layers it should expect.
-natural_color_brick <- brick("source_data/cirgis2020/w_campus_1ft.tif", nl=5)
+natural_color_brick <- brick("source_data/w_campus_1ft/w_campus_1ft.tif")
 natural_color_brick
 
-plotRGB(natural_color_brick)
+plotRGB(natural_color)
 
 
 # we also have raster stack
-natural_color_stack <- stack("source_data/cirgis2020/w_campus_1ft.tif")
+natural_color_stack <- stack("source_data/w_campus_1ft/w_campus_1ft.tif")
 
 NCOS_stack <- stack("source_data/NCOS_07_25-26_2023.tif")
 
@@ -56,7 +61,7 @@ natural_color_stack
 # still has 4 channels
 NCOS_stack
 
-plotRGB(NCOS, r=1, g=2, b=3)
+# plotRGB(NCOS, r=1, g=2, b=3)
 
 plotRGB(natural_color)
 
@@ -88,11 +93,8 @@ plotRGB(natural_color,
 # about nodata value?
 
 # as we did in ep. 1
-GDALinfo("source_data/cirgis2020/w_campus_1ft.tif")
-
-# we can also use >describe<
-# but that doesn't work for this file.
-describe("source_data/cirgis2020/w_campus_1ft.tif")
+# we can use >describe<
+describe("source_data/w_campus_1ft/w_campus_1ft.tif")
 
 # SpatRasterDataset
 # comes from terra
@@ -106,9 +108,9 @@ natural_color_sds <- sds(natural_color)
 # Alternate path preparing better for
 # episode 12
 # we can do this with SkySat!
-SkySatPanSharp_B <- brick("source_data/SkySatCollect/20161210_185631_ssc3_u0001_pansharpened_clip.tif")
-SkySatPanSharp_S <- stack("source_data/SkySatCollect/20161210_185631_ssc3_u0001_pansharpened_clip.tif")
+# SkySatPanSharp_B <- brick("source_data/SkySatCollect/20161210_185631_ssc3_u0001_pansharpened_clip.tif")
+# SkySatPanSharp_S <- stack("source_data/SkySatCollect/20161210_185631_ssc3_u0001_pansharpened_clip.tif")
 
 
 # stdout shows 4 bands
-plotRGB(SkySatPanSharp_B, r=1, g=2, b=3, scale=1932)
+# plotRGB(SkySatPanSharp_B, r=1, g=2, b=3, scale=1932)

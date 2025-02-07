@@ -10,6 +10,8 @@ library(geojsonsf)
 # clean the environment and hidden objects
 rm(list=ls())
 
+current_episode <- 11
+
 
 # output will be a side-by-side raster of 2 drastically different
 # resolutions
@@ -28,23 +30,24 @@ campus_bath_df <- as.data.frame(campus_bath)
 
 # get low-res data
 # zoom 1, aka, Map 4 from map_4_5_6.r
-zoom_2 <- rast("source_data/dem90_hf/dem90_hf.tif")
-plot(zoom_2)
+west_us <- rast("source_data/dem90_hf/dem90_hf.tif")
+plot(west_us)
 polys(sb_channel_extent)
 
 # the above overlays don't work because of different CRSs
-sb_channel_extent <- project(sb_channel_extent, zoom_2)
-plot(zoom_2)
+sb_channel_extent <- project(sb_channel_extent, west_us)
+# this time it does:
+plot(west_us)
 polys(sb_channel_extent)
 
-zoom_2_df <- as.data.frame(zoom_2, xy=TRUE)
-colnames(zoom_2_df)
+# west_us_df <- as.data.frame(west_us, xy=TRUE)
+# colnames(west_us_df)
 
 
 # make some gg overlays
 # this ggplot crashes
 #ggplot() +
-#  geom_raster(data = zoom_2_df, aes(x=x, y=y, fill = dem90_hf)) +
+#  geom_raster(data = west_us_df, aes(x=x, y=y, fill = dem90_hf)) +
 #  coord_sf()
 
 # Crop it to local area defined by 
@@ -52,46 +55,42 @@ colnames(zoom_2_df)
 # this geojson is the extent we want to crop to
 # in the lesson, it would be the HARV AOI 1-polygon shapefile
 
-zoom_2_extent <- ext(zoom_2)
-zoom_2_cropped <- crop(x=zoom_2, y=ext(zoom_2))
+west_us_cropped <- crop(x=west_us, y=ext(sb_channel_extent))
 
-#ggplot() +
-#  geom_raster(data = zoom_2_df, aes(x=x, y=y, fill = dem90_hf))
+plot(west_us_cropped)
 
 
 
-
-
+str(west_us)
 
 # project it to match west_us
-zoom_2_extent <- project(zoom_2_extent, crs(zoom_2))
-crs(zoom_2_extent)
+# why do we project this into itself?
+crs(west_us) == crs(west_us_cropped)
+
+west_us_cropped <- project(x=west_us, y=west_us)
+crs(west_us)
 
 # now you can plot them together
 # to confirm that's the correct extent
 # that you want to crop to
-plot(zoom_2)
-polys(zoom_2_extent)
+plot(west_us_cropped)
+polys(sb_channel_extent, col=NA)
 
 
 
+buildings <- st_read("source_data/Campus_Buildings/Campus_Buildings.shp")
+
+# get/make some bounding boxes for 3 layers:
+bath_extent <- ext(campus_bath)
+buildings_extent <- ext(buildings)
+
+bath_extent_shape <- vect(bath_extent)
+buildings_extent_shape <- vect(buildings_extent)
+campus_extent_shape <- sb_channel_extent
 
 
-# make bounding boxes for each
-campus_extent <- extent(campus)
-bath_extent <- extent(bath)
-buildings_extent <- extent(buildings)
-
-campus_extent_shape <- as(campus_extent, 'SpatialPolygons')
-bath_extent_shape <- as(bath_extent, 'SpatialPolygons')
-buildings_extent_shape <- as(buildings_extent, 'SpatialPolygons')
-
-crs(campus)
 crs(campus_extent_shape)
 
-crs(campus_extent_shape) <- crs(campus)
-crs(bath_extent_shape) <- crs(bath)
-crs(buildings_extent_shape) <- crs(buildings)
 
 shapefile(campus_extent_shape, "output_data/aoi_campus.shp", overwrite=TRUE)
 shapefile(bath_extent_shape, "output_data/aoi_bath.shp", overwrite=TRUE)

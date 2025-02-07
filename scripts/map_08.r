@@ -17,6 +17,8 @@ library(cowplot)
 library(ggpubr)
 
 
+current_sheet <- 8
+
 # make sure output window is 1x1
 # because you muck with it a lot
 par(mfrow = c(1,1))

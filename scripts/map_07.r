@@ -20,6 +20,7 @@ current_sheet <- 7
 buildings <- st_read("source_data/campus_buildings/Campus_Buildings.shp")
 bikeways <- st_read("source_data/bike_paths/bikelanescollapsedv8.shp")
 habitat <- st_read("source_data/NCOS_bird_observations/NCOS_Shorebird_Foraging_Habitat.shp")
+iv_buildings <- st_read("source_data/iv_buildings/CA_Structures_ExportFeatures.shp")
 
 # rasters
 # the background setup is bathymetry and topography mashed together

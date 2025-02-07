@@ -14,6 +14,9 @@ library(RColorBrewer)
 # start fresh
 rm(list=ls())
 
+# set episode counter
+current_episode <- 1
+
 #############################################
 # ep. 1
 

@@ -7,10 +7,16 @@ library(tidyverse)
 library(RColorBrewer)
 library(terra)
 
+# clean the environment and hidden objects
+rm(list=ls())
+
+current_episode <- 7
+
+
 # do we need to remake our objects?
 buildings <- st_read("source_data/Campus_Buildings/Campus_Buildings.shp")
 # trees 
-birds <- st_read("source_data/NCOS_Bird_Observations_20190619_web/NCOS_Bird_Observations_20190619_web.shp")
+birds <- st_read("source_data/NCOS_bird_observations/NCOS_Shorebird_Foraging_Habitat.shp")
 
 
 # check out the attributes
@@ -36,9 +42,13 @@ ggplot() +
   geom_sf(data = buildings) +
   ggtitle("Campus Buildings")
 
+buildings$bld_date %>% unique() %>% length() 
+
+colnames(buildings)
 ggplot() +
-  geom_sf(data = buildings, aes(bld_date)) +
-  ggtitle("Campus Buildings")
+  geom_sf(data = buildings, aes(fill=bld_date, color=bld_date )) +
+  scale_fill_continuous() +
+    ggtitle("Campus Buildings")
 
 
 
@@ -70,8 +80,7 @@ ggplot() +
 
 
 # more objects to map
-birds <- st_read("source_data/NCOS_Bird_Observations_20190619_web/NCOS_Bird_Observations_20190619_web.shp")
-habitat <- st_read("source_data/NCOS_Shorebird_Foraging_Habitat/NCOS_Shorebird_Foraging_Habitat.shp")
+habitat <- st_read("source_data/")
 
 colnames(birds)
 plot(birds)

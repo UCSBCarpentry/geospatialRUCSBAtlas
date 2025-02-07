@@ -313,7 +313,7 @@ str(avg_NDVI)
 
 colnames(avg_NDVI) <- c("MeanNDVI", "Month")
 # but this plot makes no sense
-plot(avg_NDVI)
+# plot(avg_NDVI)
 avg_NDVI
 
 
@@ -326,7 +326,7 @@ summary(avg_NDVI)
 # I just can't get these to plot logically.
 #KL -where did the y value's mean come from?
 #Error message says need finite ylim values, is it NAs? 
-plot(avg_NDVI$mean)
+# plot(avg_NDVI$mean)
 
 avg_NDVI_df <- as.data.frame(avg_NDVI, rm.na=FALSE)
 str(avg_NDVI_df)

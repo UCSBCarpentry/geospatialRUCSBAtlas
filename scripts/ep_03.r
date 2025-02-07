@@ -10,6 +10,7 @@ library(terra)
 
 # clean the environment and hidden objects
 rm(list=ls())
+current_episode <- 3
 
 # set up objects from previous episodes
 

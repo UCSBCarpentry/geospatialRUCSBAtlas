@@ -4,6 +4,9 @@
 # clean the environment and hidden objects
 rm(list=ls())
 
+current_episode <- 13
+
+
 library(terra)
 library(ggplot2)
 library(dplyr)

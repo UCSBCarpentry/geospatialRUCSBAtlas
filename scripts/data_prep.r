@@ -111,9 +111,9 @@ drive_download("https://drive.google.com/file/d/1-gAC4BRkcJXxGWUb73h2pa1QfyQ9y9y
                "source_data/ucsb_60sqkm_planet_extent.geojson",
                overwrite = TRUE)
 # NCOS AOI
-drive_download("https://drive.google.com/open?id=12TtsAjq3MbALF9gaqo_JUxLBzBonaWev&usp=drive_fs",
-               "source_data/ncos_aoi.geojson",
-               overwrite = TRUE)
+#drive_download("https://drive.google.com/open?id=12TtsAjq3MbALF9gaqo_JUxLBzBonaWev&usp=drive_fs",
+#               "source_data/ncos_aoi.geojson",
+#               overwrite = TRUE)
 
 
 # Planet 50cm NCOS?
@@ -236,7 +236,11 @@ unzip("downloaded_data/pacific_ocean-shapefile.zip", exdir="source_data/californ
 
 
 # LINES - this is bike paths
-# X-drive?
+# X-drive
+# version is 3853-s3-282-2u5_p255_2016_u5
+# and is copied to carpentry google drive.
+
+
 drive_download("https://drive.google.com/file/d/1_Rt6HGF4LsIbZPMP6vZFm67H5MlzlIW1/view?usp=drive_link", 
               "downloaded_data/bike_paths.zip", overwrite=TRUE)
 unzip("downloaded_data/bike_paths.zip", exdir = "source_data/bike_paths/", overwrite=TRUE)

@@ -1,6 +1,11 @@
 #############################################
 # ep. 8
 
+# clean the environment and hidden objects
+rm(list=ls())
+
+current_episode <- 8
+
 
 # add multiple geometries.
 names(birds)

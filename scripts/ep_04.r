@@ -14,6 +14,10 @@
 # clean the environment and hidden objects
 rm(list=ls())
 
+current_episode <- 4
+
+
+
 # Libraries
 library(tidyverse)
 library(terra)

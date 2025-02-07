@@ -4,6 +4,12 @@ library(scales)
 library(tidyverse)
 library(ggplot2)
 
+# clean the environment and hidden objects
+rm(list=ls())
+
+current_episode <- 12
+
+
 getwd()
 
 # make a list of all your tiffs
