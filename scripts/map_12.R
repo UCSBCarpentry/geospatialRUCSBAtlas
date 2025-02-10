@@ -213,7 +213,7 @@ summary(values(ndvi_series_stack))
 plot(ndvi_series_stack)
 
 #kristi got a series of ndvis after running line 199
-ggsave("images/map_12_ndvi_series_stack.png", plot=last_plot())
+ggsave("images/ndvi_series_stack.png", plot=last_plot())
 
 
 
