@@ -1,5 +1,6 @@
 # map 8 actually
 # multi-band imagery
+# and connecting to the Planet API
 
 # for the episode about RGBs and multi-band rasters
 # episode 5
@@ -27,7 +28,7 @@ par(mfrow = c(1,1))
 library(planetR)
 library(curl)
 
-(get_auth)
-plnt_quota
+# (get_auth)
+# plnt_quota
 
 curl(url="https://api.planet.com/features/v1/ogc/my?format=api", open = "")

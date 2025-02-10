@@ -12,6 +12,67 @@ rm(list=ls())
 
 current_episode <- 11
 
+# Crop a raster to a vector extent
+
+campus_DEM <- rast("source_data/campus_DEM.tif")
+campus_DEM_df <- as.data.frame(campus_DEM, xy = TRUE, na.rm=FALSE)
+
+# get a geojson and turn that into a vector
+ncos_aoi <- vect("source_data/ncos_aoi.geojson")
+
+colnames(campus_DEM_df)
+
+# projection error
+ggplot() +
+  geom_raster(data = campus_DEM_df, aes(x = x, y = y, fill = greatercampusDEM_1_1)) +
+  scale_fill_gradientn(name = "Elevation", colors = terrain.colors(10)) +
+  geom_sf(data = ncos_aoi, color = "blue", fill = NA) +
+  coord_sf()
+
+# what episode does this come from?
+ncos_aoi <- project(ncos_aoi, campus_DEM)
+
+ggplot() +
+  geom_raster(data = campus_DEM_df, aes(x = x, y = y, fill = greatercampusDEM_1_1)) +
+  scale_fill_gradientn(name = "Elevation", colors = terrain.colors(10)) +
+  geom_sf(data = ncos_aoi, color = "blue", fill = NA) +
+  coord_sf()
+
+# now we crop
+campus_DEM_cropped <- crop(x=campus_DEM, y=ncos_aoi)
+campus_DEM_cropped_df <- as.data.frame(campus_DEM_cropped, xy = TRUE, na.rm=FALSE)
+
+# st_as_sfc is new here. 
+ggplot() +
+  geom_sf(data = st_as_sfc(st_bbox(campus_DEM)), fill = "green",
+          color = "green", alpha = .2) +
+  geom_raster(data = campus_DEM_cropped_df,
+              aes(x = x, y = y, fill = greatercampusDEM_1_1)) +
+  scale_fill_gradientn(name = "Elevation", colors = terrain.colors(10)) +
+  coord_sf()
+
+# same extents
+# with a tiny strange mismatch that we 
+# should be able to explain
+ggplot() +
+  geom_raster(data = campus_DEM_cropped_df,
+              aes(x = x, y = y, fill = greatercampusDEM_1_1)) +
+  scale_fill_gradientn(name = "Elevation", colors = terrain.colors(10)) +
+  geom_sf(data=ncos_aoi, color= "blue", fill=NA) +
+  coord_sf()
+
+# the lesson goes on to show the extents of a bunch of our datasets
+# but the objects aren't loaded. and the lesson narrative is
+# 'which is the biggest?'
+
+
+
+
+
+
+
+
+
 
 # output will be a side-by-side raster of 2 drastically different
 # resolutions

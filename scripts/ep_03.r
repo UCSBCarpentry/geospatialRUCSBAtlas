@@ -147,7 +147,7 @@ campus_border_poly <- as.polygons(campus_border, crs(campus_DEM))
 campus_border_poly
 
 # and written out to a file:
-writeVector(campus_border_poly, 'output_data/campus_borderline.shp', overwrite=TRUE)
+writeVector(campus_border_poly, 'output_data/ep_3_campus_borderline.shp', overwrite=TRUE)
 
 # from ep 11: crop the bathymetry to the extent
 # of campus_DEM
@@ -158,12 +158,12 @@ plot(bath_clipped)
 
 # save the file:
 # ep 4:
-writeRaster(bath_clipped, "output_data/campus_bathymetry.tif",
+writeRaster(bath_clipped, "output_data/ep_3_campus_bathymetry.tif",
             filetype="GTiff",
             overwrite=TRUE)
 
 # and the DEM:
-writeRaster(campus_DEM, "output_data/campus_DEM.tif",
+writeRaster(campus_DEM, "output_data/ep_3_campus_DEM.tif",
             filetype="GTiff",
             overwrite=TRUE)
 
@@ -188,4 +188,4 @@ ggplot() +
 ## to do
 # there should be a 3rd and 4th raster in here to replicate
 # the challenges.
-# Is there a before-and-after DEM of WCOS?
+# Is there a before-and-after DEM of NCOS?

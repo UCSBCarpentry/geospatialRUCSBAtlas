@@ -7,7 +7,7 @@
 
 
 # UCSB version:
-# do raster math on the bathymetry later to make sea level zero
+# do raster math on the bathymetry layer to make sea level zero
 # or is it the DEM that has sea level at 4ft?
 
 
@@ -16,18 +16,16 @@ rm(list=ls())
 
 current_episode <- 4
 
-
-
 # Libraries
 library(tidyverse)
 library(terra)
 
 # reload rasters
 # from output folder
-campus_DEM <- rast("output_data/campus_DEM.tif")
+campus_DEM <- rast("output_data/ep_3_campus_DEM.tif")
 plot(campus_DEM)
 # remember: this is the one we cropped, so the 2 extents are the same.
-campus_bath <- rast("output_data/campus_bathymetry.tif")
+campus_bath <- rast("output_data/ep_3_campus_bathymetry.tif")
 plot(campus_bath)
 
 # do they have the same projections?
@@ -115,7 +113,7 @@ ggplot() +
 # write a new geoTIFF with the new 
 # sea level = 0 version of the data
 
-writeRaster(campus_DEM, "output_data/campus_sea_level_DEM.tif",
+writeRaster(campus_DEM, "output_data/ep_4_campus_sea_level_DEM.tif",
             filetype="GTiff",
             overwrite=TRUE)
 
