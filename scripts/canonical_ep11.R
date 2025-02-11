@@ -92,3 +92,8 @@ ggplot() +
 
 
 # buffers with extract()
+# challenge:
+# do it for all the plot location points.
+# is this the first time we use this data?
+# points were created in ep. 10 OR can be found:
+plot_locations_sp_HARV <- st_read("data/NEON-DS-Site-Layout-Files/HARV/PlotLocations_HARV.shp")
