@@ -116,7 +116,7 @@ campus_bath_df <- as.data.frame(campus_bath, xy=TRUE, na.rm=FALSE)
 str(campus_bath_df)
 
 # does this one have NA's?
-sum(is.na(campus_bath_df$SB_bath_2m))
+sum(is.na(campus_bath_df$Bathymetry_2m_OffshoreCoalOilPoint))
 summary(campus_bath)
 
 # you betcha.
@@ -129,7 +129,7 @@ ggplot() +
   geom_histogram(data = campus_DEM_df, aes(elevation))
 
 ggplot() +
-  geom_histogram(data = campus_bath_df, aes(SB_bath_2m))
+  geom_histogram(data = campus_bath_df, aes(Bathymetry_2m_OffshoreCoalOilPoint))
 
 # crs() and str() don't tell us what bad data values are.
 

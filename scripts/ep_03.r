@@ -38,10 +38,12 @@ bath_rast
 campus_DEM
 
 bath_df <-  bath_rast %>% 
-  as.data.frame(xy=TRUE) %>% 
-  rename(depth = SB_bath_2m)
-
+  as.data.frame(xy=TRUE)
 str(bath_df)
+
+colnames(bath_df)[colnames(bath_df) == "Bathymetry_2m_OffshoreCoalOilPoint"] <- "depth"
+str(bath_df)
+
 
 summary(bath_df, maxsamp = ncell(bath_df))
 # ^^ remember, those are negative numbers  
@@ -103,7 +105,7 @@ plot(reprojected_bath)
 
 # remake bath_df
 bath_df <- as.data.frame(reprojected_bath, xy=TRUE) %>% 
-  rename(depth = SB_bath_2m) 
+  rename(depth = Bathymetry_2m_OffshoreCoalOilPoint) 
 
 str(bath_df)
 
@@ -151,7 +153,7 @@ writeVector(campus_border_poly, 'output_data/ep_3_campus_borderline.shp', overwr
 
 # from ep 11: crop the bathymetry to the extent
 # of campus_DEM
-bath_clipped <- crop(x=reprojected_bath, y=campus_border)
+bath_clipped <- crop(x=reprojected_bath, y=campus_border_poly)
 plot(bath_clipped)
 
 # now we can make a big, slow overview map, and save the clipped bathymetry
@@ -159,7 +161,7 @@ plot(bath_clipped)
 
 # save the file:
 # ep 4:
-writeRaster(bath_clipped, "output_data/ep_3_campus_bathymetry.tif",
+writeRaster(bath_clipped, "output_data/ep_3_campus_bathymetry_crop.tif",
             filetype="GTiff",
             overwrite=TRUE)
 
@@ -172,7 +174,8 @@ writeRaster(campus_DEM, "output_data/ep_3_campus_DEM.tif",
 # Note that with the terra package, we could have done both reprojection and cropping at the same time by running:
 # reprojected_bath <- project(bath_rast, campus_DEM)
 
-campus_bath_df <- as.data.frame(bath_clipped, xy=TRUE)
+campus_bath_df <- as.data.frame(bath_clipped, xy=TRUE) %>% 
+  rename(depth = Bathymetry_2m_OffshoreCoalOilPoint)
 str(campus_bath_df)
 colnames(campus_bath_df)
 
@@ -181,7 +184,7 @@ colnames(campus_bath_df)
 # now we have a smaller campus bathymetry dataframe:
 ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
-  geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = SB_bath_2m)) +
+  geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = depth)) +
       scale_fill_viridis_c(na.value="NA") +
   coord_quickmap()
 
