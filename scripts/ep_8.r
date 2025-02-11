@@ -8,10 +8,14 @@ current_episode <- 8
 
 
 # add multiple geometries.
-names(birds)
+# names(birds)
 
-campus_DEM <- raster("source_data/greatercampusDEM/greatercampusDEM_1_1.tif")
+campus_DEM <- raster("source_data/campus_DEM.tif")
 campus_DEM_df <- as.data.frame(campus_DEM, xy=TRUE)
+
+habitat <- st_read("source_data/NCOS_Shorebird_Foraging_Habitat/NCOS_Shorebird_Foraging_Habitat.shp")
+buildings <- st_read("source_data/Campus_Buildings/Campus_Buildings.shp")
+
 
 ggplot() +
   geom_raster(data = campus_DEM_df, 
@@ -21,8 +25,8 @@ ggplot() +
                        mid="azure1", 
                        high="cornsilk3",
                        midpoint=0) +
-  geom_sf(data = signs) +
-  geom_sf(data = birds) +
+#  geom_sf(data = signs) +
+#  geom_sf(data = birds) +
   geom_sf(data = habitat) +
   geom_sf(data = buildings)
 

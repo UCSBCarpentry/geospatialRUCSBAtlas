@@ -16,7 +16,9 @@ current_episode <- 7
 # do we need to remake our objects?
 buildings <- st_read("source_data/Campus_Buildings/Campus_Buildings.shp")
 # trees 
-birds <- st_read("source_data/NCOS_bird_observations/NCOS_Shorebird_Foraging_Habitat.shp")
+
+# this isn't actually birds. it's habitat
+birds <- st_read("source_data/NCOS_Shorebird_Foraging_Habitat/NCOS_Shorebird_Foraging_Habitat.shp")
 
 
 # check out the attributes
@@ -80,7 +82,7 @@ ggplot() +
 
 
 # more objects to map
-habitat <- st_read("source_data/")
+habitat <- st_read("source_data/NCOS_Shorebird_Foraging_Habitat/NCOS_Shorebird_Foraging_Habitat.shp")
 
 colnames(birds)
 plot(birds)
@@ -105,9 +107,9 @@ names(birds)
 
 
 #  color by attribute
-ggplot () +
-  geom_sf(data = signs, aes(color = factor(Condition)), size = 1.5) +
-  labs(color = 'Condition') +
-  coord_sf()
+#ggplot () +
+#  geom_sf(data = signs, aes(color = factor(Condition)), size = 1.5) +
+#  labs(color = 'Condition') +
+#  coord_sf()
 
 

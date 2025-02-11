@@ -74,14 +74,14 @@ ggplot() +
   coord_sf()
 
 # campus Areas of Interest (AOIs) as geojson
-greatercampus <- st_read("source_data/planet/greater_UCSB-campus-aoi.geojson")
+greatercampus <- st_read("source_data/planet/planet/greater_UCSB-campus-aoi.geojson")
 ggplot() +
   geom_sf(data=greatercampus, color = "red") +
   coord_sf()
 
 # if I tell you these are a zoom, how would you confirm?
-westcampus <- st_read("source_data/UCSB-30-sqkm-aoi.geojson")
-maincampus <- st_read("source_data/UCSB-85sqkm-aoi.geojson")
+westcampus <- st_read("source_data/planet/planet/UCSB-30-sqkm-aoi.geojson")
+maincampus <- st_read("source_data/planet/planet/UCSB-85sqkm-aoi.geojson")
 
 # you could tell visually!
 ggplot() +
@@ -93,6 +93,7 @@ ggplot() +
 
 # POINTS
 # bird observations
+# these aren't points
 ggplot() +
   geom_sf(data=birds, color = "red") +
   coord_sf()
@@ -101,8 +102,8 @@ ggplot() +
 # all together
 # intentional error: wrong order
 ggplot() +
-  geom_sf(data=bikes_b, color = "blue", size = 1.5) +
-  geom_sf(data=bikes_a, color = "red", size = .75) +
+  geom_sf(data=bikes_icm, color = "blue", size = 1.5) +
+  geom_sf(data=bikes_library, color = "red", size = .75) +
   geom_sf(data=buildings, color = "gray") +
   geom_sf(data=greatercampus, color = "red") +
   geom_sf(data=maincampus, color = "green") +
@@ -114,8 +115,8 @@ ggplot() +
   geom_sf(data=greatercampus, color = "red", size = 2) +
   geom_sf(data=maincampus, color = "green") +
   geom_sf(data=westcampus, color = "blue") +
-  geom_sf(data=bikes_b, color = "blue", size = 1.5) +
-  geom_sf(data=bikes_a, color = "red", size = .75) +
+  geom_sf(data=bikes_icm, color = "blue", size = 1.5) +
+  geom_sf(data=bikes_library, color = "red", size = .75) +
   geom_sf(data=buildings, color = "gray") +
   coord_sf()
 
@@ -126,8 +127,8 @@ ggplot() +
   geom_sf(data=greatercampus, color = "red", size = 2) +
   geom_sf(data=maincampus, color = "green") +
   geom_sf(data=westcampus, color = "blue") +
-  geom_sf(data=bikes_b, color = "blue", size = 2) +
-  geom_sf(data=bikes_a, color = "red", size = .75) +
+  geom_sf(data=bikes_icm, color = "blue", size = 2) +
+  geom_sf(data=bikes_library, color = "red", size = .75) +
   geom_sf(data=buildings, color = "gray") +
   geom_sf(data=birds, color = "red", size = 2) +
       coord_sf()
