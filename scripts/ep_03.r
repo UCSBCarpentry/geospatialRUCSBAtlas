@@ -153,6 +153,7 @@ writeVector(campus_border_poly, 'output_data/ep_3_campus_borderline.shp', overwr
 # of campus_DEM
 bath_clipped <- crop(x=reprojected_bath, y=campus_border)
 plot(bath_clipped)
+
 # now we can make a big, slow overview map, and save the clipped bathymetry
 # for overlaying goodness:
 

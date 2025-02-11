@@ -6,6 +6,8 @@ library(tidyverse)
 library(terra)
 library(sf)
 library(geojsonsf)
+# new!
+library(terrainr)
 
 # clean the environment and hidden objects
 rm(list=ls())
@@ -14,23 +16,67 @@ current_episode <- 11
 
 # Crop a raster to a vector extent
 
+# from ep 5
+ncos_rgb <- rast("source_data/w_campus_1ft/w_campus_1ft.tif")
+crs(ncos_rgb)
+summary(ncos_rgb)
+
+
+ggplot() +
+  geom_spatial_rgb(data=ncos_rgb, mapping = aes(
+    r = w_campus_1ft_1, g = w_campus_1ft_2, b = w_campus_1ft_3)) +
+  coord_sf()
+
 campus_DEM <- rast("source_data/campus_DEM.tif")
 campus_DEM_df <- as.data.frame(campus_DEM, xy = TRUE, na.rm=FALSE)
 
+plot(campus_DEM)
+
+# campus Areas of Interest (AOIs) as geojson
+greatercampus <- st_read("source_data/greater_UCSB-campus-aoi.geojson")
+ggplot() +
+  geom_sf(data=greatercampus, color = "red") +
+  geom_rgb(data=natural_color_brick) +
+  coord_sf()
+
+# from episode 3 we know:
+greatercampus <- project(greatercampus, from = to = )
+
+crs(ncos_aoi) == crs(campus_DEM)
+
+
+
+
+
 # get a geojson and turn that into a vector
-ncos_aoi <- vect("source_data/ncos_aoi.geojson")
+ncos_aoi <- geojson_sf("source_data/ncos_aoi.geojson",expand_geometries = TRUE )
+
+plot(ncos_aoi)
+crs(ncos_aoi)
 
 colnames(campus_DEM_df)
 
 # projection error
-ggplot() +
-  geom_raster(data = campus_DEM_df, aes(x = x, y = y, fill = greatercampusDEM_1_1)) +
-  scale_fill_gradientn(name = "Elevation", colors = terrain.colors(10)) +
-  geom_sf(data = ncos_aoi, color = "blue", fill = NA) +
-  coord_sf()
+# ggplot() +
+#  geom_raster(data = campus_DEM_df, aes(x = x, y = y, fill = greatercampusDEM_1_1)) +
+#  scale_fill_gradientn(name = "Elevation", colors = terrain.colors(10)) +
+#  geom_polygon(data = ncos_aoi, color = "blue", fill = NA) +
+#  coord_sf()
 
-# what episode does this come from?
-ncos_aoi <- project(ncos_aoi, campus_DEM)
+crs(ncos_aoi) == crs(campus_DEM)
+campus_projection <- crs(campus_DEM)
+
+str(ncos_aoi)
+
+# from episode 3 we know:
+ncos_aoi <- project(ncos_aoi, campus_projection)
+
+crs(ncos_aoi) == crs(campus_DEM)
+
+ggplot() +
+  geom_sf(data = ncos_aoi, color = "blue", fill = NA)
+
+
 
 ggplot() +
   geom_raster(data = campus_DEM_df, aes(x = x, y = y, fill = greatercampusDEM_1_1)) +
