@@ -252,3 +252,8 @@ ggplot() +
 # still need:
 # selecting pixels with a buffer
 # look for photos under water?
+
+# buffers with extract()
+# challenge:
+# do it for all the plot location points.
+# what file do we have that has multiple points?
