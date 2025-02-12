@@ -25,7 +25,7 @@ current_sheet <- 8
 par(mfrow = c(1,1))
 
 
-library(planetR)
+# library(planetR)
 library(curl)
 
 # (get_auth)

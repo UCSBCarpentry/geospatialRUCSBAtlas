@@ -50,7 +50,7 @@ campus_DEM_df <- as.data.frame(campus_DEM, xy=TRUE) %>%
   rename(elevation = greatercampusDEM_1_1) # rename to match code later
 
 campus_bath_df <- as.data.frame(campus_bath, xy=TRUE) %>%
-  rename(bathymetry = SB_bath_2m)
+  rename(bathymetry = Bathymetry_2m_OffshoreCoalOilPoint)
 
 campus_hillshade_df <- as.data.frame(campus_hillshade, xy=TRUE)
 
@@ -94,3 +94,4 @@ ggplot() +
 
 ggsave("images/map7.0.png", plot=last_plot())
 object_test_abb <- ls()
+

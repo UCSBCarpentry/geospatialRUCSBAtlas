@@ -28,12 +28,6 @@ unzip("downloaded_data/data.zip", exdir = "source_data", overwrite = TRUE)
 # 3a downsample large files 
 # ----------------------------
 
-# Ep 1: Downsize the campus DEM 
-campus_DEM <- rast("downloaded_data/greatercampusDEM/greatercampusDEM_1_1.tif")
-
-campus_DEM_downsampled <- aggregate(campus_DEM, fact = 4, fun=mean,
-                                    filename = "source_data/campus_DEM.tif",
-                                    overwrite = TRUE)
 
 
 

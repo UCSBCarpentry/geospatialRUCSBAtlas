@@ -279,7 +279,7 @@ zoom_3_plot
 # which is census data. Use these for some placename labels and
 # visual polygons styled similar to the IV building outlines
 # on map 1.
-places <- vect("source_data/cal_pop_places/tl_2023_06_place.shp")
+places <- vect("source_data/tl_2023_06_place/tl_2023_06_place.shp")
 plot(places)
 
 ggplot() + 
