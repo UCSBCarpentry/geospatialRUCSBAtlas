@@ -15,7 +15,7 @@ current_episode <- 6
 # these will give a warning message about projections
 bikes_icm <- st_read("source_data/icm_bikes/bike_paths/bikelanescollapsedv8.shp")
 bikes_library <- st_read("source_data/library_bikes/3853-s3-282-2u5_p255_2016_u5/bikelanescollapsedv8.shp")
-birds <- st_read("downloaded_data/NCOS_Shorebird_Foraging_Habitat/NCOS_Shorebird_Foraging_Habitat.shp")
+birds <- st_read("source_data/NCOS_Shorebird_Foraging_Habitat/NCOS_Shorebird_Foraging_Habitat.shp")
 
 
 

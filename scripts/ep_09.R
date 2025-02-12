@@ -6,6 +6,8 @@
 # clean the environment and hidden objects
 rm(list=ls())
 
+current_episode <- 9
+
 library(sf)
 library(dplyr)
 library(ggplot2)
@@ -13,10 +15,10 @@ library(ggplot2)
 # we have populated places and streams to work with
 # I don't pipe through st_zm here. 
 
-places <- st_read("source_data/cal_pop_places/tl_2023_06_place.shp")
-# streams <- st_read("source_data/california_streams/California_Streams.shp")
+places <- st_read("source_data/tl_2023_06_place/tl_2023_06_place.shp")
+streams <- st_read("source_data/california_streams/California_Streams.shp")
 streams <- st_read("source_data/california_streams/streams_crop.shp")
-coast <- st_read("source_data/california_coastline/3853-s3_2002_s3_reg_pacific_ocean_lines.shp")
+coast <- st_read("source_data/pacific_ocean-shapefile/3853-s3_2002_s3_reg_pacific_ocean_lines.shp")
 
 
 # these are all different

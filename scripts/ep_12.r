@@ -14,7 +14,7 @@ getwd()
 
 # make a list of all your tiffs
 # path to files:
-skySatPath <- "source_data/SkySatCollect"
+skySatPath <- "source_data/planet/planet/20162019_WestCampusSkySat/"
 passes <- list.files(skySatPath, 
                      recursive = TRUE, 
                      pattern = ".tif$")  
@@ -31,7 +31,7 @@ passes_2
 passes_3
 
 # which tifs are the ones we want?
-plotRGB(passes_1, r = 1,  g = 2, b = 3, scale=1932)
+plotRGB(passes_1, r = 1,  g = 2, b = 3)
 plotRGB(passes_2, r = 1,  g = 2, b = 3, scale=1932)
 plotRGB(passes_3, r = 1,  g = 2, b = 3, scale=1932)
 # the other two are alpha and a stack
@@ -69,7 +69,7 @@ transformation <- sds(rast1, rast2, rast4)
 # 3 that didn't match.
 
 rast1
-plotRGB(rast1, 1,2,3, scale=1932)
+plotRGB(rast1, 1,2,3)
 
 setMinMax(rast2)
 rast2
