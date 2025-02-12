@@ -33,7 +33,7 @@ library(geojsonsf) # to handle geojson
 # image <- brick(tiff_path, n1=8)
 
 # make an NDVI for 1 file
-tiff_path <- c("source_data/UCSB_campus_23-24_psscene_analytic_8b_sr_udm2/PSScene/")
+tiff_path <- c("source_data/planet/planet/20232024_UCSB_campus_PlanetScope/PSScene/")
 
 # for reference, plot one of our 8 band files with
 # semi-natural color
@@ -70,7 +70,7 @@ ndvi_tiff
 # We need a common extent to make
 # a raster stack
 # we'll use the original AOI from our Planet request:
-ucsb_extent <- vect("source_data/ucsb_60sqkm_planet_extent.geojson")
+ucsb_extent <- vect("source_data/planet/planet/ucsb_60sqkm_planet_extent.geojson")
 str(ucsb_extent)
 crs(ucsb_extent)
 crs(image) # <---- we want to standardize on this CRS
@@ -128,7 +128,7 @@ ggplot() +
 
 # get a file list
 # ep 12
-scene_paths <- list.files("source_data/UCSB_campus_23-24_psscene_analytic_8b_sr_udm2/PSScene",
+scene_paths <- list.files("source_data/planet/planet/20232024_UCSB_campus_PlanetScope/PSScene/",
                           full.names = TRUE,
                           pattern = "8b_clip.tif")
 
@@ -207,12 +207,12 @@ summary(ndvi_series_stack[,1])
 # whooo hoooo! no errors ... but ...
 str(ndvi_series_stack)
 nlyr(ndvi_series_stack)
-# but it's crapped out:
+# summary means nothing in this context
 summary(values(ndvi_series_stack))
-# or is it:
+
+# they plot:
 plot(ndvi_series_stack)
 
-#kristi got a series of ndvis after running line 199
 ggsave("images/ndvi_series_stack.png", plot=last_plot())
 
 
@@ -232,12 +232,11 @@ summary(ndvi_series_df)
 
 str(ndvi_series_df)
 unique(ndvi_series_df$variable)
-unique(ndvi_series_df$value)
 
 
 ### let's crop this and remake the dataframe so that the ggplot 
 # facet_wrap runs in a reasonable amount of time.
-ncos_extent <- vect("source_data/ncos_aoi.geojson")
+ncos_extent <- vect("source_data/planet/planet/ncos_aoi.geojson")
 ncos_extent <- project(ncos_extent, ndvi_series_stack)
 
 ndvi_series_stack <- crop(ndvi_series_stack, ncos_extent)
@@ -250,10 +249,18 @@ ndvi_series_df <- as.data.frame(ndvi_series_stack, xy=TRUE, na.rm=FALSE) %>%
 str(ndvi_series_df)
 
 # this is the output is we are trying to speed up
+# scales are correct!!!!
 ggplot() +
   geom_raster(data = ndvi_series_df , aes(x = x, y = y, fill = value)) +
   facet_wrap(~ variable)
 
+ndvi_colors <- brewer_pal(type = "div", palette = "RdYlBu")
+
+# we need a diverging color scheme
+ggplot() +
+  geom_raster(data = ndvi_series_df , aes(x = x, y = y, fill = value)) +
+  scale_colour_brewer(ndvi_colors) +
+  facet_wrap(~ variable)
 
 
 # visually there's nothing going on
@@ -323,18 +330,23 @@ avg_NDVI
 summary(avg_NDVI)
 
 
-# I just can't get these to plot logically.
-#KL -where did the y value's mean come from?
-#Error message says need finite ylim values, is it NAs? 
-# plot(avg_NDVI$mean)
+# here we go #############
+# finally: a logical plot of average NDVIs over time. 
+plot(avg_NDVI$MeanNDVI)
 
 avg_NDVI_df <- as.data.frame(avg_NDVI, rm.na=FALSE)
 str(avg_NDVI_df)
-ggplot(avg_NDVI_df, mapping = aes(Month, MeanNDVI, geom_point(MeanNDVI)))
+
+# we want the dates. or the
+# 5th and 6th character of the dates
+
+# this plot less so:
+ggplot(avg_NDVI_df, mapping = aes(Month, MeanNDVI)) +
+  geom_point()
 
 
 
-
+# we need to arrange these by month to show change.
 # Julian dates: that's in the lesson, mean()# Jugeom_point()# Julian dates: that's in the lesson, mean()# Julian dates: that's in the lesson, but ours uses calendar dates
 # challenge: change object names to Julian dates
 

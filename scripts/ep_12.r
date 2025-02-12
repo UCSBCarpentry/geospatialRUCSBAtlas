@@ -32,8 +32,8 @@ passes_3
 
 # which tifs are the ones we want?
 plotRGB(passes_1, r = 1,  g = 2, b = 3)
-plotRGB(passes_2, r = 1,  g = 2, b = 3, scale=1932)
-plotRGB(passes_3, r = 1,  g = 2, b = 3, scale=1932)
+plotRGB(passes_2, r = 1,  g = 2, b = 3)
+plotRGB(passes_3, r = 1,  g = 2, b = 3)
 # the other two are alpha and a stack
 # of 8 attributes
 
