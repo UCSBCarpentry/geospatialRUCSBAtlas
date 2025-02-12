@@ -1,9 +1,20 @@
+# This script will gradually transform
+# into downloading the canonical data for
+# the rAtlas and transforming / downsampling it
+# and otherwise preparing it as we wrote the 
+# episodes and maps of the rAtlas.
+
+# Its day-to-day function has been replaced by new_data_prep.r
+
 # this script sets up data that will be used
 # for 2 purposes:
 # An episode-by-episode, task-by-task duplication of the
 # GeoSpatial R lesson
 # and
 # A markdown atlas of the UCSB campus.
+
+
+
 
 library(terra)
 # curl is going to be better than download.file
