@@ -16,7 +16,7 @@ dir.create("source_data", showWarnings = FALSE)
 
 # 2 download and extract the most recent zip wad geo.zip
 # ----------------------------------------------
-drive_download("https://drive.google.com/file/d/15bJbjUIzjLLOOFvZzoQA_DBXs_UOOc7u/view?usp=drive_link", 
+drive_download("https://drive.google.com/file/d/1Nsflxin9ce8mFpDK_1uvgsC12mRitRDK/view?usp=sharing", 
                "downloaded_data/data.zip", overwrite = TRUE)
 
 unzip("downloaded_data/data.zip", exdir = "source_data", overwrite = TRUE)
