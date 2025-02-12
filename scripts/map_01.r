@@ -16,10 +16,10 @@ library(scales)
 #vector layers
 
 buildings <- st_read("source_data/campus_buildings/Campus_Buildings.shp")
-iv_buildings <- st_read("source_data/iv_buildings/CA_Structures_ExportFeatures.shp")
+iv_buildings <- st_read("source_data/iv_buildings/iv_buildings/CA_Structures_ExportFeatures.shp")
 # walkways <- 
-bikeways <- st_read("source_data/bike_paths/bikelanescollapsedv8.shp")
-habitat <- st_read("source_data/NCOS_bird_observations/NCOS_Shorebird_Foraging_Habitat.shp")
+bikeways <- st_read("source_data/icm_bikes/bike_paths/bikelanescollapsedv8.shp")
+habitat <- st_read("source_data/NCOS_Shorebird_Foraging_Habitat/NCOS_Shorebird_Foraging_Habitat.shp")
 
 
 
@@ -118,8 +118,9 @@ campus_DEM_df <- as.data.frame(campus_DEM, xy=TRUE) %>%
   rename(elevation = greatercampusDEM_1_1) # rename to match code later
 str(campus_DEM_df)
 
+
 campus_bath_df <- as.data.frame(campus_bath, xy=TRUE) %>%
-  rename(bathymetry = SB_bath_2m)
+  rename(bathymetry = Bathymetry_2m_OffshoreCoalOilPoint)
 str(campus_bath_df)
 
 sea_level <- campus_DEM - 5

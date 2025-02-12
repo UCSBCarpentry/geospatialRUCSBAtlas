@@ -18,8 +18,8 @@ library(sf)
 
 #vector layers
 buildings <- st_read("source_data/campus_buildings/Campus_Buildings.shp")
-bikeways <- st_read("source_data/bike_paths/bikelanescollapsedv8.shp")
-habitat <- st_read("source_data/NCOS_bird_observations/NCOS_Shorebird_Foraging_Habitat.shp")
+bikeways <- st_read("source_data/icm_bikes/bike_paths/bikelanescollapsedv8.shp")
+habitat <- st_read("source_data/NCOS_Shorebird_Foraging_Habitat/NCOS_Shorebird_Foraging_Habitat.shp")
 # walkways <-         # do we still want walkways later on?
 
 
@@ -37,7 +37,7 @@ ggsave("images/map1a.1.png", plot=last_plot())
 # the background setup is bathymetry and topography
 # mashed together
 
-campus_DEM <- rast("output_data/campus_DEM.tif") 
+campus_DEM <- rast("source_data/campus_DEM.tif") 
 bath <- rast("source_data/SB_bath.tif") 
 
 # We'll need some bins
@@ -53,14 +53,16 @@ bath <- project(bath, campus_projection)
 # load campus_bathymetry raster from output folder
 # remember: this is the one we cropped, so the 2 extents are the same.
 # not sure exactlty where this gets made
-campus_bath <- rast("output_data/campus_bath.tif")
+campus_bath <- rast("source_data/SB_bath.tif")
 
 # make dataframes
 campus_DEM_df <- as.data.frame(campus_DEM, xy=TRUE) %>%
   rename(elevation = greatercampusDEM_1_1) # rename to match code later
 
+summary(campus_bath)
+
 campus_bath_df <- as.data.frame(campus_bath, xy=TRUE) %>%
-  rename(bathymetry = SB_bath_2m)
+  rename(bathymetry = Bathymetry_2m_OffshoreCoalOilPoint)
 
 # to make our scales make sense, we do 
 # raster math 
@@ -120,7 +122,7 @@ str(campus_DEM_df)
 ggplot() +
     geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
     geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = binned_bath)) +
-    scale_fill_manual(values = terrain.colors(16)) +
+    scale_fill_manual(values = terrain.colors(19)) +
   labs(title="Map 1", subtitle="Version 2: Binned") +
         coord_quickmap()
   
@@ -129,8 +131,7 @@ ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
   geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = bathymetry)) +
         scale_fill_viridis_c(na.value="NA") +
-  labs(title="Map 1", subtitle="Version 2: Continuous") +
-        coord_quickmap()
+  labs(title="Map 1", subtitle="Version 2: Continuous") 
   
 
 # bring back the hillshade from ep1-2
