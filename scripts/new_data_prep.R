@@ -37,26 +37,7 @@ unzip("downloaded_data/data.zip", exdir = "source_data", overwrite = TRUE)
 # 3b derive data from downloads
 # ----------------------------
 
-# Hillshade
-# ep 2
-# map 1
-# create a hillshade for our area of an appropriate resolution
 
-aspect <- terrain(campus_DEM_downsampled, 
-                  v="aspect", unit="radians", neighbors=8, 
-                  filename="output_data/aspect.tif", overwrite = TRUE)
-plot(aspect)
-
-slope <- terrain(campus_DEM_downsampled, 
-                 v="slope", unit = "radians", neighbors=8, 
-                 filename="output_data/slope.tiff", overwrite = TRUE)
-plot(slope)
-
-hillShade <- shade(slope, aspect, 
-                   angle=40, direction=170, normalize=TRUE, 
-                   filename="source_data/campus_hillshade.tif", overwrite = TRUE)
-grays <- colorRampPalette(c("black", "white"))(255)
-plot(hillShade, col=grays)
 
 # we should delete slope and aspect. They will not be needed anymore
 
