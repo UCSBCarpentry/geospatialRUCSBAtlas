@@ -27,8 +27,9 @@ ggplot() +
                        midpoint=0) +
 #  geom_sf(data = signs) +
 #  geom_sf(data = birds) +
-  geom_sf(data = habitat) +
-  geom_sf(data = buildings)
+#  geom_sf(data = habitat) +
+  geom_sf(data = buildings) +
+  coord_sf()
 
 ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = greatercampusDEM_1_1)) +
