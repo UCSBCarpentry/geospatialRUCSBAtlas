@@ -8,6 +8,8 @@
 # clean the environment and hidden objects
 rm(list=ls())
 
+sheet <- "map_01_abbreviated.r"
+
 library(tidyverse)
 library(raster)
 # library(rgdal)
@@ -159,5 +161,5 @@ ggplot() +
   labs(title="Map 1", subtitle="Version 3") +
   coord_sf()
 
-ggsave("images/map1.3.png", plot=last_plot())
+# ggsave("images/map1.3.png", plot=last_plot())
 object_test_abb <- ls()

@@ -144,7 +144,7 @@ dir.create("output_data/ndvi", showWarnings = FALSE)
 for (images in scene_paths) {
     source_image <- rast(images)
     ndvi_tiff <- ((source_image[[8]] - source_image[[6]]) / (source_image[[8]] + source_image[[6]]))
-    new_filename <- (substr(images, 67,91))
+    new_filename <- (substr(images, 67,90))
     new_path <- paste("output_data/ndvi/", new_filename, ".tif", sep="")
     ndvi_tiff <- extend(ndvi_tiff, ucsb_extent, fill=NA, snap="near")
     set.ext(ndvi_tiff, ext(ucsb_extent))

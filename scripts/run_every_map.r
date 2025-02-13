@@ -1,4 +1,4 @@
-# a script to run all the episodes
+# a script to run each map.
 
 # start fresh
 rm(list=ls())

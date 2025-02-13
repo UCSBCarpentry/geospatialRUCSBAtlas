@@ -13,6 +13,8 @@ library(scales)
 
 # set up objects
 
+sheet <- "map_01.r"
+
 #vector layers
 
 buildings <- st_read("source_data/campus_buildings/Campus_Buildings.shp")

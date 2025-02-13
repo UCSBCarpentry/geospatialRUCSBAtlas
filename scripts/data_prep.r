@@ -163,7 +163,7 @@ map2(files_bind$id, files_bind$name, ~drive_download(as_id(.x), path = file.path
 #NCOS birds 
 drive_download("https://drive.google.com/file/d/1ssytmTbpC1rpT5b-h8AxtvSgNrsGQVNY/view?usp=drive_link",
                "downloaded_data/NCOS_Shorebird_Foraging_Habitat.zip", overwrite = TRUE)
-unzip("downloaded_data/NCOS_Shorebird_Foraging_Habitat.zip", exdir = "source_data/NCOS_bird_observations") 
+unzip("downloaded_data/NCOS_Shorebird_Foraging_Habitat.zip", exdir = "source_data/NCOS_habitat") 
 
 # get IV buildings
 drive_download("https://drive.google.com/file/d/1-splwT-DNa6kFgqhaP8OTx_TkECfTo42/view?usp=sharing",
