@@ -62,4 +62,4 @@ ocfl_download <- function(ocfl_base_url, object_id, version="", download_dir="."
 
 ocfl_root <- "https://dreamlab-public.s3.us-west-2.amazonaws.com/ocfl"
 object_id <- "geospatialRUCSBAtlas-data"
-ocfl_download(ocfl_root, object_id, version="v1", download_dir="source_data")
+ocfl_download(ocfl_root, object_id, version="v3", download_dir="source_data")
