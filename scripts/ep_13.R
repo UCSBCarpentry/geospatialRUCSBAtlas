@@ -11,6 +11,8 @@ library(terra)
 library(ggplot2)
 library(dplyr)
 library(sf)
+library(raster)
+library(scales)
 
 #recreate necessary objects from map 1
 campus_DEM <- rast("source_data/campus_DEM.tif") 
@@ -26,7 +28,38 @@ campus_DEM_df <- as.data.frame(campus_DEM, xy=TRUE) %>%
   rename(elevation = greatercampusDEM_1_1) # rename to match code later
 str(campus_DEM_df)
 
-#load in campus_bath made in episode 3
+# create bathymetry in case episodes
+# weren't run yet
+
+bath_rast <- rast("source_data/SB_bath.tif")  
+bath_rast 
+
+reprojected_bath <- project(bath_rast, campus_projection)
+reprojected_bath
+# get a bounding box out of campus DEM to clip the bathymetry.
+# later on we will clip to extent, but for now we will leave it at this:
+
+# extent object
+campus_border <- ext(campus_DEM)
+campus_border
+
+#can be turned into a spatial object
+campus_border_poly <- as.polygons(campus_border, crs(campus_DEM))
+campus_border_poly
+
+# and written out to a file:
+writeVector(campus_border_poly, 'output_data/ep_3_campus_borderline.shp', overwrite=TRUE)
+
+# from ep 11: crop the bathymetry to the extent
+# of campus_DEM
+bath_clipped <- crop(x=reprojected_bath, y=campus_border_poly)
+plot(bath_clipped)
+
+writeRaster(bath_clipped, "output_data/ep_3_campus_bathymetry_crop.tif",
+            filetype="GTiff",
+            overwrite=TRUE)
+
+
 campus_bath <- rast("output_data/ep_3_campus_bathymetry_crop.tif")
 (campus_bath)
 
