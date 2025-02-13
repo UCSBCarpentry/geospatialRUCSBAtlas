@@ -25,7 +25,7 @@ library(terra)
 campus_DEM <- rast("output_data/ep_3_campus_DEM.tif")
 plot(campus_DEM)
 # remember: this is the one we cropped, so the 2 extents are the same.
-campus_bath <- rast("output_data/ep_3_campus_bathymetry.tif")
+campus_bath <- rast("output_data/ep_3_campus_bathymetry_crop.tif")
 plot(campus_bath)
 
 # do they have the same projections?
@@ -36,6 +36,8 @@ campus_bath
 # don't want to read that? Test that:
 crs(campus_DEM) == crs(campus_bath)
 
+# you'll need this later
+campus_bath_df <- as.data.frame(campus_bath, xy=TRUE)
 
 campus_DEM %>%  
   ncell()
@@ -48,7 +50,7 @@ campus_DEM_df <- as.data.frame(campus_DEM, xy=TRUE) %>%
 str(campus_DEM_df)
 
 campus_bath_df <- as.data.frame(campus_bath, xy=TRUE) %>%
-  rename(bathymetry = SB_bath_2m)
+  rename(bathymetry = Bathymetry_2m_OffshoreCoalOilPoint)
 str(campus_bath_df)
 
 
@@ -92,7 +94,7 @@ custom_sea_bins <- c(-8, -.1, .1, 3, 5, 7.5, 10, 25, 40, 70, 100, 150, 200)
 
 sea_level_df <- sea_level_df %>% 
   mutate(binned = cut(elevation, breaks=custom_sea_bins))
-
+str(sea_level_df)
 
 length(custom_sea_bins)
 
@@ -100,6 +102,7 @@ length(custom_sea_bins)
 ggplot() + 
   geom_raster(data = sea_level_df, aes(x=x, y=y, fill = binned)) +
   coord_sf()
+
 
 # if we overlay, we should get the same result as at the 
 # end of the previous episode:
@@ -123,3 +126,4 @@ writeRaster(campus_DEM, "output_data/ep_4_campus_sea_level_DEM.tif",
 # necessarily up in the hills? Or for buildings
 # on campus?
 # we've already visualized that the campus DEM is a DSM, that is, treetops.
+

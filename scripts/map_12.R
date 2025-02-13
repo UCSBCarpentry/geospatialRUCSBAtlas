@@ -29,14 +29,15 @@ library(geojsonsf) # to handle geojson
 # brick is raster. rast is terra
 # the 2 different ndvis looks VERY different when
 # you do this raster math
-# for now we leave bricks behind
-# image <- brick(tiff_path, n1=8)
+# for now we leave raster::bricks behind
 
 # make an NDVI for 1 file
 tiff_path <- c("source_data/planet/planet/20232024_UCSB_campus_PlanetScope/PSScene/")
 
-# for reference, plot one of our 8 band files with
+# for reference, plot ONE of our 8 band files with
 # semi-natural color
+# this is PlanetScope
+
 image <- rast(paste(tiff_path, "20230912_175450_00_2439_3B_AnalyticMS_SR_8b_clip.tif", sep=""))
 # ala-episode 5
 plotRGB(image, r=6,g=3,b=1, stretch = "hist")
@@ -67,8 +68,8 @@ names(ndvi_tiff)
 ndvi_tiff
 
 
-# We need a common extent to make
-# a raster stack
+# We need a common extent to 
+# stack things up
 # we'll use the original AOI from our Planet request:
 ucsb_extent <- vect("source_data/planet/planet/ucsb_60sqkm_planet_extent.geojson")
 str(ucsb_extent)
@@ -143,7 +144,7 @@ dir.create("output_data/ndvi", showWarnings = FALSE)
 for (images in scene_paths) {
     source_image <- rast(images)
     ndvi_tiff <- ((source_image[[8]] - source_image[[6]]) / (source_image[[8]] + source_image[[6]]))
-    new_filename <- (substr(images, 67,92))
+    new_filename <- (substr(images, 67,91))
     new_path <- paste("output_data/ndvi/", new_filename, ".tif", sep="")
     ndvi_tiff <- extend(ndvi_tiff, ucsb_extent, fill=NA, snap="near")
     set.ext(ndvi_tiff, ext(ucsb_extent))
@@ -166,7 +167,7 @@ ndvi_series_names <- list.files("output_data/ndvi")
 ndvi_series_names <- paste("output_data/ndvi/", ndvi_series_names, sep="")
 
 ndvi_series_names
-testraster <- rast("output_data/ndvi/20230912_175450_00_2439_3B.tif")
+testraster <- rast("output_data/ndvi/20230912_175450_00_2439.tif")
 summary(values(testraster))
 
 
@@ -204,13 +205,13 @@ ndvi_series_stack <- rast(ndvi_series_paths)
 
 summary(ndvi_series_stack[,1])
 
-# whooo hoooo! no errors ... but ...
+# whooo hoooo! no errors 
 str(ndvi_series_stack)
 nlyr(ndvi_series_stack)
-# summary means nothing in this context
+# but summary means nothing in this context
 summary(values(ndvi_series_stack))
 
-# they plot:
+# they plot!:
 plot(ndvi_series_stack)
 
 ggsave("images/ndvi_series_stack.png", plot=last_plot())

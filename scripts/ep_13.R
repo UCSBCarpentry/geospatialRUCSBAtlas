@@ -110,13 +110,13 @@ summary(ndvi_series_stack[,1])
 
 
 # back to the narrative:
-ggplot() +
-  geom_raster(data = "??????????" , aes(x = x, y = y, fill = value)) +
-  facet_wrap(~variable) +
-  ggtitle("NDVI", subtitle = "blah blah") + 
-  theme_void() + 
-  theme(plot.title = element_text(hjust = 0.5),
-        plot.subtitle = element_text(hjust = 0.5))
+#ggplot() +
+#  geom_raster(data = "??????????" , aes(x = x, y = y, fill = value)) +
+#  facet_wrap(~variable) +
+#  ggtitle("NDVI", subtitle = "blah blah") + 
+#  theme_void() + 
+#  theme(plot.title = element_text(hjust = 0.5),
+#        plot.subtitle = element_text(hjust = 0.5))
 
 #facet wrap ndvi thing 
 #adjust color ramp? 
