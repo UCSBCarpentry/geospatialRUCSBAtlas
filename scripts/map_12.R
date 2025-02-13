@@ -144,7 +144,7 @@ dir.create("output_data/ndvi", showWarnings = FALSE)
 for (images in scene_paths) {
     source_image <- rast(images)
     ndvi_tiff <- ((source_image[[8]] - source_image[[6]]) / (source_image[[8]] + source_image[[6]]))
-    new_filename <- (substr(images, 67,90))
+    new_filename <- (substr(images, 67,91))
     new_path <- paste("output_data/ndvi/", new_filename, ".tif", sep="")
     ndvi_tiff <- extend(ndvi_tiff, ucsb_extent, fill=NA, snap="near")
     set.ext(ndvi_tiff, ext(ucsb_extent))
@@ -356,3 +356,7 @@ ggplot(avg_NDVI_df, mapping = aes(Month, MeanNDVI)) +
 # we'll need weather data to mimic the lesson.
 # or use our brains and eyes to define 
 # when was it rainiest?
+
+
+current_sheet <- "Map 12 Complete"
+current_sheet

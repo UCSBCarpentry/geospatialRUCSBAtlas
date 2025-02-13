@@ -122,3 +122,7 @@ summary(ndvi_series_stack[,1])
 #adjust color ramp? 
 #facet wrap? egh 
 #julian day thing (not julien)
+
+
+
+current_episode <- "episode 13 end"
