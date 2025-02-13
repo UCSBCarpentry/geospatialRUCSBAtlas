@@ -9,6 +9,9 @@
 rm(list=ls())
 
 sheet <- "map_01_abbreviated.r"
+map_title <- "Map 1: Wide Overview of Campus"
+map_counter <- 1 
+
 
 library(tidyverse)
 library(raster)
@@ -26,10 +29,12 @@ habitat <- st_read("source_data/NCOS_Shorebird_Foraging_Habitat/NCOS_Shorebird_F
 
 
 # overlays as in episode 8
+
 ggplot() +
   geom_sf(data=habitat, color="yellow") +
   geom_sf(data=buildings) +
   geom_sf(data=bikeways, color="blue") +
+  ggtitle(map_title, subtitle = map_counter) +
   coord_sf()
 
 ggsave("images/map1a.1.png", plot=last_plot())
@@ -85,7 +90,10 @@ sea_level_df <- as.data.frame(sea_level_0, xy=TRUE) %>%
 ggplot() + 
   geom_raster(data = sea_level_df, aes(x=x, y=y, fill = binned)) + 
   labs(title="Map 0.2", subtitle="Sea Level ~= 0") +
-    coord_sf() # to keep map's proportions
+  ggtitle(map_title, subtitle = (map_counter+1)) +
+  coord_sf() 
+
+# to keep map's proportions
 
 custom_sea_bins <- c(-8, -.1, .1, 3, 5, 7.5, 10, 25, 40, 70, 100, 150, 200)
 
@@ -95,9 +103,10 @@ sea_level_df <- sea_level_df %>%
 length(custom_sea_bins)
 
 # binned zero sea level 
+subtitle <- c((map_counter+1), "Map 0.3: Binned Zero Sea Level")
 ggplot() + 
   geom_raster(data = sea_level_df, aes(x=x, y=y, fill = binned)) +
-  labs(title="Map 0.3", subtitle="Binned Zero Sea Level") +
+  ggtitle(map_title, subtitle = subtitle) +
   coord_sf()
 
 # add custom bins to each.
