@@ -260,10 +260,9 @@ ggplot() +
   geom_sf(data=iv_buildings, color=alpha("light gray", .1), fill=NA) +
   geom_sf(data=buildings, color ="hotpink") +
   geom_sf(data=habitat, color="darkorchid1") +
-  geom_sf(data=bikeways, color="yellow") +
+  geom_sf(data=bikeways, color="#00abff") +
   coord_sf()
 
-ggsave("images/map1.3.png", plot=last_plot())
 
 # next we need to refine the plot and labels
 # Not a publication ready graphic (yet) ~episode 13
@@ -276,12 +275,13 @@ ggplot() +
   geom_raster(data = campus_hillshade_df, aes(x=x, y=y, alpha = campus_hillshade), show.legend = FALSE) +
   geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = bathymetry)) +
   scale_y_continuous(labels = number_format(accuracy = 0.01)) +
-  scale_fill_viridis_c(na.value="NA", guide = guide_legend("elevation (US ft)"))+
-  labs(title="Map 1", subtitle="Version 3") + theme(axis.title.x=element_blank(),
+  scale_fill_viridis_c(na.value="NA", guide = guide_legend("bathymetry / elevation (US ft)"))+
+  labs(subtitle="Map 1.4", title="UCSB & environs") + theme(axis.title.x=element_blank(),
                                                     axis.title.y=element_blank())+
   geom_sf(data=iv_buildings, color=alpha("light gray", .1), fill=NA) +
   geom_sf(data=buildings, color ="hotpink") +
   geom_sf(data=habitat, color="darkorchid1") +
-  geom_sf(data=bikeways, color="yellow") +
+  geom_sf(data=bikeways, color="#00abff") +
   coord_sf()
 
+ggsave("images/map1.4.png", plot=last_plot())

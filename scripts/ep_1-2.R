@@ -94,7 +94,8 @@ str(campus_DEM)
 # but they don't have to be.
 ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
-  scale_fill_viridis_c(na.value = "deeppink") 
+  scale_fill_viridis_c(na.value = "deeppink") +
+  ggtitle(current_episode)
 
 
 # We can maybe find one that doesn't have any to 
