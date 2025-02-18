@@ -123,6 +123,7 @@ ggplot() +
 
 # keep adding. 
 # where should birds go in the stack?
+# add birds here
 ggplot() +
   geom_sf(data=greatercampus, color = "red", size = 2) +
   geom_sf(data=maincampus, color = "green") +
