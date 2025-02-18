@@ -27,37 +27,51 @@ ocfl_download <- function(ocfl_base_url, object_id, version="", download_dir="."
     version <- inventory$head
   }
   state <- inventory$versions[[version]]$state
-  # TODO: check that state no null
+  # TODO: check that state is not null
   
-  # for each digest in the version state:
-  # - find its manifest entry (content source)
-  # - for each local path with the digest:
-  # - - download content if needed,
+  
+  # the idea two sets of vectors: download source and dest, copy source and dets
+  download_sources <- c()
+  download_dests <- c()
+  copy_sources <- c()
+  copy_dests <- list()
+  
+  # build vectors
   for (digest in names(state)){
-    src_file <- manifest[[digest]][1]
-    src_uri <- paste(object_base_url, src_file, sep="/")
-    local_copy <- ""
+    remote_name <- manifest[[digest]][1]
+    src_uri <- paste(object_base_url, remote_name, sep="/")
+    local_file <- file.path(download_dir, state[[digest]][1])
+    local_dir <- dirname(local_file)
+    download_sources <- c(download_sources, src_uri)
+    download_dests <- c(download_dests, local_file)
+    if (!dir.exists(local_dir)) {
+      dir.create(local_dir, recursive = TRUE)
+    }
     
-    for(name in state[[digest]]) {
-      dst_file <- file.path(download_dir, name)
-      dst_dir <- dirname(dst_file)
-      tryCatch({
-        if (!dir.exists(dst_dir)) {
-          dir.create(dst_dir, recursive = TRUE)
-        }
-      }, error = function(e) {
-        cat("Failed to create directory:", dst_dir, "\n")
-      })
-      # download or copy?
-      if (local_copy == "") {
-        curl_download(src_uri, destfile=dst_file, quiet=FALSE)
-        local_copy <- dst_file
-      } else {
-        write(paste(" using local copy:", name), stderr())
-        file.copy(local_copy, dst_file)
-      }
+    if(length(state[[digest]]) > 1) {
+      copy_sources <- c(copy_sources, local_file)  
+      copy_dests <- c(copy_dests, state[[digest]][2:length(state[[digest]])])
     }
   }
+  
+  # download all files
+  multi_download(download_sources, destfiles = download_dests, progress=TRUE)
+  
+  # do copies
+  i <- 1
+  for(local_source in copy_sources) {
+    for(local_dest in copy_dests[[i]]){
+      local_source <- file.path(download_dir, local_source)
+      local_dir <- dirname(local_source)
+      if (!dir.exists(local_dir)) {
+        dir.create(local_dir, recursive = TRUE)
+      }
+      write(paste("using local copy for", local_dest), stderr())
+      file.copy(local_source, local_dest)
+    }
+    i <- i+1
+  } # copy loop
+  
 }
 
 ocfl_root <- "https://dreamlab-public.s3.us-west-2.amazonaws.com/ocfl"
