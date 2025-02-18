@@ -11,5 +11,7 @@ episode_list
 
 # time for a for loop:
 for (episode in episode_list) {
-    source(episode)
+  cat("\n******** Running episode: ", episode, " *********\n\n")
+  tt <- system.time(source(episode))
+  cat("\n******** Episode ran in ", tt[3], " s *********\n\n")
 }
