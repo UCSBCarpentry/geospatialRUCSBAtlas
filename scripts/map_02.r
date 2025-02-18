@@ -134,7 +134,7 @@ ggplot() +
   geom_spatvector(data = streams_crop, , colour='lightblue') +
   geom_spatvector(data = bikes_crop, colour='black') +
   geom_spatvector(data = coastline_crop, colour='darkblue') +
-  ggtitle(subtitle="Map 2 v 0.2")
+  ggtitle(subtitle="Map 2 v 0.2", label=title)
 
 
 # We will come back to stylize our map even more, but for now, let's explore
