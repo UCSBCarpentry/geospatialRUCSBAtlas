@@ -13,16 +13,20 @@ library(sf)
 # clean the environment and hidden objects
 rm(list=ls())
 
+current_sheet <- 7
+
+
 #vector layers
 buildings <- st_read("source_data/campus_buildings/Campus_Buildings.shp")
-bikeways <- st_read("source_data/bike_paths/bikelanescollapsedv8.shp")
-habitat <- st_read("source_data/NCOS_bird_observations/NCOS_Shorebird_Foraging_Habitat.shp")
+bikeways <- st_read("source_data/icm_bikes/bike_paths/bikelanescollapsedv8.shp")
+habitat <- st_read("source_data/NCOS_Shorebird_Foraging_Habitat/NCOS_Shorebird_Foraging_Habitat.shp")
+iv_buildings <- st_read("source_data/iv_buildings/iv_buildings/CA_Structures_ExportFeatures.shp")
 
 # rasters
 # the background setup is bathymetry and topography mashed together
 
 campus_DEM <- rast("source_data/campus_DEM.tif") 
-campus_bath <- rast("output_data/campus_bath.tif")
+campus_bath <- rast("output_data/ep_3_campus_bathymetry_crop.tif")
 campus_hillshade <- rast("source_data/campus_hillshade.tif")
 
 # We'll need some bins
@@ -46,7 +50,7 @@ campus_DEM_df <- as.data.frame(campus_DEM, xy=TRUE) %>%
   rename(elevation = greatercampusDEM_1_1) # rename to match code later
 
 campus_bath_df <- as.data.frame(campus_bath, xy=TRUE) %>%
-  rename(bathymetry = SB_bath_2m)
+  rename(bathymetry = Bathymetry_2m_OffshoreCoalOilPoint)
 
 campus_hillshade_df <- as.data.frame(campus_hillshade, xy=TRUE)
 
@@ -90,3 +94,4 @@ ggplot() +
 
 ggsave("images/map7.0.png", plot=last_plot())
 object_test_abb <- ls()
+

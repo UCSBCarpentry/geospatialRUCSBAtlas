@@ -5,11 +5,11 @@
 A repo that uses local UCSB examples applied to all of the steps of the
 Carpentries' Intro to Raster and Vector Data workshop.
 
-Scripts run parallel to the episodes (ep_1.r ep_2.r ...) and create maps
-'suitable for publication'. (map1.r, map2.r) as laid out in Maps 1 thru 7
+Scripts run parallel to the episodes (ep_01.r ep_02.r ... ep_13.r) and create maps
+'suitable for publication' (map01.r, map02.r, ... map12.r) as laid out in Maps 1 thru 7
 below.
 
-The goal is to produce several nice atlas pages of campus that use all
+The goals are to produce nice atlas pages of campus that use all of
 the techniques covered in the Intro to GeoSpatial R Carpentry lesson.
 (Maybe not the NDVI over time, since we've never ever done that
 episode.)
@@ -19,24 +19,25 @@ track of names.
 
 ## Getting Started
 
-1: The repo is set up with a `source_data` folder
+1: Clone this repo. 
 
-`source_data` is *.* git ignored, so it's probably not going to get made
-automatically.
+2: Run `new_data_prep.r` This script downloads the filder `data.zip` from
+our Carentry Google drive into a `downloaded_data` directory), and unzips
+it into `source_data`
 
-2: Run `data_prep.r` The goal is for this script to download raw data
-(into a `downloaded_data` directory), unzips, and preps any data that's
-required for the rAtlas. Its outputs go into `source_data`
+3: Now you can run `run_every_episode.r` or `run_ever_map.r` to produce output
+from these data sources. Any data that an episode writes is
+placed in `output_data` and any formated maps are placed in `images`.
 
-3: now each episode and map should run nicely, opening input data from
-the `source_data` directory. Any data that an episode writes should be
-placed in `output_data`
+4: Script away! Feel free to tackle issues, express issues, or just
+do work if you see work that needs to be done.
 
-The narrative of the lesson produces a number of maps, but not
-particularly well formatted. We'll have 7 well-formatted maps that exist
-as a shadow to the lesson narrative.
+5: Episode scripts produce a number of maps, but not
+particularly well formatted. They are formated as in the Lesson, with 
+the addition of ggtitles to keep track of where they are generated.
 
-All have a 3 tall x 4 wide aspect ratio, except where noted
+All outputs from map scripts should have a 3 tall x 4 wide 
+aspect ratio, except where noted.
 
 ### Map 1. A wide view of campus with
 
@@ -85,7 +86,7 @@ Bacara-ish to 154/101
 
 Maps 4-5-6: ![Triplet zoom in](/images/3-zoom.png "Draft zoom.")
 
-#### 7 Campus Detail
+#### Map 7 Campus Detail
 Wide Landscape 9x16ish? \* A stripped down version of #1
 
 
@@ -104,7 +105,7 @@ ie: identify vernal pools
 
 ### 10 Analysis: Find bike paths that cross water?
 
-### 12 Episode 12: 12 months of NDVI Raster Stack
+### Map 12  / Episode 12: 12 months of NDVI Raster Stack
 [UCSB Carpentry](https://ucsbcarpentry.github.io)
 
 [Original lesson -- Introduction to Geospatial Raster and Vector Data

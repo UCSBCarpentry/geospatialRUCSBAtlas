@@ -10,6 +10,7 @@ library(terra)
 
 # clean the environment and hidden objects
 rm(list=ls())
+current_episode <- 3
 
 # set up objects from previous episodes
 
@@ -26,7 +27,7 @@ custom_bins <- c(-3, -.01, .01, 2, 3, 4, 5, 10, 40, 200)
 campus_DEM_df <- campus_DEM_df %>% 
   mutate(binned_DEM = cut(elevation, breaks = custom_bins))
 
-
+str(campus_DEM_df)
 
 # ep3 is reprojections. We need a raster in a different projection.
 # how about bathymetry?
@@ -34,12 +35,15 @@ campus_DEM_df <- campus_DEM_df %>%
 # make it the tidy way, so that there's not an extra object
 bath_rast <- rast("source_data/SB_bath.tif")  
 bath_rast 
+campus_DEM
 
 bath_df <-  bath_rast %>% 
-  as.data.frame(xy=TRUE) %>% 
-  rename(depth = SB_bath_2m)
-
+  as.data.frame(xy=TRUE)
 str(bath_df)
+
+colnames(bath_df)[colnames(bath_df) == "Bathymetry_2m_OffshoreCoalOilPoint"] <- "depth"
+str(bath_df)
+
 
 summary(bath_df, maxsamp = ncell(bath_df))
 # ^^ remember, those are negative numbers  
@@ -101,7 +105,7 @@ plot(reprojected_bath)
 
 # remake bath_df
 bath_df <- as.data.frame(reprojected_bath, xy=TRUE) %>% 
-  rename(depth = SB_bath_2m) 
+  rename(depth = Bathymetry_2m_OffshoreCoalOilPoint) 
 
 str(bath_df)
 
@@ -145,32 +149,42 @@ campus_border_poly <- as.polygons(campus_border, crs(campus_DEM))
 campus_border_poly
 
 # and written out to a file:
-writeVector(campus_border_poly, 'output_data/campus_borderline.shp', overwrite=TRUE)
+writeVector(campus_border_poly, 'output_data/ep_3_campus_borderline.shp', overwrite=TRUE)
 
 # from ep 11: crop the bathymetry to the extent
 # of campus_DEM
-bath_clipped <- crop(x=reprojected_bath, y=campus_border)
+bath_clipped <- crop(x=reprojected_bath, y=campus_border_poly)
 plot(bath_clipped)
+
 # now we can make a big, slow overview map, and save the clipped bathymetry
 # for overlaying goodness:
 
 # save the file:
 # ep 4:
-writeRaster(bath_clipped, "output_data/campus_bathymetry.tif",
+writeRaster(bath_clipped, "output_data/ep_3_campus_bathymetry_crop.tif",
             filetype="GTiff",
             overwrite=TRUE)
+
+# and the DEM:
+writeRaster(campus_DEM, "output_data/ep_3_campus_DEM.tif",
+            filetype="GTiff",
+            overwrite=TRUE)
+
 
 # Note that with the terra package, we could have done both reprojection and cropping at the same time by running:
 # reprojected_bath <- project(bath_rast, campus_DEM)
 
-campus_bath_df <- as.data.frame(bath_clipped, xy=TRUE)
+campus_bath_df <- as.data.frame(bath_clipped, xy=TRUE) %>% 
+  rename(depth = Bathymetry_2m_OffshoreCoalOilPoint)
 str(campus_bath_df)
 colnames(campus_bath_df)
 
-# now we have a smaller campus bathymetry file:
+
+
+# now we have a smaller campus bathymetry dataframe:
 ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
-  geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = SB_bath_2m)) +
+  geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = depth)) +
       scale_fill_viridis_c(na.value="NA") +
   coord_quickmap()
 
@@ -178,4 +192,4 @@ ggplot() +
 ## to do
 # there should be a 3rd and 4th raster in here to replicate
 # the challenges.
-# Is there a before-and-after DEM of WCOS?
+# Is there a before-and-after DEM of NCOS?

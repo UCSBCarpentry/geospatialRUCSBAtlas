@@ -9,8 +9,8 @@
 # clean the environment and hidden objects
 rm(list=ls())
 
-
-
+sheet <- 2
+version <- 0
 
 # Load required libraries
 library(tidyverse)
@@ -20,18 +20,16 @@ library(ggspatial) # Required for map scale -annotation_scale()- and compass -an
 library(ggnewscale) # Required for mapping multiple scales in ggplot
 
 
-
-
 ## Read data
 # Trees
-trees <- vect("source_data/trees/DTK_012116.shp")
+trees <- vect("source_data/Treekeeper_012116/DTK_012116.shp")
 # Bikes
-bikes <- vect("source_data/bike_paths/bikelanescollapsedv8.shp")
+bikes <- vect("source_data/icm_bikes/bike_paths/bikelanescollapsedv8.shp")
 # Streams
 streams <- vect("source_data/california_streams/California_Streams.shp")
 # Coastline polygon
-coastline <- vect("source_data/california_coastline/3853-s3_2002_s3_reg_pacific_ocean_lines.shp")
-
+coastline <- vect("source_data/pacific_ocean-shapefile/3853-s3_2002_s3_reg_pacific_ocean_lines.shp")
+# IV buildings
 
 # Let's take a quick first look at our data and find out their projections
 plot(trees)
@@ -46,7 +44,7 @@ crs(streams, describe=TRUE)
 plot(coastline)
 crs(coastline, describe=TRUE)
 
-# We can see the different CRS our data has:
+# 3 different CRSs at least: 
 # * Trees: WGS84 - Pseudo-mercator / EPSG 3857
 # * Bikes: NAD83 / EPSG 2229
 # * Streams: WGS84  - Pseudo-mercator / EPSG 3857
@@ -93,12 +91,17 @@ coastline_crop <- crop(coastline_proj, trees)
 
 # With this dataset, let's do a first test of how our map would look like
 # question, what in the queens english? 
+
+title <- c(sheet, 'v', version+1)
+title
+
 ggplot() +
   geom_spatvector(data=trees, colour='green4') +
   geom_spatvector(data=streams_crop, , colour='lightblue') +
   geom_spatvector(data = bikes_crop, colour='black') +
   geom_spatvector(data=coastline_crop, colour='darkblue') +
-  ggtitle("Map 2 v 0.1")
+  ggtitle("Map 2 v 0.1", subtitle=title) +
+  coord_sf()
   
 
 # But we see that the current extent used is too narrow, we almost can't see
@@ -122,13 +125,16 @@ bikes_crop <- crop(bikes_proj, new_ext)
 streams_crop <- crop(streams, new_ext)
 coastline_crop <- crop(coastline_proj, new_ext)
 
+title <- c(sheet, 'v', version+1)
+title
+
 # Run again the plot to see the differences
 ggplot() +
   geom_spatvector(data = trees, colour='green4') +
   geom_spatvector(data = streams_crop, , colour='lightblue') +
   geom_spatvector(data = bikes_crop, colour='black') +
   geom_spatvector(data = coastline_crop, colour='darkblue') +
-  ggtitle("Map 2 v 0.2")
+  ggtitle(subtitle="Map 2 v 0.2", label=title)
 
 
 # We will come back to stylize our map even more, but for now, let's explore
@@ -332,8 +338,8 @@ map2_v5 <- ggplot() +
                                  'Streams' = 'cadetblue3',
                                  'Ocean' = 'dodgerblue')) +
   theme_minimal() +
-  labs(title = 'Map 2: Stylized thematic map of UCSB campus',
-       subtitle = 'Trees, bike paths, and water. (v.5)',
+  labs(subtitle = 'Map 2: Stylized thematic map of UCSB campus',
+       title = 'Trees, bikes, and water. (v.5)',
        x = 'Longitude', y = 'Latitude') +
   theme(
     plot.title = element_text(hjust = 0.5),
@@ -356,3 +362,5 @@ ggsave(
   units = 'in'
 )
 
+# add IV buildings as in map 1
+# add a background?

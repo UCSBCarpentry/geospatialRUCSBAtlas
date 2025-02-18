@@ -1,5 +1,6 @@
 # map 8 actually
 # multi-band imagery
+# and connecting to the Planet API
 
 # for the episode about RGBs and multi-band rasters
 # episode 5
@@ -17,15 +18,17 @@ library(cowplot)
 library(ggpubr)
 
 
+current_sheet <- 8
+
 # make sure output window is 1x1
 # because you muck with it a lot
 par(mfrow = c(1,1))
 
 
-library(planetR)
+# library(planetR)
 library(curl)
 
-(get_auth)
-plnt_quota
+# (get_auth)
+# plnt_quota
 
 curl(url="https://api.planet.com/features/v1/ogc/my?format=api", open = "")

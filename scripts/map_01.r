@@ -13,13 +13,15 @@ library(scales)
 
 # set up objects
 
+sheet <- "map_01.r"
+
 #vector layers
 
 buildings <- st_read("source_data/campus_buildings/Campus_Buildings.shp")
-iv_buildings <- st_read("source_data/iv_buildings/CA_Structures_ExportFeatures.shp")
+iv_buildings <- st_read("source_data/iv_buildings/iv_buildings/CA_Structures_ExportFeatures.shp")
 # walkways <- 
-bikeways <- st_read("source_data/bike_paths/bikelanescollapsedv8.shp")
-habitat <- st_read("source_data/NCOS_bird_observations/NCOS_Shorebird_Foraging_Habitat.shp")
+bikeways <- st_read("source_data/icm_bikes/bike_paths/bikelanescollapsedv8.shp")
+habitat <- st_read("source_data/NCOS_Shorebird_Foraging_Habitat/NCOS_Shorebird_Foraging_Habitat.shp")
 
 
 
@@ -118,8 +120,9 @@ campus_DEM_df <- as.data.frame(campus_DEM, xy=TRUE) %>%
   rename(elevation = greatercampusDEM_1_1) # rename to match code later
 str(campus_DEM_df)
 
+
 campus_bath_df <- as.data.frame(campus_bath, xy=TRUE) %>%
-  rename(bathymetry = SB_bath_2m)
+  rename(bathymetry = Bathymetry_2m_OffshoreCoalOilPoint)
 str(campus_bath_df)
 
 sea_level <- campus_DEM - 5
@@ -257,10 +260,9 @@ ggplot() +
   geom_sf(data=iv_buildings, color=alpha("light gray", .1), fill=NA) +
   geom_sf(data=buildings, color ="hotpink") +
   geom_sf(data=habitat, color="darkorchid1") +
-  geom_sf(data=bikeways, color="yellow") +
+  geom_sf(data=bikeways, color="#00abff") +
   coord_sf()
 
-ggsave("images/map1.3.png", plot=last_plot())
 
 # next we need to refine the plot and labels
 # Not a publication ready graphic (yet) ~episode 13
@@ -273,12 +275,13 @@ ggplot() +
   geom_raster(data = campus_hillshade_df, aes(x=x, y=y, alpha = campus_hillshade), show.legend = FALSE) +
   geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = bathymetry)) +
   scale_y_continuous(labels = number_format(accuracy = 0.01)) +
-  scale_fill_viridis_c(na.value="NA", guide = guide_legend("elevation (US ft)"))+
-  labs(title="Map 1", subtitle="Version 3") + theme(axis.title.x=element_blank(),
+  scale_fill_viridis_c(na.value="NA", guide = guide_legend("bathymetry / elevation (US ft)"))+
+  labs(subtitle="Map 1.4", title="UCSB & environs") + theme(axis.title.x=element_blank(),
                                                     axis.title.y=element_blank())+
   geom_sf(data=iv_buildings, color=alpha("light gray", .1), fill=NA) +
   geom_sf(data=buildings, color ="hotpink") +
   geom_sf(data=habitat, color="darkorchid1") +
-  geom_sf(data=bikeways, color="yellow") +
+  geom_sf(data=bikeways, color="#00abff") +
   coord_sf()
 
+ggsave("images/map1.4.png", plot=last_plot())

@@ -8,6 +8,9 @@
 # clean the environment and hidden objects
 rm(list=ls())
 
+current_sheet <- 12
+
+
 library(scales)
 library(tidyr)
 library(dplyr)
@@ -26,14 +29,15 @@ library(geojsonsf) # to handle geojson
 # brick is raster. rast is terra
 # the 2 different ndvis looks VERY different when
 # you do this raster math
-# for now we leave bricks behind
-# image <- brick(tiff_path, n1=8)
+# for now we leave raster::bricks behind
 
 # make an NDVI for 1 file
-tiff_path <- c("source_data/UCSB_campus_23-24_psscene_analytic_8b_sr_udm2/PSScene/")
+tiff_path <- c("source_data/planet/planet/20232024_UCSB_campus_PlanetScope/PSScene/")
 
-# for reference, plot one of our 8 band files with
+# for reference, plot ONE of our 8 band files with
 # semi-natural color
+# this is PlanetScope
+
 image <- rast(paste(tiff_path, "20230912_175450_00_2439_3B_AnalyticMS_SR_8b_clip.tif", sep=""))
 # ala-episode 5
 plotRGB(image, r=6,g=3,b=1, stretch = "hist")
@@ -64,10 +68,10 @@ names(ndvi_tiff)
 ndvi_tiff
 
 
-# We need a common extent to make
-# a raster stack
+# We need a common extent to 
+# stack things up
 # we'll use the original AOI from our Planet request:
-ucsb_extent <- vect("source_data/ucsb_60sqkm_planet_extent.geojson")
+ucsb_extent <- vect("source_data/planet/planet/ucsb_60sqkm_planet_extent.geojson")
 str(ucsb_extent)
 crs(ucsb_extent)
 crs(image) # <---- we want to standardize on this CRS
@@ -125,7 +129,7 @@ ggplot() +
 
 # get a file list
 # ep 12
-scene_paths <- list.files("source_data/UCSB_campus_23-24_psscene_analytic_8b_sr_udm2/PSScene",
+scene_paths <- list.files("source_data/planet/planet/20232024_UCSB_campus_PlanetScope/PSScene/",
                           full.names = TRUE,
                           pattern = "8b_clip.tif")
 
@@ -139,12 +143,13 @@ dir.create("output_data/ndvi", showWarnings = FALSE)
 # this takes a while
 for (images in scene_paths) {
     source_image <- rast(images)
+    source_image <- aggregate(source_image, fact = 4)
     ndvi_tiff <- ((source_image[[8]] - source_image[[6]]) / (source_image[[8]] + source_image[[6]]))
-    new_filename <- (substr(images, 67,92))
+    new_filename <- (substr(images, 67,90))
     new_path <- paste("output_data/ndvi/", new_filename, ".tif", sep="")
     ndvi_tiff <- extend(ndvi_tiff, ucsb_extent, fill=NA, snap="near")
     set.ext(ndvi_tiff, ext(ucsb_extent))
-    names(ndvi_tiff) <- substr(new_filename, 0,14)
+    names(ndvi_tiff) <- substr(new_filename, 0,13)
     print(names(ndvi_tiff))
     print(new_filename)
     print(dim(ndvi_tiff))
@@ -163,15 +168,16 @@ ndvi_series_names <- list.files("output_data/ndvi")
 ndvi_series_names <- paste("output_data/ndvi/", ndvi_series_names, sep="")
 
 ndvi_series_names
-testraster <- rast("output_data/ndvi/20230912_175450_00_2439_3B.tif")
+testraster <- rast("output_data/ndvi/20230912_175450_00_2439.tif")
 summary(values(testraster))
 
 
 # check the files's resolutions and 
 # keep only the 2217x3541 ones.
+# 554 x 885 now that we are downsampled
 length(ndvi_series_names)
 str(ndvi_series_names)
-valid_tiff <- c(2217,3541,1)
+valid_tiff <- c(554,885,1)
 str(valid_tiff)
 
 dim(ndvi_tiff) == valid_tiff
@@ -201,15 +207,15 @@ ndvi_series_stack <- rast(ndvi_series_paths)
 
 summary(ndvi_series_stack[,1])
 
-# whooo hoooo! no errors ... but ...
+# whooo hoooo! no errors 
 str(ndvi_series_stack)
 nlyr(ndvi_series_stack)
-# but it's crapped out:
+# but summary means nothing in this context
 summary(values(ndvi_series_stack))
-# or is it:
+
+# they plot!:
 plot(ndvi_series_stack)
 
-#kristi got a series of ndvis after running line 199
 ggsave("images/ndvi_series_stack.png", plot=last_plot())
 
 
@@ -229,12 +235,11 @@ summary(ndvi_series_df)
 
 str(ndvi_series_df)
 unique(ndvi_series_df$variable)
-unique(ndvi_series_df$value)
 
 
 ### let's crop this and remake the dataframe so that the ggplot 
 # facet_wrap runs in a reasonable amount of time.
-ncos_extent <- vect("source_data/ncos_aoi.geojson")
+ncos_extent <- vect("source_data/planet/planet/ncos_aoi.geojson")
 ncos_extent <- project(ncos_extent, ndvi_series_stack)
 
 ndvi_series_stack <- crop(ndvi_series_stack, ncos_extent)
@@ -247,10 +252,18 @@ ndvi_series_df <- as.data.frame(ndvi_series_stack, xy=TRUE, na.rm=FALSE) %>%
 str(ndvi_series_df)
 
 # this is the output is we are trying to speed up
+# scales are correct!!!!
 ggplot() +
   geom_raster(data = ndvi_series_df , aes(x = x, y = y, fill = value)) +
   facet_wrap(~ variable)
 
+ndvi_colors <- brewer_pal(type = "div", palette = "RdYlBu")
+
+# we need a diverging color scheme
+ggplot() +
+  geom_raster(data = ndvi_series_df , aes(x = x, y = y, fill = value)) +
+  scale_colour_brewer(ndvi_colors) +
+  facet_wrap(~ variable)
 
 
 # visually there's nothing going on
@@ -310,7 +323,7 @@ str(avg_NDVI)
 
 colnames(avg_NDVI) <- c("MeanNDVI", "Month")
 # but this plot makes no sense
-plot(avg_NDVI)
+# plot(avg_NDVI)
 avg_NDVI
 
 
@@ -320,18 +333,23 @@ avg_NDVI
 summary(avg_NDVI)
 
 
-# I just can't get these to plot logically.
-#KL -where did the y value's mean come from?
-#Error message says need finite ylim values, is it NAs? 
-plot(avg_NDVI$mean)
+# here we go #############
+# finally: a logical plot of average NDVIs over time. 
+plot(avg_NDVI$MeanNDVI)
 
 avg_NDVI_df <- as.data.frame(avg_NDVI, rm.na=FALSE)
 str(avg_NDVI_df)
-ggplot(avg_NDVI_df, mapping = aes(Month, MeanNDVI, geom_point(MeanNDVI)))
+
+# we want the dates. or the
+# 5th and 6th character of the dates
+
+# this plot less so:
+ggplot(avg_NDVI_df, mapping = aes(Month, MeanNDVI)) +
+  geom_point()
 
 
 
-
+# we need to arrange these by month to show change.
 # Julian dates: that's in the lesson, mean()# Jugeom_point()# Julian dates: that's in the lesson, mean()# Julian dates: that's in the lesson, but ours uses calendar dates
 # challenge: change object names to Julian dates
 
@@ -340,3 +358,7 @@ ggplot(avg_NDVI_df, mapping = aes(Month, MeanNDVI, geom_point(MeanNDVI)))
 # we'll need weather data to mimic the lesson.
 # or use our brains and eyes to define 
 # when was it rainiest?
+
+
+current_sheet <- "Map 12 Complete"
+current_sheet

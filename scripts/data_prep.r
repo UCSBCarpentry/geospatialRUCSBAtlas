@@ -1,9 +1,20 @@
+# This script will gradually transform
+# into downloading the canonical data for
+# the rAtlas and transforming / downsampling it
+# and otherwise preparing it as we wrote the 
+# episodes and maps of the rAtlas.
+
+# Its day-to-day function has been replaced by new_data_prep.r
+
 # this script sets up data that will be used
 # for 2 purposes:
 # An episode-by-episode, task-by-task duplication of the
 # GeoSpatial R lesson
 # and
 # A markdown atlas of the UCSB campus.
+
+
+
 
 library(terra)
 # curl is going to be better than download.file
@@ -111,13 +122,14 @@ drive_download("https://drive.google.com/file/d/1-gAC4BRkcJXxGWUb73h2pa1QfyQ9y9y
                "source_data/ucsb_60sqkm_planet_extent.geojson",
                overwrite = TRUE)
 # NCOS AOI
-drive_download("https://drive.google.com/open?id=12TtsAjq3MbALF9gaqo_JUxLBzBonaWev&usp=drive_fs",
-               "source_data/ncos_aoi.geojson",
-               overwrite = TRUE)
+#drive_download("https://drive.google.com/open?id=12TtsAjq3MbALF9gaqo_JUxLBzBonaWev&usp=drive_fs",
+#               "source_data/ncos_aoi.geojson",
+#               overwrite = TRUE)
 
 
 # Planet 50cm NCOS?
 # Where art thou NCOS_07_25-26_2023.tif
+# https://drive.google.com/open?id=1DFQpenwhWQQ1RWAiIQ4S31TYCDk05HCU&usp=drive_fs
 # with arc.open()
 # the planet will have a funny band combo
 # when it first opens
@@ -151,7 +163,7 @@ map2(files_bind$id, files_bind$name, ~drive_download(as_id(.x), path = file.path
 #NCOS birds 
 drive_download("https://drive.google.com/file/d/1ssytmTbpC1rpT5b-h8AxtvSgNrsGQVNY/view?usp=drive_link",
                "downloaded_data/NCOS_Shorebird_Foraging_Habitat.zip", overwrite = TRUE)
-unzip("downloaded_data/NCOS_Shorebird_Foraging_Habitat.zip", exdir = "source_data/NCOS_bird_observations") 
+unzip("downloaded_data/NCOS_Shorebird_Foraging_Habitat.zip", exdir = "source_data/NCOS_habitat") 
 
 # get IV buildings
 drive_download("https://drive.google.com/file/d/1-splwT-DNa6kFgqhaP8OTx_TkECfTo42/view?usp=sharing",
@@ -235,7 +247,11 @@ unzip("downloaded_data/pacific_ocean-shapefile.zip", exdir="source_data/californ
 
 
 # LINES - this is bike paths
-# X-drive?
+# X-drive
+# version is 3853-s3-282-2u5_p255_2016_u5
+# and is copied to carpentry google drive.
+
+
 drive_download("https://drive.google.com/file/d/1_Rt6HGF4LsIbZPMP6vZFm67H5MlzlIW1/view?usp=drive_link", 
               "downloaded_data/bike_paths.zip", overwrite=TRUE)
 unzip("downloaded_data/bike_paths.zip", exdir = "source_data/bike_paths/", overwrite=TRUE)
