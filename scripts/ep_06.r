@@ -15,8 +15,8 @@ current_episode <- 6
 # these will give a warning message about projections
 bikes_icm <- st_read("source_data/icm_bikes/bike_paths/bikelanescollapsedv8.shp")
 bikes_library <- st_read("source_data/library_bikes/3853-s3-282-2u5_p255_2016_u5/bikelanescollapsedv8.shp")
-birds <- st_read("source_data/NCOS_Shorebird_Foraging_Habitat/NCOS_Shorebird_Foraging_Habitat.shp")
-
+birds_habitat <- st_read("source_data/NCOS_Shorebird_Foraging_Habitat/NCOS_Shorebird_Foraging_Habitat.shp")
+birds_points <- st_read("source_data/NCOS_Bird_Survey_Data_20190724shp/NCOS_Bird_Survey_Data_20190724_web.shp")
 
 
 # you can see when you create the object that the CRS's
@@ -25,7 +25,7 @@ birds <- st_read("source_data/NCOS_Shorebird_Foraging_Habitat/NCOS_Shorebird_For
 # if you look at just the bounding boxes, you might think
 # you have data from opposite sides of the world.
 st_bbox((bikes_icm))
-st_bbox((birds))
+st_bbox((birds_habitat))
 
 
 st_bbox((bikes_library))
@@ -42,12 +42,13 @@ str(bikes_icm)
 
 # POINTS
 # I don't think these birds are points
-str(birds)
+str(birds_points)
 
 # this example might be more striking if there
 # were new west campus bike paths
 ggplot() +
   geom_sf(data=bikes_icm, color = "red") +
+  geom_sf(data=birds_points)
   coord_sf() 
 
 ggplot() +

@@ -49,7 +49,7 @@ summary(image)
 #(NIR - Red) / (NIR + Red)
 ndvi_tiff <- ((image[[8]] - image[[6]]) / (image[[8]] + image[[6]]))*10000 
 
-plot(ndvi_tiff)
+# plot(ndvi_tiff)
 summary(values(ndvi_tiff))
 str(ndvi_tiff)
 class(ndvi_tiff)
@@ -91,7 +91,7 @@ ext(ucsb_extent) == ext(ndvi_tiff)
 
 # I need to extend my calculated NDVI to the AOI extent
 ndvi_tiff <- extend(ndvi_tiff, ucsb_extent)
-plot(ndvi_tiff)
+# plot(ndvi_tiff)
 ndvi_tiff
 
 
@@ -106,7 +106,7 @@ set.ext(ndvi_tiff, ext(ucsb_extent))
 # now they are exactly the same extent
 ext(ucsb_extent) == ext(ndvi_tiff)
 
-plot(ndvi_tiff)
+#plot(ndvi_tiff)
 dim(ndvi_tiff)
 str(ndvi_tiff)
 names(ndvi_tiff)
@@ -214,9 +214,9 @@ nlyr(ndvi_series_stack)
 summary(values(ndvi_series_stack))
 
 # they plot!:
-plot(ndvi_series_stack)
+#plot(ndvi_series_stack)
 
-ggsave("images/ndvi_series_stack.png", plot=last_plot())
+#ggsave("images/ndvi_series_stack.png", plot=last_plot())
 
 
 
@@ -245,25 +245,44 @@ ncos_extent <- project(ncos_extent, ndvi_series_stack)
 ndvi_series_stack <- crop(ndvi_series_stack, ncos_extent)
 
 # make the files 4x smaller:
-ndvi_series_stack <- aggregate(ndvi_series_stack, fact=4, fun="mean")
+# let's not anymore, because I downsampled in the loop
+# ndvi_series_stack <- aggregate(ndvi_series_stack, fact=4, fun="mean")
 
 ndvi_series_df <- as.data.frame(ndvi_series_stack, xy=TRUE, na.rm=FALSE) %>% 
   pivot_longer(-(x:y), names_to = "variable", values_to= "value")
 str(ndvi_series_df)
 
-# this is the output is we are trying to speed up
+# this output should be pretty speedy
 # scales are correct!!!!
 ggplot() +
   geom_raster(data = ndvi_series_df , aes(x = x, y = y, fill = value)) +
   facet_wrap(~ variable)
 
-ndvi_colors <- brewer_pal(type = "div", palette = "RdYlBu")
-
 # we need a diverging color scheme
 ggplot() +
   geom_raster(data = ndvi_series_df , aes(x = x, y = y, fill = value)) +
-  scale_colour_brewer(ndvi_colors) +
-  facet_wrap(~ variable)
+  scale_fill_distiller(palette = "RdYlBu", direction = 1) +
+  facet_wrap(~ variable) +
+  theme_minimal() +
+  xlab("YY-MM")
+
+# fix those labels!
+str(ndvi_series_df)
+year_month_label <- substr(ndvi_series_df$variable, 2,9)
+year_month_label
+
+
+ndvi_series_df$variable <- year_month_label
+ndvi_series_df$variable
+
+# repeat the above ggplot label each facet
+# with only the first 8 characters of the variable
+ggplot() +
+  geom_raster(data = ndvi_series_df , aes(x = x, y = y, fill = value)) +
+  scale_fill_distiller(palette = "RdYlBu", direction = 1) +
+  facet_wrap(~ variable) +
+  theme_minimal() +
+  xlab("YY-MM")
 
 
 # visually there's nothing going on
@@ -276,7 +295,8 @@ ggplot() +
 # OR figure the mean NDVI for each image as in ep 14.
 
 # this default one shows us what?
-# a fatter and pretty tall April?
+# looks like April 2024 is the greenest:
+
 ggplot(ndvi_series_df) +
   geom_histogram(aes(value)) + 
   facet_wrap(~variable)
@@ -322,20 +342,19 @@ avg_NDVI <- mutate(avg_NDVI, months=ndvi_months)
 str(avg_NDVI)
 
 colnames(avg_NDVI) <- c("MeanNDVI", "Month")
-# but this plot makes no sense
-# plot(avg_NDVI)
-avg_NDVI
 
+avg_NDVI
 
 
 
 avg_NDVI
 summary(avg_NDVI)
-
+str(avg_NDVI)
 
 # here we go #############
+
 # finally: a logical plot of average NDVIs over time. 
-plot(avg_NDVI$MeanNDVI)
+plot(avg_NDVI$meanNDVI)
 
 avg_NDVI_df <- as.data.frame(avg_NDVI, rm.na=FALSE)
 str(avg_NDVI_df)
