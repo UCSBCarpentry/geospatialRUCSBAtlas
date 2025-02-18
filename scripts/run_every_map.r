@@ -11,6 +11,6 @@ map_list
 
 # time for a for loop:
 for (map_sheet in map_list) {
-    (map_sheet)
-    source(map_sheet)
+    cat("\n******** Building map: ", map_sheet, " *********\n\n")
+    source(map_sheet, echo = TRUE)
 }
