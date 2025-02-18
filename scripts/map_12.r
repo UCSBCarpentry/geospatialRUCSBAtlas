@@ -143,6 +143,7 @@ dir.create("output_data/ndvi", showWarnings = FALSE)
 # this takes a while
 for (images in scene_paths) {
     source_image <- rast(images)
+    source_image <- aggregate(source_image, fact = 4)
     ndvi_tiff <- ((source_image[[8]] - source_image[[6]]) / (source_image[[8]] + source_image[[6]]))
     new_filename <- (substr(images, 67,91))
     new_path <- paste("output_data/ndvi/", new_filename, ".tif", sep="")
@@ -173,9 +174,10 @@ summary(values(testraster))
 
 # check the files's resolutions and 
 # keep only the 2217x3541 ones.
+# 554 x 885 now that we are downsampled
 length(ndvi_series_names)
 str(ndvi_series_names)
-valid_tiff <- c(2217,3541,1)
+valid_tiff <- c(554,885,1)
 str(valid_tiff)
 
 dim(ndvi_tiff) == valid_tiff
