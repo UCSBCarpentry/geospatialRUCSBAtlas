@@ -14,8 +14,7 @@ getwd()
 
 # make a list of all your tiffs
 # NDVI data gets calculated by map 12. 
-ndvi_series_names <- list.files("output_data/ndvi")
-ndvi_series_path <- paste("output_data/ndvi/", ndvi_series_names, sep="")
+ndvi_series_path <- list.files("output_data/ndvi", full.names = TRUE)
 
 # build a raster stack
 ndvi_series_stack <- rast(ndvi_series_path)
