@@ -1,4 +1,5 @@
 # ep 11
+# "Manipulate raster data"
 # cropping rasters
 
 # library(raster)
@@ -16,15 +17,18 @@ current_episode <- 11
 
 # Crop a raster to a vector extent
 
+# re-create vector overlay map here
+
+# recreate a raster with a vector extent overlaid on it
 # from ep 5
-ncos_rgb <- rast("source_data/w_campus_1ft/w_campus_1ft.tif")
+ncos_rgb <- rast("source_data/cirgis_1ft/w_campus_1ft.tif")
 crs(ncos_rgb)
 summary(ncos_rgb)
 
 
 ggplot() +
-  geom_spatial_rgb(data=ncos_rgb, mapping = aes(
-    r = w_campus_1ft_1, g = w_campus_1ft_2, b = w_campus_1ft_3)) +
+  geom_spatraster_rgb(data=ncos_rgb, mapping = aes(
+    r = 1, g = 2, b = 3)) +
   coord_sf()
 
 campus_DEM <- rast("source_data/campus_DEM.tif")
@@ -32,7 +36,10 @@ campus_DEM_df <- as.data.frame(campus_DEM, xy = TRUE, na.rm=FALSE)
 
 plot(campus_DEM)
 
+
 # campus Areas of Interest (AOIs) as geojson
+# use these AOIs as the extent to crop the raster?
+# they come into the lesson in ep. 6.
 greatercampus <- st_read("source_data/greater_UCSB-campus-aoi.geojson")
 ggplot() +
   geom_sf(data=greatercampus, color = "red") +
@@ -40,7 +47,7 @@ ggplot() +
   coord_sf()
 
 # from episode 3 we know:
-greatercampus <- project(greatercampus, from = to = )
+# greatercampus <- project(greatercampus, from = to = )
 
 crs(ncos_aoi) == crs(campus_DEM)
 
