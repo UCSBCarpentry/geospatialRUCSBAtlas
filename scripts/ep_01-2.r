@@ -17,6 +17,9 @@ rm(list=ls())
 # set episode counter
 current_episode <- 1
 
+# set ggplot counter
+current_ggplot <- 1
+
 #############################################
 # ep. 1
 
@@ -58,9 +61,14 @@ summary(campus_DEM_df)
 #we will stick to this naming convention the rest of the lesson
 names(campus_DEM_df)[names(campus_DEM_df) == 'greatercampusDEM_1_1'] <- 'elevation'
 
+gg_title <- c("Episode", current_episode, " ggplot:", current_ggplot)
+gg_title_string <- paste(gg_title, collapse="  " )
+gg_title_string
+
 ggplot() + geom_raster(data = campus_DEM_df, 
               aes(x=x, y=y, fill = elevation)) +
-# scale_fill_viridis_c() +
+  scale_fill_viridis_c() +
+  ggtitle(gg_title_string) +
   coord_sf()
 
 
@@ -92,10 +100,16 @@ str(campus_DEM)
 # NAs tend to be the data
 # that tends to be the part around the edges
 # but they don't have to be.
+
+current_ggplot <- current_ggplot+1
+gg_title <- c("Episode", current_episode, " ggplot:", current_ggplot)
+gg_title_string <- paste(gg_title, collapse="  " )
+gg_title_string
+
 ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
   scale_fill_viridis_c(na.value = "deeppink") +
-  ggtitle(current_episode)
+  ggtitle(gg_title_string)
 
 
 # We can maybe find one that doesn't have any to 
@@ -126,11 +140,24 @@ summary(campus_bath)
 ### bad data example goes here.
 # both these warning messages tells us there's more going on.
 # ie: values out of scale range
-ggplot() +
-  geom_histogram(data = campus_DEM_df, aes(elevation))
+
+current_ggplot <- current_ggplot+1
+gg_title <- c("Episode", current_episode, " ggplot:", current_ggplot)
+gg_title_string <- paste(gg_title, collapse="  " )
+gg_title_string
 
 ggplot() +
-  geom_histogram(data = campus_bath_df, aes(Bathymetry_2m_OffshoreCoalOilPoint))
+  geom_histogram(data = campus_DEM_df, aes(elevation)) +
+  ggtitle(gg_title_string)
+
+current_ggplot <- current_ggplot+1
+gg_title <- c("Episode", current_episode, " ggplot:", current_ggplot)
+gg_title_string <- paste(gg_title, collapse="  " )
+gg_title_string
+
+ggplot() +
+  geom_histogram(data = campus_bath_df, aes(Bathymetry_2m_OffshoreCoalOilPoint)) +
+  ggtitle(gg_title_string)
 
 # crs() and str() don't tell us what bad data values are.
 
@@ -148,14 +175,33 @@ describe("source_data/campus_DEM.tif")
 # for argument's sake, this should be a different dataset. 
 # like a DSM instead of DEM??
 
-ggplot() +
-  geom_histogram(data = campus_DEM_df, aes(elevation))
+current_ggplot <- current_ggplot+1
+gg_title <- c("Episode", current_episode, " ggplot:", current_ggplot)
+gg_title_string <- paste(gg_title, collapse="  " )
+gg_title_string
 
 ggplot() +
-  geom_histogram(data = campus_DEM_df, aes(elevation), bins = 5)
+  geom_histogram(data = campus_DEM_df, aes(elevation))+
+  ggtitle(gg_title_string)
+
+
+current_ggplot <- current_ggplot+1
+gg_title <- c("Episode", current_episode, " ggplot:", current_ggplot)
+gg_title_string <- paste(gg_title, collapse="  " )
+gg_title_string
 
 ggplot() +
-  geom_histogram(data = campus_DEM_df, aes(elevation), bins = 20)
+  geom_histogram(data = campus_DEM_df, aes(elevation), bins = 5)+
+  ggtitle(gg_title_string)
+
+gg_title <- c("Episode", current_episode, " ggplot:", current_ggplot)
+gg_title_string <- paste(gg_title, collapse="  " )
+gg_title_string
+
+ggplot() +
+  geom_histogram(data = campus_DEM_df, aes(elevation), bins = 20)+
+  ggtitle(gg_title_string)
+
 
 # at some point, the negative values disappear from the visualization
 # that's not helpful.
@@ -179,20 +225,37 @@ unique(campus_DEM_df$binned_DEM)
 
 # there's sooooo few negative values that you can't see them.
 
+gg_title <- c("Episode", current_episode, " ggplot:", current_ggplot+1)
+gg_title_string <- paste(gg_title, collapse="  " )
+gg_title_string
+
 ggplot() +
-  geom_bar(data = campus_DEM_df, aes(binned_DEM))
+  geom_bar(data = campus_DEM_df, aes(binned_DEM)) +
+  ggtitle(gg_title_string)
+
 
 # but think about landscapes. elevation tends to be
 # a log. (I know this because I am a geographer)
 # log scale works better
 # this shows that there's nothing at zero.
 # and a little bit of negative
+gg_title <- c("Episode", current_episode, " ggplot:", current_ggplot+1)
+gg_title_string <- paste(gg_title, collapse="  " )
+gg_title_string
+
 ggplot() +
   geom_bar(data = campus_DEM_df, aes(binned_DEM)) +
-  scale_y_continuous(trans='log10')
+  scale_y_continuous(trans='log10') +
+  ggtitle(gg_title_string)
+
+gg_title <- c("Episode", current_episode, " ggplot:", current_ggplot+1)
+gg_title_string <- paste(gg_title, collapse="  " )
+gg_title_string
 
 ggplot() + 
-  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) 
+  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
+  ggtitle(gg_title_string)
+
 
 
 # let's go again with what we've learned
@@ -202,9 +265,15 @@ campus_DEM_df <- campus_DEM_df %>%
   mutate(binned_DEM = cut(elevation, breaks = custom_bins))
 
 # this shows sea level at 2-5 ft
+gg_title <- c("Episode", current_episode, " ggplot:", current_ggplot+1)
+gg_title_string <- paste(gg_title, collapse="  " )
+gg_title_string
+
 ggplot() + 
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
-  coord_quickmap()
+  coord_quickmap() +
+  ggtitle(gg_title_string)
+
 
 
 # challenge
@@ -214,16 +283,29 @@ custom_bins <- c(-3, 4.9, 5.1, 7.5, 10, 25, 40, 70, 100, 150, 200)
 
 campus_DEM_df <- campus_DEM_df %>% 
   mutate(binned_DEM = cut(elevation, breaks = custom_bins))
+
+gg_title <- c("Episode", current_episode, " ggplot:", current_ggplot+1)
+gg_title_string <- paste(gg_title, collapse="  " )
+gg_title_string
+
 ggplot() + 
-  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) 
+  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
+  ggtitle(gg_title_string)
+
   
 
 
 
 # this isn't so nice
+gg_title <- c("Episode", current_episode, " ggplot:", current_ggplot+1)
+gg_title_string <- paste(gg_title, collapse="  " )
+gg_title_string
+
 ggplot() + 
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
-  scale_fill_manual(values = terrain.colors(10)) 
+  scale_fill_manual(values = terrain.colors(10)) +
+  ggtitle("Pretty ugle", subtitle = gg_title_string)
+
   #coord_quickmap()
 
 # let's seize control of our bins
@@ -235,9 +317,14 @@ coast_palette[3] <- "#1c9aed"
 coast_palette
 
 # where's my nice blue?
+gg_title <- c("Episode", current_episode, " ggplot:", current_ggplot+1)
+gg_title_string <- paste(gg_title, collapse="  " )
+gg_title_string
+
 ggplot() + 
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
-  scale_fill_manual(values = coast_palette)
+  scale_fill_manual(values = coast_palette)+
+  ggtitle(gg_title_string)
   #coord_quickmap()
 
 
@@ -261,23 +348,36 @@ campus_hillshade_df
 str(campus_hillshade_df)
 
 # plot the hillshade
+gg_title <- c("Episode", current_episode, " ggplot:", current_ggplot+1)
+gg_title_string <- paste(gg_title, collapse="  " )
+gg_title_string
+
 ggplot() + 
   geom_raster(data = campus_hillshade_df, 
               aes(x=x, y=y, fill = hillshade)) +
+  ggtitle(gg_title_string)+
   coord_quickmap()
 
 # overlay
 # not sure if this is displaying as desired
+gg_title <- c("Episode", current_episode, " ggplot:", current_ggplot+1)
+gg_title_string <- paste(gg_title, collapse="  " )
+gg_title_string
+
 ggplot() + 
     geom_raster(data=campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
     geom_raster(data = campus_hillshade_df, 
               aes(x=x, y=y, alpha = hillshade)) +
     scale_fill_viridis_c() + 
-  ggtitle("Elevation and Hillshade") +
+  ggtitle("Elevation and Hillshade", subtitle=gg_title_string) +
   coord_quickmap()
 
 # I'm not sure this graph does anything for us anymore
 # it would if it displayed the red. 
+gg_title <- c("Episode", current_episode, " ggplot:", current_ggplot+1)
+gg_title_string <- paste(gg_title, collapse="  " )
+gg_title_string
+
 ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
   scale_fill_gradient2(na.value = "lightgray", 
@@ -285,8 +385,9 @@ ggplot() +
                        mid="white", 
                        high="cornsilk3",
                        guide = "colourbar",
-                        midpoint = 3.12, aesthetics = "fill") 
-  #coord_quickmap()
+                        midpoint = 3.12, aesthetics = "fill") +
+    ggtitle(gg_title_string) +
+    coord_quickmap()
 
 # we can't see them, because there are too few.
 # how few?
