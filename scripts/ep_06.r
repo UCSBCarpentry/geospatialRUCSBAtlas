@@ -93,10 +93,9 @@ ggplot() +
 
 
 # POINTS
-# bird observations
-# these aren't points
+# bird habitat polygons
 ggplot() +
-  geom_sf(data=birds, color = "red") +
+  geom_sf(data=birds_habitat, color = "red") +
   coord_sf()
 
 
@@ -132,5 +131,6 @@ ggplot() +
   geom_sf(data=bikes_icm, color = "blue", size = 2) +
   geom_sf(data=bikes_library, color = "red", size = .75) +
   geom_sf(data=buildings, color = "gray") +
-  geom_sf(data=birds, color = "red", size = 2) +
+  geom_sf(data=birds_points, color = "purple") +
+  geom_sf(data=birds_habitat, color = "red", size = 2) +
       coord_sf()
