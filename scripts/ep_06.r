@@ -132,5 +132,5 @@ ggplot() +
   geom_sf(data=bikes_library, color = "red", size = .75) +
   geom_sf(data=buildings, color = "gray") +
   geom_sf(data=birds_points, color = "purple") +
-  geom_sf(data=birds_habitat, color = "red", size = 2) +
+  geom_sf(data=birds_habitat, color = "lawngreen", size = 2) +
       coord_sf()
