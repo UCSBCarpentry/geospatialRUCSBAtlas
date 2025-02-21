@@ -79,22 +79,22 @@ campus_DEM <- rast("source_data/campus_DEM.tif")
 crs(campus_DEM)
 
 # does bathymetry still needs to be re-projected in order to overlay?
-bath <- rast("source_data/SB_bath.tif") 
-crs(campus_DEM) == crs(bath)
+campus_bath <- rast("source_data/SB_bath.tif") 
+crs(campus_bath)
 
 # can't overlay them because they are different CRS's
 # that's part of the narrative of the lesson.
 plot(campus_DEM)
-plot(bath)
+plot(campus_bath)
 
 
 campus_projection <- crs(campus_DEM)
 
-bath <- project(bath, campus_projection)
+campus_bath <- project(campus_bath, campus_projection)
 plot(campus_DEM)
-plot(bath)
+plot(campus_bath)
 
-crs(campus_DEM) == crs(bath)
+crs(campus_DEM) == crs(campus_bath)
 
 #################################
 
@@ -103,13 +103,13 @@ crs(campus_DEM) == crs(bath)
 
 
 # do they have the same projections?
-crs(campus_DEM) == crs(bath)
+crs(campus_DEM) == crs(campus_bath)
 
 # do they have the same extents?
-ext(campus_DEM) == ext(bath)
+ext(campus_DEM) == ext(campus_bath)
 
 
-campus_bath <- crop(x=bath, y=campus_DEM)
+campus_bath <- crop(x=campus_bath, y=campus_DEM)
 plot(campus_bath)
 
 # save campus bathymetry here
@@ -119,7 +119,6 @@ writeRaster(campus_bath, "output_data/campus_bath.tif", filetype="GTiff", overwr
 campus_DEM_df <- as.data.frame(campus_DEM, xy=TRUE) %>%
   rename(elevation = greatercampusDEM_1_1) # rename to match code later
 str(campus_DEM_df)
-
 
 campus_bath_df <- as.data.frame(campus_bath, xy=TRUE) %>%
   rename(bathymetry = Bathymetry_2m_OffshoreCoalOilPoint)
@@ -141,6 +140,7 @@ sea_level_df <- as.data.frame(sea_level_0, xy=TRUE) %>%
 # to make our scale make sense, we can do 
 # raster math 
 # how would I do this with overlay?
+
 ggplot() + 
   geom_raster(data = sea_level_df, aes(x=x, y=y, fill = binned)) + 
   coord_sf() # to keep map's proportions
@@ -160,7 +160,7 @@ ggplot() +
   coord_sf()
 
 # if we overlay, we should get the same result as at the 
-# end of the previous episode:
+# end of (episode 1?).
 ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
   geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = bathymetry)) +
@@ -211,6 +211,27 @@ ggplot() +
         scale_fill_viridis_c(na.value="NA") +
     coord_quickmap()
   
+# while we are here, we should make 
+# one DEM that is both bathymetry and elevation
+# by combining campus_DEM and sea_level_0
+plot(campus_bath)
+plot(sea_level_0)
+
+crs(campus_bath) == crs(sea_level_0)
+
+# they have different resolutions
+res(campus_bath)
+res(sea_level_0)
+
+campus_bath_20m <- resample(campus_bath, sea_level_0)
+
+res(sea_level_0) 
+res(campus_bath_20m)
+
+campus_bathotopo <- merge(campus_bath_20m, sea_level_0)
+
+plot(campus_bathotopo)
+writeRaster(campus_bathotopo, "output_data/campus_bathotopo.tif", overwrite=TRUE)
   
 # overlay the vectors
 

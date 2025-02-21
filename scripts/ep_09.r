@@ -31,6 +31,46 @@ ggplot() +
   ggtitle("Map 9.1: Cali Places") +
   coord_sf()
 
+
+# get a raster to put all this in context. batho_topo:
+# this is worked through in map_01.r 
+campus_DEM <- rast("source_data/campus_DEM.tif") 
+crs(campus_DEM)
+campus_DEM <- rast("source_data/campus_DEM.tif") 
+crs(campus_DEM)
+campus_projection <- crs(campus_DEM)
+bath <- project(bath, campus_projection)
+campus_bath_20m <- resample(campus_bath, sea_level_0)
+res(sea_level_0) 
+res(campus_bath_20m)
+
+campus_bathotopo <- merge(campus_bath_20m, sea_level_0)
+
+# while we are here, we should make 
+# one DEM that is both bathymetry and elevation
+# by combining campus_DEM and sea_level_0
+plot(campus_bath)
+plot(sea_level_0)
+
+crs(campus_bath) == crs(sea_level_0)
+
+# they have different resolutions
+res(campus_bath)
+res(sea_level_0)
+
+sea_level_0_26m <- resample(sea_level_0, campus_bath)
+
+res(campus_bath) 
+res(sea_level_0_26m)
+
+campus_bathotopo <- merge(campus_bath, sea_level_0_26m)
+
+plot(campus_bathotopo)
+writeRaster(campus_bathotopo, "output_data/campus_bathotopo.tif", overwrite=TRUE)
+
+
+
+
 # start by putting the coast and streams in the same CRS
 streams <- st_transform(streams, st_crs(coast))
 

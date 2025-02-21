@@ -230,7 +230,7 @@ ggplot() +
 # streams_crop as a data frame, you'll notice that each geometry is a LINESTRING
 # which makes it plot correctly in the legend
 biked_df <- as.data.frame(bikes_crop, geom='WKT')
-View(biked_df)
+biked_df
 
 # To fix this, we need to dissagregate the MULTILINESTRING of bike paths into
 # individual LINESTRINGs. For that, we can use the `disagg` terra function, which
