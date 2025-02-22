@@ -55,6 +55,9 @@ streams_cropped <- st_read("source_data/california_streams/streams_crop.shp")
 
 # streams is really big, so let's crop it
 # to zoom 2 extent from map 4
+# issue: when we export this in map 4, it didn't come with
+# a CRS. So we need to set it here.
+streams <- st_transform(streams, crs(streams_cropped))
 bite_extent <- st_read("output_data/zoom_2_extent.shp")
 
 # this makes garbage because different crs?
