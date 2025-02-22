@@ -19,6 +19,7 @@ library(dplyr)
 # needed to lay out multiple baseplots with par()?
 library(cowplot)
 library(ggpubr)
+library(raster)
 
 # make sure output window is 1x1
 # because you muck with it a lot
@@ -249,6 +250,9 @@ zoom_2_plot <- ggplot() +
 
 zoom_2_plot
 
+# later on we will want to use the zoom_2 as an extent
+zoom_2_extent <- ext(zoom_2) %>% as.polygons()
+writeVector(zoom_2_extent, "output_data/zoom_2_extent.shp")
 
 # zoom3
 # figure out the layer names

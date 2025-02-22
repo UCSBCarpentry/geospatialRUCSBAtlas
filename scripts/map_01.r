@@ -211,9 +211,12 @@ ggplot() +
         scale_fill_viridis_c(na.value="NA") +
     coord_quickmap()
   
+# start batho-topo
 # while we are here, we should make 
 # one DEM that is both bathymetry and elevation
 # by combining campus_DEM and sea_level_0
+# this is also in episode 9
+
 plot(campus_bath)
 plot(sea_level_0)
 
@@ -232,6 +235,10 @@ campus_bathotopo <- merge(campus_bath_20m, sea_level_0)
 
 plot(campus_bathotopo)
 writeRaster(campus_bathotopo, "output_data/campus_bathotopo.tif", overwrite=TRUE)
+
+# end batho-topo
+# ######
+
   
 # overlay the vectors
 
