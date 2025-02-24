@@ -1,9 +1,6 @@
 # map 1
 # Wide overview of campus
 
-# clean the environment and hidden objects
-rm(list=ls())
-
 library(tidyverse)
 library(raster)
 # library(rgdal)
@@ -11,58 +8,86 @@ library(terra)
 library(sf)
 library(scales)
 
+# clean the environment and hidden objects
+rm(list=ls())
+
 # set up objects
 
-sheet <- "map_01.r"
+# set map number
+current_sheet <- 1
+# set ggplot counter
+current_ggplot <- 0
+# set ggplot title
+gg_title_string <- ""
 
-#vector layers
+gg_labelmaker <- function(labelmaker){
+  current_ggplot <- current_ggplot+1
+  gg_title <- c("Map:", current_sheet, " ggplot:", labelmaker)
+  gg_title_string <- paste(gg_title, collapse=" " )
+  return(gg_title_string)
+}
+
+
+# add vector layers
 
 buildings <- st_read("source_data/campus_buildings/Campus_Buildings.shp")
 iv_buildings <- st_read("source_data/iv_buildings/iv_buildings/CA_Structures_ExportFeatures.shp")
-# walkways <- 
+# walkways <- ???
 bikeways <- st_read("source_data/icm_bikes/bike_paths/bikelanescollapsedv8.shp")
 habitat <- st_read("source_data/NCOS_Shorebird_Foraging_Habitat/NCOS_Shorebird_Foraging_Habitat.shp")
 
 
 
 # basic terra plots
-plot(buildings)
-plot(iv_buildings)
-plot(bikeways)
-plot(habitat)
+# $geometry does just the shape.
+plot(buildings$geometry)
+plot(iv_buildings$geometry)
+plot(bikeways$geometry)
+plot(habitat$geometry)
 
 
 # overlays as in episode 8
+gg_title_string <- gg_labelmaker(current_ggplot)
+
+# #1 
 ggplot() +
   geom_sf(data=habitat) +
   geom_sf(data=buildings) +
   geom_sf(data=iv_buildings) +
   geom_sf(data=bikeways) +
+  ggtitle(gg_title_string) +
   coord_sf()
 
 ggsave("images/map1.1.png", plot=last_plot())
 
-#which buildings are on top?
+# which buildings are on top?
 # the last ones added
+gg_title_string <- gg_labelmaker(current_ggplot)
+gg_title_string
+# #2 
 ggplot() +
   geom_sf(data=habitat, color="yellow") +
+  geom_sf(data=iv_buildings, color="pink") +
   geom_sf(data=buildings) +
-  geom_sf(data=iv_buildings, color="light gray") +
   geom_sf(data=bikeways, color="blue") +
+  ggtitle(gg_title_string) +
   coord_sf()
+
 
 # so visually let's put the non-campus gray
 # buildings below our campus buildings
+gg_title_string <- gg_labelmaker(current_ggplot)
+gg_title_string
+# # 3 
 ggplot() +
   geom_sf(data=habitat, color="yellow") +
   geom_sf(data=iv_buildings, color="light gray") +
   geom_sf(data=buildings) +
   geom_sf(data=bikeways, color="blue") +
-  coord_sf() + 
-  ggtitle("Map 1.2")
-
-ggsave("images/map1.2.png", plot=last_plot())
-
+  ggtitle(gg_title_string) +
+  coord_sf() 
+  
+ggsave("images/1.2.png", plot=last_plot())
 
 
 # the background setup is bathymetry and topography
@@ -140,10 +165,13 @@ sea_level_df <- as.data.frame(sea_level_0, xy=TRUE) %>%
 # to make our scale make sense, we can do 
 # raster math 
 # how would I do this with overlay?
-
+gg_title_string <- gg_labelmaker(current_ggplot)
+gg_title_string
+# # 3 
 ggplot() + 
   geom_raster(data = sea_level_df, aes(x=x, y=y, fill = binned)) + 
-  coord_sf() # to keep map's proportions
+  ggtitle(gg_title_string) +
+  coord_sf()
 
 summary(sea_level_df)
 custom_sea_bins <- c(-8, -.1, .1, 3, 5, 7.5, 10, 25, 40, 70, 100, 150, 200)
@@ -155,16 +183,24 @@ sea_level_df <- sea_level_df %>%
 length(custom_sea_bins)
 
 # now sea level is zero.
+gg_title_string <- gg_labelmaker(current_ggplot)
+gg_title_string
+# # 3 
 ggplot() + 
   geom_raster(data = sea_level_df, aes(x=x, y=y, fill = binned)) +
+  ggtitle(gg_title_string) +
   coord_sf()
 
 # if we overlay, we should get the same result as at the 
 # end of (episode 1?).
+gg_title_string <- gg_labelmaker(current_ggplot)
+gg_title_string
+# #  
 ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
   geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = bathymetry)) +
   scale_fill_viridis_c(na.value="NA") +
+  ggtitle(gg_title_string, subtitle = "Does the ovlerlay work?") +
   coord_sf()
 
 
@@ -189,26 +225,35 @@ str(campus_bath_df)
 str(campus_DEM_df)
 
 # overlays works!!!!!
+gg_title_string <- gg_labelmaker(current_ggplot)
+gg_title_string
+# #  
 ggplot() + 
   geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = binned_bath)) +
   scale_fill_manual(values = terrain.colors(10)) +
   geom_raster(data=campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
   scale_fill_manual(values = terrain.colors(19)) +
+  ggtitle(gg_title_string, subtitle = "overlay works!") +
   coord_quickmap()
 
 # switch the order
-# Not sure how it gets on both layers
-# not sure why it's so so ugly
+# Not sure how color scheme gets on both layers
+gg_title_string <- gg_labelmaker(current_ggplot)
+gg_title_string
+# #  
 ggplot() +
     geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
     geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = binned_bath)) +
     scale_fill_manual(values = terrain.colors(19)) +
+    ggtitle(gg_title_string) +
     coord_quickmap()
-  
+
+gg_title_string <- gg_labelmaker(current_ggplot)  
 ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
   geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = bathymetry)) +
         scale_fill_viridis_c(na.value="NA") +
+  ggtitle(gg_title_string) +
     coord_quickmap()
   
 # start batho-topo
@@ -247,6 +292,7 @@ names(campus_bath)
 
 # they won't overlay because
 # you need to re-project
+gg_title_string <- gg_labelmaker(current_ggplot)
 ggplot() +
   geom_sf(data=habitat, color="yellow") +
   geom_sf(data=buildings) +
@@ -254,6 +300,7 @@ ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
   geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = bathymetry)) +
   scale_fill_viridis_c(na.value="NA") +
+  ggtitle(gg_title_string) +
     coord_sf()
 
 # reproject the vectors
@@ -278,17 +325,18 @@ str(campus_hillshade_df)
 #update color scheme for contrast 
 # +hillshade
 # trying with the scales library to shorten the x, y to 2 decimals
+gg_title_string <- gg_labelmaker(current_ggplot)
 ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
   geom_raster(data = campus_hillshade_df, aes(x=x, y=y, alpha = campus_hillshade), show.legend = FALSE) +
   geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = bathymetry)) +
   scale_fill_viridis_c(na.value="NA")+ 
-  labs(title="Map 1", subtitle="Version 3",
-       labels =label_number(scale = 1/1000)) +
+  labs(labels =label_number(scale = 1/1000)) +
   geom_sf(data=iv_buildings, color=alpha("light gray", .1), fill=NA) +
   geom_sf(data=buildings, color ="hotpink") +
   geom_sf(data=habitat, color="darkorchid1") +
   geom_sf(data=bikeways, color="#00abff") +
+  ggtitle(gg_title_string) +
   coord_sf()
 
 
@@ -297,19 +345,23 @@ ggplot() +
 # customize the x and y graticule to be xx.xx and smaller -> number_format()
 # remove the x and y axis labels -> axis.title.x/y = element_blank()
 # customize the legend title to include units of elevation -> guide_legend()
-
+current_ggplot <- current_ggplot+1
+gg_title <- c("Map:", current_sheet, " ggplot:", current_ggplot)
+gg_title_string <- paste(gg_title, collapse="  " )
+gg_title_string
+# #  
 ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
   geom_raster(data = campus_hillshade_df, aes(x=x, y=y, alpha = campus_hillshade), show.legend = FALSE) +
   geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = bathymetry)) +
   scale_y_continuous(labels = number_format(accuracy = 0.01)) +
   scale_fill_viridis_c(na.value="NA", guide = guide_legend("bathymetry / elevation (US ft)"))+
-  labs(subtitle="Map 1.4", title="UCSB & environs") + theme(axis.title.x=element_blank(),
-                                                    axis.title.y=element_blank())+
   geom_sf(data=iv_buildings, color=alpha("light gray", .1), fill=NA) +
-  geom_sf(data=buildings, color ="hotpink") +
-  geom_sf(data=habitat, color="darkorchid1") +
+  geom_sf(data=buildings, color ="pink") +
+  geom_sf(data=habitat, color=alpha("darkorchid1", .1), fill=NA) +
   geom_sf(data=bikeways, color="#00abff") +
-  coord_sf()
+  ggtitle(gg_title_string, subtitle="UCSB & environs") + 
+  theme(axis.title.x=element_blank(), axis.title.y=element_blank())+
+    coord_sf()
 
-ggsave("images/map1.4.png", plot=last_plot())
+ggsave("images/map1.9.png", plot=last_plot())
