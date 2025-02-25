@@ -256,7 +256,7 @@ zoom_2_plot <- ggplot() +
 #  geom_spatvector(data=campus_extent) +
   theme_dark()+
   coord_sf(crs=campus_crs)+
-  ggtitle(gg_labelmaker(current_ggplot+1), subtitle = "The Bite of California")
+  ggtitle(gg_labelmaker(current_ggplot+1), subtitle = "Zoom 2: Bite of California")
 
 zoom_2_plot
 
@@ -284,7 +284,7 @@ zoom_3_plot <- ggplot()+
   scale_alpha(range = c(0.15, 0.65), guide="none")+
   theme_dark() +
   coord_sf(crs=campus_crs) +
-  ggtitle(gg_labelmaker(current_ggplot+1), subtitle="UCSB and vicinity")
+  ggtitle(gg_labelmaker(current_ggplot+1), subtitle="Zoom 3: UCSB and vicinity")
 
 zoom_3_plot
 
@@ -311,7 +311,8 @@ colnames(places)
 ggplot() +
   geom_spatraster(data = zoom_2_hillshade,
                   aes(fill=hillshade)) +
-geom_spatvector(data = places, fill=NA) 
+geom_spatvector(data = places, fill=NA)+ 
+ggtitle(gg_labelmaker(current_ggplot+1))
   
 #######################
 # is the alpha doing anything here?
@@ -321,7 +322,7 @@ ggplot() +
     scale_fill_viridis_c() +
   scale_alpha(range = c(0.15, 0.65), guide="none")+
   geom_spatvector(data=places, fill=NA) +
-  ggtitle(gg_labelmaker(current_ggplot+1))
+  ggtitle(gg_labelmaker(current_ggplot+1), subtitle = "What is alpha doing?")
 
 
 ggplot() +
