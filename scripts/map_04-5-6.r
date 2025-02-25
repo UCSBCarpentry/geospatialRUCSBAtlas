@@ -26,17 +26,7 @@ par(mfrow = c(1,1))
 # We'll need a grayscale palette later
 grays <- colorRampPalette(c("black", "white"))(255)
 
-
-
-# ###########################
-# Map 6
-# Zoom 3: campus
-
-# set map number
-current_sheet <- 6
-# set ggplot counter
-current_ggplot <- 0
-
+# our auto ggtitle maker
 gg_labelmaker <- function(plot_num){
   gg_title <- c("Map:", current_sheet, " ggplot:", plot_num)
   plot_text <- paste(gg_title, collapse=" " )
@@ -45,6 +35,11 @@ gg_labelmaker <- function(plot_num){
   return(plot_text)
 }
 
+
+
+# ###########################
+# Map 6
+# Zoom 3: campus
 
 campus_DEM <- rast("source_data/campus_DEM.tif") 
 
@@ -66,19 +61,6 @@ plot(campus_extent)
 # Map 5
 # Zoom 2
 # Bite of California
-
-# set map number
-current_sheet <- 5
-# set ggplot counter
-current_ggplot <- 0
-
-gg_labelmaker <- function(plot_num){
-  gg_title <- c("Map:", current_sheet, " ggplot:", plot_num)
-  plot_text <- paste(gg_title, collapse=" " )
-  print(plot_text)
-  current_ggplot <<- plot_num
-  return(plot_text)
-}
 
 # Crop western region DEM to local area defined by 
 # socal_aoi.geojson
@@ -128,7 +110,6 @@ zoom_2_cropped <- project(zoom_2_cropped, campus_crs)
 plot(zoom_2_cropped, col=grays)
 polys(campus_extent, border="red", lwd=4)
 
-ggsave("images/map5.png", plot=last_plot())
 
 # #####################
 # Map 4
@@ -137,18 +118,6 @@ ggsave("images/map5.png", plot=last_plot())
 # this one arrived as a hillshade.
 # maybe this should actually be made from the west_us?
 
-# set map number
-current_sheet <- 4
-# set ggplot counter
-current_ggplot <- 0
-
-gg_labelmaker <- function(plot_num){
-  gg_title <- c("Map:", current_sheet, " ggplot:", plot_num)
-  plot_text <- paste(gg_title, collapse=" " )
-  print(plot_text)
-  current_ggplot <<- plot_num
-  return(plot_text)
-}
 
 world <- rast("source_data/global_raster/GRAY_HR_SR_OB.tif")
 plot(world)
@@ -169,8 +138,6 @@ zoom_1 <- project(zoom_1, campus_crs)
 
 plot(zoom_1)
 polys(zoom_3_fake_aoi, border="red", lwd=4)
-
-
 
 
 plot(zoom_1, col=grays)
@@ -239,12 +206,14 @@ plot(zoom_3, col = grays)
 
 
 
-
+# now we do it all again with ggplot:
 # via ggplot
 #################################################
-# now we should make them with ggplot with better 
-# visualization.
-# as is done in the lessons
+
+# set map number
+current_sheet <- "4-5-6"
+# set ggplot counter
+current_ggplot <- 0
 
 
 # zoom 1 as ggplot
@@ -259,12 +228,13 @@ zoom_1_plot <- ggplot() +
     scale_fill_viridis_c() +
   theme_dark() +
   coord_sf(crs=campus_crs) + 
-  ggtitle("California", subtitle = "Map 4, Zoom 1")
+  ggtitle(gg_labelmaker(current_ggplot+1), subtitle = "California")
 
 zoom_1_plot
 
 
 # zoom 2 as ggplot
+
 zoom_2_df <- as.data.frame(zoom_2_cropped, xy=TRUE)
 colnames(zoom_2_df)
 
@@ -286,17 +256,19 @@ zoom_2_plot <- ggplot() +
 #  geom_spatvector(data=campus_extent) +
   theme_dark()+
   coord_sf(crs=campus_crs)+
-  ggtitle("The Bite of California", subtitle = "Map 5, Zoom 2")
+  ggtitle(gg_labelmaker(current_ggplot+1), subtitle = "The Bite of California")
 
 zoom_2_plot
 
 # later on we will want to use the zoom_2 as an extent
 zoom_2_extent <- ext(zoom_2) %>% as.polygons()
-writeVector(zoom_2_extent, "output_data/zoom_2_extent.shp")
+writeVector(zoom_2_extent, "output_data/zoom_2_extent.shp", overwrite=TRUE)
 
 # zoom3
 # figure out the layer names
 zoom_3_df <- as.data.frame(campus_DEM, xy=TRUE)
+
+
 
 campus_hillshade <- rast("source_data/campus_hillshade.tif") 
 zoom_3_hillshade_df <- as.data.frame(campus_hillshade, xy=TRUE)
@@ -312,13 +284,13 @@ zoom_3_plot <- ggplot()+
   scale_alpha(range = c(0.15, 0.65), guide="none")+
   theme_dark() +
   coord_sf(crs=campus_crs) +
-  ggtitle("UCSB and vicinity", subtitle="Map 6, Zoom 3")
+  ggtitle(gg_labelmaker(current_ggplot+1), subtitle="UCSB and vicinity")
 
 zoom_3_plot
 
 
 
-# load 
+# now load 
 # 'california populated places'
 # which is census data. Use these for some placename labels and
 # visual polygons styled similar to the IV building outlines
@@ -327,7 +299,8 @@ places <- vect("source_data/tl_2023_06_place/tl_2023_06_place.shp")
 plot(places)
 
 ggplot() + 
-  geom_spatvector(data=places)
+  geom_spatvector(data=places) +
+  ggtitle(gg_labelmaker(current_ggplot+1))
 
 # overlay 
 # geom_raster and geom_spatraster
@@ -347,7 +320,8 @@ ggplot() +
               aes(fill=hillshade)) +
     scale_fill_viridis_c() +
   scale_alpha(range = c(0.15, 0.65), guide="none")+
-  geom_spatvector(data=places, fill=NA)
+  geom_spatvector(data=places, fill=NA) +
+  ggtitle(gg_labelmaker(current_ggplot+1))
 
 
 ggplot() +
@@ -355,7 +329,8 @@ ggplot() +
                   aes(fill=hillshade))+
       scale_fill_viridis_c() +
   scale_alpha(range = c(0.15, 0.65), guide="none") +
-geom_spatvector(data=places, fill=NA)
+geom_spatvector(data=places, fill=NA) +
+  ggtitle(gg_labelmaker(current_ggplot+1))
 
 zoom_2_plot <- ggplot() +
   geom_raster(data = zoom_2_hillshade,
@@ -364,8 +339,7 @@ zoom_2_plot <- ggplot() +
   scale_alpha(range = c(0.15, 0.65), guide="none") +
   geom_spatvector(data=campus_extent) +
   geom_spatvector(data=places, fill=NA) +
-  labs(title = "Bite of California",
-       subtitle = "Map 5. Zoom 2")
+  ggtitle(gg_labelmaker(current_ggplot+1), subtitle = "Bite of California")
 
   
 zoom_1_plot

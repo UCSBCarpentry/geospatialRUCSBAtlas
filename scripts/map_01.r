@@ -275,7 +275,6 @@ names(campus_bath)
 
 # they won't overlay because
 # you need to re-project
-gg_title_string <- gg_labelmaker(current_ggplot)
 ggplot() +
   geom_sf(data=habitat, color="yellow") +
   geom_sf(data=buildings) +
@@ -283,7 +282,7 @@ ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
   geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = bathymetry)) +
   scale_fill_viridis_c(na.value="NA") +
-  ggtitle(gg_title_string) +
+  ggtitle(gg_labelmaker(current_ggplot+1)) +
     coord_sf()
 
 # reproject the vectors
@@ -308,7 +307,6 @@ str(campus_hillshade_df)
 #update color scheme for contrast 
 # +hillshade
 # trying with the scales library to shorten the x, y to 2 decimals
-gg_title_string <- gg_labelmaker(current_ggplot)
 ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
   geom_raster(data = campus_hillshade_df, aes(x=x, y=y, alpha = campus_hillshade), show.legend = FALSE) +
@@ -319,7 +317,7 @@ ggplot() +
   geom_sf(data=buildings, color ="hotpink") +
   geom_sf(data=habitat, color="darkorchid1") +
   geom_sf(data=bikeways, color="#00abff") +
-  ggtitle(gg_title_string) +
+  ggtitle(gg_labelmaker(current_ggplot+1)) +
   coord_sf()
 
 
