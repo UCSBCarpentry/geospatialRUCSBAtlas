@@ -66,23 +66,24 @@ Links are to their original source:
   * Planet SkySat images?
   
 ### Object list
-"bath"                
-"bikeways"            
-"buildings"           
 "campus_bath"        
-"campus_bath_df"      
 "campus_DEM"          
+"campus_bathotopo" -- the above merged()
+"campus_bath_df"      
 "campus_DEM_df"       
+"sea_level"           
+"sea_level_0"        
 "campus_hillshade_df"
 "campus_projection"   -- this is whatever campus_DEM is when it comes out of episode 1.
 "custom_bath_bins"   
 "custom_bins"         
 "custom_DEM_bins"    
 "custom_sea_bins"     
-"habitat"             
-"sea_level"           
-"sea_level_0"        
 "sea_level_df"  
+"bikeways"            
+"buildings"  
+"iv_buildings"
+"habitat"             
 
 
 ## Map 2
