@@ -275,7 +275,9 @@ ggplot() +
   scale_fill_distiller(palette = "RdYlBu", direction = 1) +
   facet_wrap(~ variable) +
   theme_minimal() +
-  xlab("YY-MM")
+  xlab("YY-MM") +
+  ggtitle(gg_labelmaker(current_ggplot+1))
+
 
 # fix those labels!
 str(ndvi_series_df)
@@ -293,7 +295,9 @@ ggplot() +
   scale_fill_distiller(palette = "RdYlBu", direction = 1) +
   facet_wrap(~ variable) +
   theme_minimal() +
-  xlab("YY-MM")
+  xlab("YY-MM") +
+  ggtitle(gg_labelmaker(current_ggplot+1))
+
 
 
 # visually there's nothing going on
@@ -310,7 +314,9 @@ ggplot() +
 
 ggplot(ndvi_series_df) +
   geom_histogram(aes(value)) + 
-  facet_wrap(~variable)
+  facet_wrap(~variable) +
+  ggtitle(gg_labelmaker(current_ggplot+1))
+
 
 
 # display the binned histograms of the NDVIs
@@ -321,7 +327,9 @@ ndvi_series_binned_df <-  ndvi_series_df %>%
 
 ggplot(ndvi_series_binned_df) +
   geom_bar(aes(bins)) + 
-  facet_wrap(~variable)
+  facet_wrap(~variable) +
+  ggtitle(gg_labelmaker(current_ggplot+1))
+
 
 # that's better. And shows us where we can make custom bins
 summary(ndvi_series_binned_df)
@@ -333,7 +341,8 @@ ndvi_series_custom_binned_df <-  ndvi_series_df %>%
 
 ggplot(ndvi_series_custom_binned_df, aes(x=bins)) +
   geom_bar() + 
-  facet_wrap(~variable)
+  facet_wrap(~variable) +
+  ggtitle(gg_labelmaker(current_ggplot+1))
 # this is still a visual judgement call.
 
 
@@ -365,7 +374,7 @@ str(avg_NDVI)
 # here we go #############
 
 # finally: a logical plot of average NDVIs over time. 
-plot(avg_NDVI$meanNDVI)
+plot(avg_NDVI$MeanNDVI)
 
 avg_NDVI_df <- as.data.frame(avg_NDVI, rm.na=FALSE)
 str(avg_NDVI_df)
