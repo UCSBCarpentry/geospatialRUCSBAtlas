@@ -13,19 +13,23 @@ rm(list=ls())
 
 # set up objects
 
+# make our ggtitles automagically #######
 # set map number
 current_sheet <- 1
 # set ggplot counter
 current_ggplot <- 0
-# set ggplot title
-gg_title_string <- ""
 
-gg_labelmaker <- function(labelmaker){
-  current_ggplot <- current_ggplot+1
-  gg_title <- c("Map:", current_sheet, " ggplot:", current_ggplot)
-  gg_title_string <- paste(gg_title, collapse=" " )
-  return(gg_title_string)
+gg_labelmaker <- function(plot_num){
+  gg_title <- c("Map:", current_sheet, " ggplot:", plot_num)
+  plot_text <- paste(gg_title, collapse=" " )
+  print(plot_text)
+  current_ggplot <<- plot_num
+  return(plot_text)
 }
+
+# every ggtitle should be:
+# ggtitle(gg_labelmaker(current_ggplot+1))
+# end automagic ggtitle           #######
 
 
 # add vector layers
@@ -47,7 +51,6 @@ plot(habitat$geometry)
 
 
 # overlays as in episode 8
-gg_title_string <- gg_labelmaker(current_ggplot)
 
 # #1 
 ggplot() +
@@ -55,36 +58,32 @@ ggplot() +
   geom_sf(data=buildings) +
   geom_sf(data=iv_buildings) +
   geom_sf(data=bikeways) +
-  ggtitle(gg_title_string) +
+  ggtitle(gg_labelmaker(current_ggplot+1)) +
   coord_sf()
 
 ggsave("images/map1.1.png", plot=last_plot())
 
 # which buildings are on top?
 # the last ones added
-gg_title_string <- gg_labelmaker(current_ggplot)
-gg_title_string
 # #2 
 ggplot() +
   geom_sf(data=habitat, color="yellow") +
   geom_sf(data=iv_buildings, color="pink") +
   geom_sf(data=buildings) +
   geom_sf(data=bikeways, color="blue") +
-  ggtitle(gg_title_string) +
+  ggtitle(gg_labelmaker(current_ggplot+1)) +
   coord_sf()
 
 
 # so visually let's put the non-campus gray
 # buildings below our campus buildings
-gg_title_string <- gg_labelmaker(current_ggplot)
-gg_title_string
-# # 3 
+
 ggplot() +
   geom_sf(data=habitat, color="yellow") +
   geom_sf(data=iv_buildings, color="light gray") +
   geom_sf(data=buildings) +
   geom_sf(data=bikeways, color="blue") +
-  ggtitle(gg_title_string) +
+  ggtitle(gg_labelmaker(current_ggplot+1)) +
   coord_sf() 
   
 ggsave("images/1.2.png", plot=last_plot())
@@ -165,12 +164,9 @@ sea_level_df <- as.data.frame(sea_level_0, xy=TRUE) %>%
 # to make our scale make sense, we can do 
 # raster math 
 # how would I do this with overlay?
-gg_title_string <- gg_labelmaker(current_ggplot)
-gg_title_string
-# # 3 
 ggplot() + 
   geom_raster(data = sea_level_df, aes(x=x, y=y, fill = binned)) + 
-  ggtitle(gg_title_string) +
+  ggtitle(gg_labelmaker(current_ggplot+1)) +
   coord_sf()
 
 summary(sea_level_df)
@@ -183,24 +179,18 @@ sea_level_df <- sea_level_df %>%
 length(custom_sea_bins)
 
 # now sea level is zero.
-gg_title_string <- gg_labelmaker(current_ggplot)
-gg_title_string
-# # 3 
 ggplot() + 
   geom_raster(data = sea_level_df, aes(x=x, y=y, fill = binned)) +
-  ggtitle(gg_title_string) +
+  ggtitle(gg_labelmaker(current_ggplot+1)) +
   coord_sf()
 
 # if we overlay, we should get the same result as at the 
 # end of (episode 1?).
-gg_title_string <- gg_labelmaker(current_ggplot)
-gg_title_string
-# #  
 ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
   geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = bathymetry)) +
   scale_fill_viridis_c(na.value="NA") +
-  ggtitle(gg_title_string, subtitle = "Does the ovlerlay work?") +
+  ggtitle(gg_labelmaker(current_ggplot+1), subtitle = "Does the ovlerlay work?") +
   coord_sf()
 
 
@@ -225,36 +215,29 @@ str(campus_bath_df)
 str(campus_DEM_df)
 
 # overlays works!!!!!
-gg_title_string <- gg_labelmaker(current_ggplot)
-gg_title_string
-# #  
 ggplot() + 
   geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = binned_bath)) +
   scale_fill_manual(values = terrain.colors(10)) +
   geom_raster(data=campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
   scale_fill_manual(values = terrain.colors(19)) +
-  ggtitle(gg_title_string, subtitle = "overlay works!") +
+  ggtitle(gg_labelmaker(current_ggplot+1), subtitle = "overlay works!") +
   coord_quickmap()
 
 # switch the order
 # Not sure how color scheme gets on both layers
-gg_title_string <- gg_labelmaker(current_ggplot)
-gg_title_string
-# #  
 ggplot() +
     geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
     geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = binned_bath)) +
     scale_fill_manual(values = terrain.colors(19)) +
-    ggtitle(gg_title_string) +
-    coord_quickmap()
+  ggtitle(gg_labelmaker(current_ggplot+1)) +
+  coord_quickmap()
 
-gg_title_string <- gg_labelmaker(current_ggplot)  
 ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
   geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = bathymetry)) +
         scale_fill_viridis_c(na.value="NA") +
-  ggtitle(gg_title_string) +
-    coord_quickmap()
+  ggtitle(gg_labelmaker(current_ggplot+1)) +
+  coord_quickmap()
   
 # start batho-topo
 # while we are here, we should make 
