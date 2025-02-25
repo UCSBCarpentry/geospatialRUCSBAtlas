@@ -8,8 +8,6 @@
 # clean the environment and hidden objects
 rm(list=ls())
 
-current_sheet <- 4
-
 library(terra)
 library(geojsonsf)
 library(sf)
@@ -33,6 +31,21 @@ grays <- colorRampPalette(c("black", "white"))(255)
 # ###########################
 # Map 6
 # Zoom 3: campus
+
+# set map number
+current_sheet <- 6
+# set ggplot counter
+current_ggplot <- 0
+
+gg_labelmaker <- function(plot_num){
+  gg_title <- c("Map:", current_sheet, " ggplot:", plot_num)
+  plot_text <- paste(gg_title, collapse=" " )
+  print(plot_text)
+  current_ggplot <<- plot_num
+  return(plot_text)
+}
+
+
 campus_DEM <- rast("source_data/campus_DEM.tif") 
 
 # we are going to reuse this CRS throughout
@@ -53,6 +66,19 @@ plot(campus_extent)
 # Map 5
 # Zoom 2
 # Bite of California
+
+# set map number
+current_sheet <- 5
+# set ggplot counter
+current_ggplot <- 0
+
+gg_labelmaker <- function(plot_num){
+  gg_title <- c("Map:", current_sheet, " ggplot:", plot_num)
+  plot_text <- paste(gg_title, collapse=" " )
+  print(plot_text)
+  current_ggplot <<- plot_num
+  return(plot_text)
+}
 
 # Crop western region DEM to local area defined by 
 # socal_aoi.geojson
@@ -110,6 +136,20 @@ ggsave("images/map5.png", plot=last_plot())
 # overview
 # this one arrived as a hillshade.
 # maybe this should actually be made from the west_us?
+
+# set map number
+current_sheet <- 4
+# set ggplot counter
+current_ggplot <- 0
+
+gg_labelmaker <- function(plot_num){
+  gg_title <- c("Map:", current_sheet, " ggplot:", plot_num)
+  plot_text <- paste(gg_title, collapse=" " )
+  print(plot_text)
+  current_ggplot <<- plot_num
+  return(plot_text)
+}
+
 world <- rast("source_data/global_raster/GRAY_HR_SR_OB.tif")
 plot(world)
 
