@@ -22,7 +22,7 @@ gg_title_string <- ""
 
 gg_labelmaker <- function(labelmaker){
   current_ggplot <- current_ggplot+1
-  gg_title <- c("Map:", current_sheet, " ggplot:", labelmaker)
+  gg_title <- c("Map:", current_sheet, " ggplot:", current_ggplot)
   gg_title_string <- paste(gg_title, collapse=" " )
   return(gg_title_string)
 }
@@ -345,9 +345,7 @@ ggplot() +
 # customize the x and y graticule to be xx.xx and smaller -> number_format()
 # remove the x and y axis labels -> axis.title.x/y = element_blank()
 # customize the legend title to include units of elevation -> guide_legend()
-current_ggplot <- current_ggplot+1
-gg_title <- c("Map:", current_sheet, " ggplot:", current_ggplot)
-gg_title_string <- paste(gg_title, collapse="  " )
+gg_title_string <- gg_labelmaker(current_ggplot)
 gg_title_string
 # #  
 ggplot() +
