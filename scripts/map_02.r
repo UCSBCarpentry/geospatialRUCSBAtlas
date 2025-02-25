@@ -9,8 +9,19 @@
 # clean the environment and hidden objects
 rm(list=ls())
 
-sheet <- 2
-version <- 0
+# make our ggtitles automagically #######
+# set map number
+current_sheet <- 2
+# set ggplot counter
+current_ggplot <- 0
+
+gg_labelmaker <- function(plot_num){
+  gg_title <- c("Map:", current_sheet, " ggplot:", plot_num)
+  plot_text <- paste(gg_title, collapse=" " )
+  print(plot_text)
+  current_ggplot <<- plot_num
+  return(plot_text)
+}
 
 # Load required libraries
 library(tidyverse)
@@ -92,15 +103,12 @@ coastline_crop <- crop(coastline_proj, trees)
 # With this dataset, let's do a first test of how our map would look like
 # question, what in the queens english? 
 
-title <- c(sheet, 'v', version+1)
-title
-
 ggplot() +
   geom_spatvector(data=trees, colour='green4') +
   geom_spatvector(data=streams_crop, , colour='lightblue') +
   geom_spatvector(data = bikes_crop, colour='black') +
   geom_spatvector(data=coastline_crop, colour='darkblue') +
-  ggtitle("Map 2 v 0.1", subtitle=title) +
+  ggtitle(gg_labelmaker(current_ggplot+1)) +
   coord_sf()
   
 
@@ -125,8 +133,6 @@ bikes_crop <- crop(bikes_proj, new_ext)
 streams_crop <- crop(streams, new_ext)
 coastline_crop <- crop(coastline_proj, new_ext)
 
-title <- c(sheet, 'v', version+1)
-title
 
 # Run again the plot to see the differences
 ggplot() +
@@ -134,8 +140,8 @@ ggplot() +
   geom_spatvector(data = streams_crop, , colour='lightblue') +
   geom_spatvector(data = bikes_crop, colour='black') +
   geom_spatvector(data = coastline_crop, colour='darkblue') +
-  ggtitle(subtitle="Map 2 v 0.2", label=title)
-
+  ggtitle(gg_labelmaker(current_ggplot+1)) +
+  coord_sf()
 
 # We will come back to stylize our map even more, but for now, let's explore
 # the trees data, which contains more information beyond points for the location
@@ -200,7 +206,7 @@ ggplot() +
   scale_colour_manual(name = "Legend",
                       values = c('Trees' = 'green4', 
                                  'Streams' = 'cadetblue3')) +
-  ggtitle("Map2 v.0.3") +
+  ggtitle(gg_labelmaker(current_ggplot+1))  +
   theme_minimal()
 
 
@@ -251,7 +257,7 @@ ggplot() +
 
 # Finally adding the coastline geometry and legend.
 # Save this plot in an object so we don't have to repeat the same code
-map2_v1 <- ggplot() +
+map2_gg1 <- ggplot() +
   geom_spatvector(data=trees_filt, aes(size=HT, colour = 'Trees'),alpha = 0.5) +
   scale_size_continuous(range = c(0, 2), name = 'Tree Height (ft)') +
   geom_spatvector(data=streams_crop, aes(colour = 'Streams'), , linewidth = 2, alpha=0.6) +
@@ -263,21 +269,21 @@ map2_v1 <- ggplot() +
                                'Streams' = 'cadetblue3',
                                'Ocean' = 'dodgerblue')) +
   theme_minimal()
-map2_v1
+map2_gg1
 
 # Adding title, subtitle and title for the axes
-map2_v2 <- map2_v1 +
-  labs(title = 'Map 2 v2: Stylized thematic map of UCSB campus',
+map2_gg2 <- map2_gg1 +
+  labs(title = 'Map 2 ggplot 2: Stylized thematic map of UCSB campus',
        subtitle = 'Trees, bike paths, and water',
        x = 'Longitude', y = 'Latitude')
-map2_v2
+map2_gg2
 
 
 # Modifying the aesthetics of the title and subtitle, removing the grid lines, 
 # and adding a black border around the map
 # title and subtitle. Additionally, eliminating the white space between the
 # plot region and the border
-map2_v3 <- map2_v2 +
+map2_gg3 <- map2_gg2 +
   theme(
     plot.title = element_text(hjust = 0.5),
     plot.subtitle = element_text(hjust = 0.5),
@@ -286,17 +292,17 @@ map2_v3 <- map2_v2 +
   )+
   scale_x_continuous(expand = c(0, 0)) +
   scale_y_continuous(expand = c(0, 0))
-map2_v3
+map2_gg3
   
 # Finally, adding a scale
-map2_v4 <- map2_v3 +
+map2_gg4 <- map2_gg3 +
   annotation_scale(location = 'bl', width_hint = 0.1)
-map2_v4
+map2_gg4
 
 # Save this plot
 ggsave(
   "images/map2_TreeHeight.png",
-  plot = map2_v4,
+  plot = map2_gg4,
   width = 10, height = 7,
   dpi = 500,
   units = 'in'
@@ -326,7 +332,7 @@ trees_filt$SPP_grouped <- ifelse(trees_filt$SPP %in% top5_species,
                                  "Other")
 
 # Finally, making the plot with the same aesthetics as the previous one
-map2_v5 <- ggplot() +
+map2_gg5 <- ggplot() +
   geom_spatvector(data=trees_filt, aes(colour = SPP_grouped), alpha=0.6, size=0.5) +
   scale_color_viridis_d(name = 'Tree species') +
   new_scale_color() +
@@ -351,12 +357,12 @@ map2_v5 <- ggplot() +
   scale_y_continuous(expand = c(0, 0)) +
   annotation_scale(location = 'bl', width_hint = 0.167)
 
-map2_v5
+map2_gg5
 
 # Save this plot
 ggsave(
   "images/map2_TreeSpecies.png",
-  plot = map2_v5,
+  plot = map2_gg5,
   width = 10, height = 7,
   dpi = 500,
   units = 'in'
