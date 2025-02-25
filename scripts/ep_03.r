@@ -12,6 +12,23 @@ library(terra)
 rm(list=ls())
 current_episode <- 3
 
+# make our ggtitles automagically #######
+# set ggplot counter
+current_ggplot <- 0
+
+gg_labelmaker <- function(plot_num){
+  gg_title <- c("Episode:", current_episode, " ggplot:", plot_num)
+  plot_text <- paste(gg_title, collapse=" " )
+  print(plot_text)
+  current_ggplot <<- plot_num
+  return(plot_text)
+}
+# every ggtitle should be:
+# ggtitle(gg_labelmaker(current_ggplot+1))
+# end automagic ggtitle           #######
+
+
+
 # set up objects from previous episodes
 
 # create the campus DEM
@@ -58,12 +75,13 @@ ggplot() +
   geom_raster(data = bath_df) +
   aes(x=x, y=y, fill=depth) +
   scale_fill_viridis_c() +
+  ggtitle(gg_labelmaker(current_ggplot+1)) +
   coord_quickmap()
 
 # histogram helps determine good bins
 ggplot() +
-  geom_histogram(data = bath_df, aes(depth), bins = 10)
-
+  geom_histogram(data = bath_df, aes(depth), bins = 10) +
+  ggtitle(gg_labelmaker(current_ggplot+1)) 
 # these should work:
 custom_bath_bins <- c(1, -5, -15, -35, -45, -55, -60, -65, -75, -100, -125)
 
@@ -75,7 +93,8 @@ summary(bath_df)
 ggplot() + 
   geom_raster(data = bath_df, aes(x=x, y=y, fill = binned_bath)) +
   scale_fill_manual(values = terrain.colors(10)) +
-coord_quickmap()
+  ggtitle(gg_labelmaker(current_ggplot+1)) +
+  coord_quickmap()
 
 
 # so now I am ready to overlay the two files
@@ -85,6 +104,7 @@ ggplot() +
   geom_raster(data = bath_df, aes(x=x, y=y, fill = binned_bath)) +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, alpha = elevation)) +
   scale_alpha(range = c(0.15, 0.65), guide = "none") +
+  ggtitle(gg_labelmaker(current_ggplot+1)) +
   coord_quickmap()
 
 
@@ -119,7 +139,9 @@ ggplot() +
   geom_raster(data = bath_df, aes(x=x, y=y, fill = binned_bath)) +
   scale_alpha_binned(range = c(0.15, 0.65), guide = "none") +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
+  ggtitle(gg_labelmaker(current_ggplot+1)) +
   coord_quickmap()
+
 
 # hide the NA's again
 # scale_alpha doesn't seem to like na.value
