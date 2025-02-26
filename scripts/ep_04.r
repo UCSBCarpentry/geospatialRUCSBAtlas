@@ -11,14 +11,29 @@
 # or is it the DEM that has sea level at 4ft?
 
 
+# Libraries
+library(tidyverse)
+library(terra)
+
 # clean the environment and hidden objects
 rm(list=ls())
 
 current_episode <- 4
+# make our ggtitles automagically #######
+# set ggplot counter
+current_ggplot <- 0
 
-# Libraries
-library(tidyverse)
-library(terra)
+gg_labelmaker <- function(plot_num){
+  gg_title <- c("Episode:", current_episode, " ggplot:", plot_num)
+  plot_text <- paste(gg_title, collapse=" " )
+  print(plot_text)
+  current_ggplot <<- plot_num
+  return(plot_text)
+}
+# every ggtitle should be:
+# ggtitle(gg_labelmaker(current_ggplot+1))
+# end automagic ggtitle           #######
+
 
 # reload rasters
 # from output folder
@@ -64,6 +79,7 @@ campus_DEM_df <- campus_DEM_df %>%
 # Let's have a look
 ggplot() + 
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned)) + 
+  ggtitle(gg_labelmaker(current_ggplot+1)) +
   coord_sf() # to keep map's proportions
 
 # this sea level doesn't make much sense, 
@@ -87,6 +103,7 @@ sea_level_df <- as.data.frame(sea_level_0, xy=TRUE) %>%
 # how would I do this with overlay?
 ggplot() + 
   geom_raster(data = sea_level_df, aes(x=x, y=y, fill = binned)) + 
+  ggtitle(gg_labelmaker(current_ggplot+1)) +
   coord_sf() # to keep map's proportions
 
 summary(sea_level_df)
@@ -101,6 +118,7 @@ length(custom_sea_bins)
 # now sea level is zero.
 ggplot() + 
   geom_raster(data = sea_level_df, aes(x=x, y=y, fill = binned)) +
+  ggtitle(gg_labelmaker(current_ggplot+1)) +
   coord_sf()
 
 
@@ -110,10 +128,12 @@ ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
   geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = bathymetry)) +
   scale_fill_viridis_c(na.value="NA") +
+  ggtitle(gg_labelmaker(current_ggplot+1)) +
   coord_sf()
 
 # end of ep. 4:
-# write a new geoTIFF with the new 
+# how write a new geoTIFF 
+# with the new 
 # sea level = 0 version of the data
 
 writeRaster(campus_DEM, "output_data/ep_4_campus_sea_level_DEM.tif",

@@ -5,13 +5,30 @@
 # clean the environment and hidden objects
 rm(list=ls())
 
-current_episode <- 5
-
 
 library(terra)
 library(tidyverse)
 # library(sf)
 library(raster)
+
+current_episode <- 5
+
+# make our ggtitles automagically #######
+# set ggplot counter
+current_ggplot <- 0
+
+gg_labelmaker <- function(plot_num){
+  gg_title <- c("Episode:", current_episode, " ggplot:", plot_num)
+  plot_text <- paste(gg_title, collapse=" " )
+  print(plot_text)
+  current_ggplot <<- plot_num
+  return(plot_text)
+}
+# every ggtitle should be:
+# ggtitle(gg_labelmaker(current_ggplot+1))
+# end automagic ggtitle           #######
+
+
 
 
 

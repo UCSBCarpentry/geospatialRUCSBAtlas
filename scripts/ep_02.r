@@ -13,22 +13,20 @@
 rm(list=ls())
 
 # set up objects
-
 current_episode <- 2
 
 campus_DEM <- rast("source_data/campus_DEM.tif")
 campus_DEM_df <- as.data.frame(campus_DEM, xy = TRUE, na.rm=FALSE)
-
 # make the name logical:
 names(campus_DEM_df)[names(campus_DEM_df) == 'greatercampusDEM_1_1'] <- 'elevation'
 
 campus_bath <- rast("source_data/SB_bath.tif")
 campus_bath_df <- as.data.frame(campus_bath, xy = TRUE, na.rm=FALSE)
+# make the name logical:
 names(campus_bath_df)[names(campus_bath_df) == 'Bathymetry_2m_OffshoreCoalOilPoint'] <- 'depth'
 
 
-
-
+# Plotting Data Using Breaks
 #################################
 # lesson example bins / highlights Harvard Forest pixels > 400m.
 # for us, let's highlight our holes.
@@ -42,35 +40,25 @@ custom_bins <- c(-3, -.01, .01, 2, 3, 4, 5, 10, 40, 200)
 campus_DEM_df <- campus_DEM_df %>% 
   mutate(binned_DEM = cut(elevation, breaks = custom_bins))
 
-unique(campus_DEM_df$binned_DEM)
+# there are < 20 pixels under zero
+summary(campus_DEM_df$binned_DEM)
 
-# there's sooooo few negative values that you can't see them.
-
-
-
+# there's sooooo few negative values that you can't see them
+# on the histogram
 ggplot() +
   geom_bar(data = campus_DEM_df, aes(binned_DEM)) +
   ggtitle("Histogram")
 
 
-# but think about landscapes. elevation tends to be
-# a log. (I know this because I am a geographer)
+# but think about landscapes. elevation tends to 
+# go up on a log scale from the coast
 # log scale works better
 # this shows that there's nothing at zero.
 # and a little bit of negative
-
-
 ggplot() +
   geom_bar(data = campus_DEM_df, aes(binned_DEM)) +
   scale_y_continuous(trans='log10') +
-  ggtitle("log10")
-
-
-
-ggplot() + 
-  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
-  ggtitle("I dunno")
-
+  ggtitle("log10 histogram")
 
 
 # let's go again with what we've learned
@@ -88,56 +76,62 @@ ggplot() +
   ggtitle("Map")
 
 
+# Challenge: Plot Using Custom Breaks
+# ##################################
 
-# challenge
 # use custom bins to figure out a good place to put sea level
-custom_bins <- c(-3, 4, 4.8, 5, 10, 25, 40, 70, 100, 150, 200)
-custom_bins <- c(-3, 4.9, 5.1, 7.5, 10, 25, 40, 70, 100, 150, 200)
+# what is really 'zero' around here?
+
+custom_bins <- c(-3, 0, 4, 4.8, 5, 10, 25, 40, 70, 100, 150, 200)
+custom_bins <- c(-3, 0, 4.9, 5.1, 7.5, 10, 25, 40, 70, 100, 150, 200)
 
 campus_DEM_df <- campus_DEM_df %>% 
   mutate(binned_DEM = cut(elevation, breaks = custom_bins))
 
 ggplot() + 
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
-  ggtitle("Map ?")
+  ggtitle("Where is sea level ?")
 
 
-
-
+# More Plot Formatting
+# ############################# 
 # this isn't so nice
 
 
 ggplot() + 
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
-  scale_fill_manual(values = terrain.colors(10)) +
-  ggtitle("Pretty ugly", subtitle = "boo")
+  scale_fill_manual(values = terrain.colors(11)) +
+  ggtitle("Where is sea level ?", 
+          subtitle = "greens are too similar")
 
-#coord_quickmap()
 
-# let's seize control of our bins
-coast_palette <- terrain.colors(10)
+# let's seize more control of our bins
+# like my_col in the lesson
+coast_palette <- terrain.colors(11)
 
 # set 4.9-5 ft a nice sea blue
 coast_palette[2] <- "#1d95b3"
 coast_palette[3] <- "#1c9aed"
 coast_palette
 
-# where's my nice blue?
+# and make the negative numbers "red"
+coast_palette[1] <- "red"
 
+# but we can't see any underwaters.
 
 ggplot() + 
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = binned_DEM)) +
   scale_fill_manual(values = coast_palette)+
-  ggtitle("Last manual title?")+
+  ggtitle("Last manual title?", subtitle="Can't see red")+
   coord_quickmap()
 
-
+sum(campus_DEM_df$elevation < 0)
 
 
 
 # hillshade layer
-#ok we have to do something here to make a hillshade
-#since one doesn't exist
+# ok we have to do something here to make a hillshade
+# since one doesn't exist
 
 # insert script from map 7 here.
 
@@ -242,10 +236,14 @@ campus_DEM_df %>%
   group_by(elevation) %>% 
   count()
 
+str(campus_DEM_df)
+
 # that's still too many? It's very few on Feb 4. this is part
 # of why bins are handy
-plot(campus_DEM_df$binned_DEM)
+# ggplot(campus_DEM_df) +
+#  geom_histogram(aes(binned_DEM))
 
 
 
 # Challenge: Make a 2-layer overlay for a 2nd set of rasters
+# try the bathymetry (if we have a hillshade)

@@ -12,14 +12,27 @@ rm(list=ls())
 
 current_episode <- 7
 
+# make our ggtitles automagically #######
+# set ggplot counter
+current_ggplot <- 0
+
+gg_labelmaker <- function(plot_num){
+  gg_title <- c("Episode:", current_episode, " ggplot:", plot_num)
+  plot_text <- paste(gg_title, collapse=" " )
+  print(plot_text)
+  current_ggplot <<- plot_num
+  return(plot_text)
+}
+# every ggtitle should be:
+# ggtitle(gg_labelmaker(current_ggplot+1))
+# end automagic ggtitle           #######
 
 # do we need to remake our objects?
 buildings <- st_read("source_data/Campus_Buildings/Campus_Buildings.shp")
 # trees ?
 
-# this isn't actually birds. it's habitat
 birds <- st_read("source_data/NCOS_Bird_Survey_Data_20190724shp/NCOS_Bird_Survey_Data_20190724_web.shp")
-
+plot(birds$geometry)
 
 # check out the attributes
 st_geometry_type(buildings)
@@ -50,7 +63,7 @@ colnames(buildings)
 ggplot() +
   geom_sf(data = buildings, aes(fill=bld_date, color=bld_date )) +
   scale_fill_continuous() +
-    ggtitle("Campus Buildings")
+  ggtitle(gg_labelmaker(current_ggplot+1), subtitle="Campus Buildings")
 
 
 
@@ -63,14 +76,14 @@ ggplot() +
 ggplot() +
   geom_sf(data = buildings, aes(color = bld_date), size = 1.5) +
   ggtitle("Campus Buildings", subtitle = "by age") +
+  ggtitle(gg_labelmaker(current_ggplot+1)) +
   coord_sf()
 
 # this one gives distinct colors
 ggplot() +
   geom_sf(data = buildings, aes(color = factor(bld_date)), size = 1.5) +
-  ggtitle("Campus Buildings", subtitle = "by age") +
+  ggtitle(gg_labelmaker(current_ggplot+1), subtitle="Campus Buildings, by age") +
   coord_sf()
-
 
 
 # We will want to bin that somehow, just like we
@@ -82,13 +95,13 @@ ggplot() +
 
 
 # more objects to map
-# habitat <- st_read("source_data/NCOS_Shorebird_Foraging_Habitat/NCOS_Shorebird_Foraging_Habitat.shp")
+habitat <- st_read("source_data/NCOS_Shorebird_Foraging_Habitat/NCOS_Shorebird_Foraging_Habitat.shp")
 
-# colnames(birds)
-# plot(birds, max.plot = 20)
+colnames(birds)
+plot(birds, max.plot = 20)
 
 # make a composite bird column: all the types of birds
-# birds_df <- as.data.frame(birds)
+birds_df <- as.data.frame(birds)
 
 
 # hey, something to explore
@@ -102,14 +115,14 @@ ggplot() +
 
 
 # filter on attributes
-# names(birds)
+names(birds)
 
+unique(birds$Species)
 
-
-#  color by attribute
-#ggplot () +
-#  geom_sf(data = signs, aes(color = factor(Condition)), size = 1.5) +
-#  labs(color = 'Condition') +
-#  coord_sf()
+# color by attribute
+ggplot () +
+  geom_sf(data = birds, aes(color = factor(Species)), size = 1.5) +
+  ggtitle(gg_labelmaker(current_ggplot+1)) +
+  coord_sf()
 
 

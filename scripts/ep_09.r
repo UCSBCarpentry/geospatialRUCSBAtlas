@@ -2,15 +2,33 @@
 # more about CRS
 # when vectors don't line up
 
-# clean the environment and hidden objects
-rm(list=ls())
-
-current_episode <- 9
 
 library(sf)
 library(dplyr)
 library(ggplot2)
 library(terra)
+
+# clean the environment and hidden objects
+rm(list=ls())
+
+current_episode <- 9
+
+# make our ggtitles automagically #######
+# set ggplot counter
+current_ggplot <- 0
+
+gg_labelmaker <- function(plot_num){
+  gg_title <- c("Episode:", current_episode, " ggplot:", plot_num)
+  plot_text <- paste(gg_title, collapse=" " )
+  print(plot_text)
+  current_ggplot <<- plot_num
+  return(plot_text)
+}
+# every ggtitle should be:
+# ggtitle(gg_labelmaker(current_ggplot+1))
+# end automagic ggtitle           #######
+
+
 
 
 # ############
@@ -50,89 +68,126 @@ coast <- st_read("source_data/pacific_ocean-shapefile/3853-s3_2002_s3_reg_pacifi
 campus_border <- st_read("output_data/ep_3_campus_borderline.shp")
 streams <- st_read("source_data/california_streams/California_Streams.shp")
 
-# created along the way for a map
+# streams is giant
+# streams_cropped was made earlier
 streams_cropped <- st_read("source_data/california_streams/streams_crop.shp")
+crs(streams_cropped)
 
-# streams is really big, so let's crop it
-# to zoom 2 extent from map 4
-# issue: when we export this in map 4, it didn't come with
+campus_projection == crs(streams_cropped)
+
+# streams is really big
+# and streams_cropped is too close
+# is this the first time we use $geometry?
+plot(streams_cropped$geometry)
+
+# let's make a different crop of streams
+# to the zoom 2 extent from map 4
+
+# issue: when we exported this in map 4, it didn't come with
 # a CRS. So we need to set it here.
-streams <- st_transform(streams, crs(streams_cropped))
 bite_extent <- st_read("output_data/zoom_2_extent.shp")
+crs(bite_extent)
+
+bite_extent_crs_set <- st_set_crs(bite_extent, crs(streams_cropped))
+crs(bite_extent_crs_set) 
+plot(bite_extent_crs_set$geometry)
+
+crs(bite_extent_crs_set) == crs(streams)
 
 # this makes garbage because different crs?
-streams_bite <- st_crop(streams, bite_extent)
+# missting bounding box?
+streams_crop2bite <- st_crop(streams, st_bbox(bite_extent_crs_set))
 
-crs(streams_bite) == crs(bite_extent)
-bite_extent <- st_transform(bite_extent, crs(streams_bite))
+plot(streams_crop2bite$geometry)
 
-crs(streams_bite) 
-crs(bite_extent)
+
+
+plot(places$geometry)
+plot(coast$geometry)
+plot(campus_border$geometry)
+
+
+# 4 layers, 4 different CRSs
+crs(places, proj=TRUE)
+crs(coast, proj=TRUE)
+crs(campus_border, proj=TRUE)
+crs(streams, proj=TRUE)
+
+# are any of them what we have declared to be 
+# the campus projection?
+campus_projection == crs(places)
+campus_projection == crs(coast)
+campus_projection == crs(campus_border)
+campus_projection == crs(streams)
+
 
 
 
 # these are all different
 st_crs(campus_border)
 st_crs(places)
-st_crs(streams_bite)
+st_crs(streams_crop2bite)
 st_crs(coast)
 
 ggplot() +
   geom_sf(data = places) +
   aes(color = "purple") +
-  ggtitle("Map 9.1: Cali Places") +
+  ggtitle(gg_labelmaker(current_ggplot+1), subtitle="Map 9.1: Cali Places")+
   coord_sf()
 
 ggplot() +
   geom_sf(data = coast, color="purple") +
-  ggtitle("Map 9.2: Cali Coast") +
-  coord_sf()
-
-ggplot() +
-  geom_sf(data = streams_bite, color="blue") +
-  ggtitle("Map 9.3: Streams") +
+  ggtitle(gg_labelmaker(current_ggplot+1), subtitle="Map 9.2: Cali Coast")+
   coord_sf()
 
 
 # do they overlay before re-projection?
 ggplot() +
   geom_sf(data = places,color="purple") +
-  geom_sf(data = coast, color="purple") +
-  ggtitle("Map 9.3: Places and Coast SUCCESS") +
+  geom_sf(data = coast, color="blue") +
+  ggtitle(gg_labelmaker(current_ggplot+1), subtitle="Map 9.3: Places and Coast SUCCESS") +
   coord_sf()
 # they do!
 
 ggplot() +
+  geom_sf(data = streams_crop2bite, color="blue") +
+  ggtitle(gg_labelmaker(current_ggplot+1), subtitle="just the streams") +
+  coord_sf()
+
+
+ggplot() +
   geom_sf(data = places,color="purple") +
-  geom_sf(data = coast, color="purple") +
-  geom_sf(data = streams_bite, color="blue") +
-  ggtitle("Map 9.4: ???") +
+  geom_sf(data = coast, color="gray") +
+  geom_sf(data = streams_crop2bite, color="blue") +
+  ggtitle(gg_labelmaker(current_ggplot+1), subtitle="Map 9.4: ???") +
   coord_sf()
 # fails!
 
+st_crs(coast)
+
 # start by putting the coast and streams in the same CRS
-streams_bite <- st_transform(streams_bite, st_crs(coast))
+streams_crop2bite_4326 <- st_transform(streams_crop2bite, st_crs(coast))
 
 # now they should overlay:
 ggplot() +
   geom_sf(data = places,color="purple") +
-  geom_sf(data = coast, color="purple") +
-  geom_sf(data = streams_bite, color="blue") +
-  ggtitle("Map 9.5: Well?") +
+#  geom_sf(data = coast, color="purple") +
+  geom_sf(data = streams_crop2bite_4326, color="blue") +
+  ggtitle(gg_labelmaker(current_ggplot+1), subtitle="Well? ???") +
   coord_sf()
 
 
 ggplot() +
-  geom_sf(data = streams_bite, color = "blue") +
+  geom_sf(data = streams_crop2bite_4326, color = "blue") +
   geom_sf(data = coast, color = "black",alpha = 0.25,size = 5) +
-  ggtitle("Map 9.5: Streams and Coast") +
+  ggtitle(gg_labelmaker(current_ggplot+1), subtitle="Streams and Coast") +
   coord_sf()
 
 ggplot() +
-  geom_sf(data = streams, color = "blue") +
+  geom_sf(data = streams_crop2bite_4326, color = "blue") +
   geom_sf(data = coast, color = "black",alpha = 0.25,size = 5) +
   geom_sf(data = places,color="purple") +
-  ggtitle("Map 9.6: Streams and Coast and Places???") +
+  ggtitle(gg_labelmaker(current_ggplot+1), subtitle="Streams and Coast and Places") +
   coord_sf()
 
   

@@ -10,6 +10,22 @@ rm(list=ls())
 
 current_episode <- 6
 
+# make our ggtitles automagically #######
+# set ggplot counter
+current_ggplot <- 0
+
+gg_labelmaker <- function(plot_num){
+  gg_title <- c("Episode:", current_episode, " ggplot:", plot_num)
+  plot_text <- paste(gg_title, collapse=" " )
+  print(plot_text)
+  current_ggplot <<- plot_num
+  return(plot_text)
+}
+# every ggtitle should be:
+# ggtitle(gg_labelmaker(current_ggplot+1))
+# end automagic ggtitle           #######
+
+
 
 # compare extents of 2 bike path files
 # these will give a warning message about projections
@@ -48,17 +64,20 @@ str(birds_points)
 # were new west campus bike paths
 ggplot() +
   geom_sf(data=bikes_icm, color = "red") +
-  geom_sf(data=birds_points)
+  geom_sf(data=birds_points) +
+  ggtitle(gg_labelmaker(current_ggplot+1)) +
   coord_sf() 
 
 ggplot() +
   geom_sf(data=bikes_icm, color = "red", size = .75) +
   geom_sf(data=bikes_library, color = "blue", size = 1.5) +
+  ggtitle(gg_labelmaker(current_ggplot+1)) +
       coord_sf()
 
 ggplot() +
   geom_sf(data=bikes_library, color = "blue", size = 1.5) +
   geom_sf(data=bikes_icm, color = "red", size = .75) +
+  ggtitle(gg_labelmaker(current_ggplot+1)) +
   coord_sf()
 
 
@@ -72,12 +91,14 @@ buildings <- st_read("source_data/Campus_Buildings/Campus_Buildings.shp")
 
 ggplot() +
   geom_sf(data=buildings, color = "red") +
+  ggtitle(gg_labelmaker(current_ggplot+1)) +
   coord_sf()
 
 # campus Areas of Interest (AOIs) as geojson
 greatercampus <- st_read("source_data/planet/planet/greater_UCSB-campus-aoi.geojson")
 ggplot() +
   geom_sf(data=greatercampus, color = "red") +
+  ggtitle(gg_labelmaker(current_ggplot+1)) +
   coord_sf()
 
 # if I tell you these are a zoom, how would you confirm?
@@ -89,6 +110,7 @@ ggplot() +
   geom_sf(data=greatercampus, color = "red") +
   geom_sf(data=maincampus, color = "green") +
   geom_sf(data=westcampus, color = "blue") +
+  ggtitle(gg_labelmaker(current_ggplot+1)) +
   coord_sf()
 
 
@@ -96,6 +118,7 @@ ggplot() +
 # bird habitat polygons
 ggplot() +
   geom_sf(data=birds_habitat, color = "red") +
+  ggtitle(gg_labelmaker(current_ggplot+1)) +
   coord_sf()
 
 
@@ -107,7 +130,9 @@ ggplot() +
   geom_sf(data=buildings, color = "gray") +
   geom_sf(data=greatercampus, color = "red") +
   geom_sf(data=maincampus, color = "green") +
-  geom_sf(data=westcampus, color = "blue") 
+  geom_sf(data=westcampus, color = "blue") +
+  ggtitle(gg_labelmaker(current_ggplot+1), subtitle="Error!")
+  
 
 
 # filled polygons need to go on the bottom
@@ -118,6 +143,7 @@ ggplot() +
   geom_sf(data=bikes_icm, color = "blue", size = 1.5) +
   geom_sf(data=bikes_library, color = "red", size = .75) +
   geom_sf(data=buildings, color = "gray") +
+  ggtitle(gg_labelmaker(current_ggplot+1)) +
   coord_sf()
 
 
@@ -133,4 +159,5 @@ ggplot() +
   geom_sf(data=buildings, color = "gray") +
   geom_sf(data=birds_points, color = "purple") +
   geom_sf(data=birds_habitat, color = "lawngreen", size = 2) +
-      coord_sf()
+  ggtitle(gg_labelmaker(current_ggplot+1)) +
+  coord_sf()
