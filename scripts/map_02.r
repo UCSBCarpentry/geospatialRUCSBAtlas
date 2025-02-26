@@ -22,6 +22,10 @@ gg_labelmaker <- function(plot_num){
   current_ggplot <<- plot_num
   return(plot_text)
 }
+# every ggtitle should be:
+# ggtitle(gg_labelmaker(current_ggplot+1))
+# end automagic ggtitle           #######
+
 
 # Load required libraries
 library(tidyverse)
