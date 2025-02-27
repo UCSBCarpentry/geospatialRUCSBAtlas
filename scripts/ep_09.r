@@ -73,7 +73,7 @@ crs(coast)
 
 # deal with streams
 streams <- vect("source_data/california_streams/California_Streams.shp")
-zoom_2_extent <- vect("scripts/socal_aoi.geojson")
+zoom_2_extent <- vect("source_data/socal_aoi.geojson")
 
 
 crs(zoom_2_extent)

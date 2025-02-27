@@ -4,7 +4,7 @@
 # clean the environment and hidden objects
 rm(list=ls())
 
-current_episode <- 80
+current_episode <- 8
 
 
 # add multiple geometries.
