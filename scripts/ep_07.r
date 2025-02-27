@@ -2,10 +2,16 @@
 # geospatial R UCSB examples
 # ep 7 : visualizing by attribute
 
-
-library(tidyverse)
-library(RColorBrewer)
+# canonical says:
+library(sf)
 library(terra)
+library(dplyr)
+library(ggplot2)
+
+# and for us. 
+# Do we really use these? as of 2/27 we don't
+# library(RColorBrewer)
+# library(terra)
 
 # clean the environment and hidden objects
 rm(list=ls())
@@ -27,19 +33,45 @@ gg_labelmaker <- function(plot_num){
 # ggtitle(gg_labelmaker(current_ggplot+1))
 # end automagic ggtitle           #######
 
-# do we need to remake our objects?
-buildings <- st_read("source_data/Campus_Buildings/Campus_Buildings.shp")
-# trees ?
 
+# remake our objects
+buildings <- st_read("source_data/Campus_Buildings/Campus_Buildings.shp")
 birds <- st_read("source_data/NCOS_Bird_Survey_Data_20190724shp/NCOS_Bird_Survey_Data_20190724_web.shp")
+bikes <- st_read("source_data/icm_bikes/bike_paths/bikelanescollapsedv8.shp")
+
+# maybe use the zoomed in streams instead / also?
+
+# this might be the first use of $geometry
+# canonical lesson uses a single point. we will use birds
 plot(birds$geometry)
+
+# Query Vector Feature Metadata
+birds
+ncol(birds)
+names(birds)
+
+ncol(bikes)
+names(bikes)
+
+
+# Challenge: Plot Polygon by Attribute
+
+# bikes by LnType
+unique(bikes$LnType)
+str(bikes$LnType)
+
+# Challenge: Attributes for Different Spatial Classes
+# points vs an aoi
+
+
+# Explore Values within One Attribute
+# do building ages?
+#     canonical uses lines
 
 # check out the attributes
 st_geometry_type(buildings)
 colnames(buildings)
 
-# see the CRS
-st_crs(buildings)
 
 
 # 2 different ages in the table.
@@ -67,7 +99,10 @@ ggplot() +
 
 
 
-# A: you could do it with a filter 
+# Subset Features
+# canonical does it by path type
+# maybe we do it by age of building?
+    # ducks only in birds?
 
 # B: and then plot one-by-one layer
 
@@ -92,7 +127,6 @@ ggplot() +
 
 # an example more analagous to the lesson would be 
 # bird types as a categorical variable.
-
 
 # more objects to map
 habitat <- st_read("source_data/NCOS_Shorebird_Foraging_Habitat/NCOS_Shorebird_Foraging_Habitat.shp")

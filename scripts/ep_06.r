@@ -35,6 +35,8 @@ birds_habitat <- st_read("source_data/NCOS_Shorebird_Foraging_Habitat/NCOS_Shore
 birds_points <- st_read("source_data/NCOS_Bird_Survey_Data_20190724shp/NCOS_Bird_Survey_Data_20190724_web.shp")
 
 
+
+
 # you can see when you create the object that the CRS's
 # and bounding boxes are different
 
