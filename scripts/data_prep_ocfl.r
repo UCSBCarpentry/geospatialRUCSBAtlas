@@ -92,3 +92,24 @@ ocfl_download <- function(ocfl_base_url, object_id, version="", download_dir="."
 ocfl_root <- "https://dreamlab-public.s3.us-west-2.amazonaws.com/ocfl"
 object_id <- "geospatialRUCSBAtlas-data"
 ocfl_download(ocfl_root, object_id, download_dir="source_data")
+
+
+## Work in progress
+download_if_changed <- function(uri, localfile) {
+  head_handle <- new_handle()
+  handle_setopt(head_handle, customrequest = "HEAD", nobody = TRUE)
+  resp <- curl_fetch_memory(uri, handle = head_handle)
+  headers <- parse_headers_list(resp$headers)
+  size <- as.numeric(headers[['content-length']])
+  mtime <- curl::parse_date(headers$`last-modified`)
+  f_info <- file.info(localfile)
+  if(is.na(f_info$size) || size != f_info$size || mtime != f_info$mtime){
+    write(paste("downloading to", localfile), stderr())
+    curl_download(uri, dstfile)
+    Sys.setFileTime(dstfile, modtime)
+    return(TRUE)
+  }
+  write(paste(localfile, "is unchanged"), stderr())
+  return(FALSE)
+}
+
