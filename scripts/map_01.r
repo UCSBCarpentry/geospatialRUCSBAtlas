@@ -331,7 +331,7 @@ gg_title_string
 # #  
 ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
-  geom_raster(data = campus_hillshade_df, aes(x=x, y=y, alpha = campus_hillshade), show.legend = FALSE) +
+  geom_raster(data = campus_hillshade_df, aes(x=x, y=y, alpha = campus_hillshade)) +
   geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = bathymetry)) +
   scale_y_continuous(labels = number_format(accuracy = 0.01)) +
   scale_fill_viridis_c(na.value="NA", guide = guide_legend("bathymetry / elevation (US ft)"))+
@@ -340,7 +340,7 @@ ggplot() +
   geom_sf(data=habitat, color=alpha("darkorchid1", .1), fill=NA) +
   geom_sf(data=bikeways, color="#00abff") +
   ggtitle(gg_title_string, subtitle="UCSB & environs") + 
-  theme(axis.title.x=element_blank(), axis.title.y=element_blank())+
+  theme(axis.title.x=element_blank(), axis.title.y=element_blank(), legend.position="none") +
     coord_sf()
 
 ggsave("images/map1.11.png", width = 16, height = 9, plot=last_plot())
