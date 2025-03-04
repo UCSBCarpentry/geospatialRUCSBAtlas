@@ -69,7 +69,7 @@ zoom_2 <- rast("source_data/dem90_hf/dem90_hf.tif")
 
 # this geojson is the extent we want to crop to
 # extent geojson came from planet
-zoom_2_extent <- geojson_sf("scripts/socal_aoi.geojson")
+zoom_2_extent <- geojson_sf("source_data/socal_aoi.geojson")
 zoom_2_extent <- vect(zoom_2_extent)
 
 # project it to match west_us
@@ -96,7 +96,7 @@ zoom_2_extent <- project(zoom_2_extent, campus_crs)
 #                                    fun=mean)
 
 # now project and test the overlay:
-zoom_3_fake_aoi <- vect("scripts/socal_aoi.geojson")
+zoom_3_fake_aoi <- vect("source_data/socal_aoi.geojson")
 
 # need make the projections match
 # the above didn't work because the crs's don't match:
@@ -124,7 +124,7 @@ plot(world)
 
 # world <- project(world, campus_crs)
 # clip first instead
-zoom_1_extent <- geojson_sf("scripts/cali_overview.geojson")
+zoom_1_extent <- geojson_sf("source_data/cali_overview.geojson")
 zoom_1_extent <- vect(zoom_1_extent)
 zoom_1_extent <- project(zoom_1_extent, crs(world))
 
