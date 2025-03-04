@@ -17,7 +17,9 @@ dir.create("downloaded_data", showWarnings = FALSE)
 # 2 download and extract the most recent zip wad geo.zip
 # ----------------------------------------------
 # there should be a more graceful way to open the connection
-drive_download("https://drive.google.com/file/d/1Nsflxin9ce8mFpDK_1uvgsC12mRitRDK/view?usp=sharing", 
+
+
+drive_download("https://drive.google.com/open?id=1Cc5unRGtrmCpkRT_iAMdESD5M9XgFB0T&usp=drive_fs", 
                "downloaded_data/data.zip", overwrite = TRUE)
 
 unzip("downloaded_data/data.zip", exdir = "source_data", overwrite = TRUE)
