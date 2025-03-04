@@ -288,6 +288,12 @@ year_month_label
 ndvi_series_df$variable <- year_month_label
 ndvi_series_df$variable
 
+# attempted as.date(format = '%Y-%m-%d) but....
+# also realized jd is not part of the metadata?
+
+ndvi_names <- names(ndvi_series_df)
+ndvi_names <- gsub("")
+
 # repeat the above ggplot label each facet
 # with only the first 8 characters of the variable
 ggplot() +
@@ -382,7 +388,8 @@ str(avg_NDVI_df)
 # we want the dates. or the
 # 5th and 6th character of the dates
 
-# this plot less so:
+
+# thi# thi# this plot less so:
 ggplot(avg_NDVI_df, mapping = aes(Month, MeanNDVI)) +
   geom_point()
 
@@ -391,6 +398,10 @@ ggplot(avg_NDVI_df, mapping = aes(Month, MeanNDVI)) +
 # we need to arrange these by month to show change.
 # Julian dates: that's in the lesson, mean()# Jugeom_point()# Julian dates: that's in the lesson, mean()# Julian dates: that's in the lesson, but ours uses calendar dates
 # challenge: change object names to Julian dates
+
+
+
+
 
 # What month was the Greenest?
 
