@@ -26,6 +26,11 @@ par(mfrow = c(1,1))
 # We'll need a grayscale palette later
 grays <- colorRampPalette(c("black", "white"))(255)
 
+# set map number
+current_sheet <- 4
+# set ggplot counter
+current_ggplot <- 0
+
 # our auto ggtitle maker
 gg_labelmaker <- function(plot_num){
   gg_title <- c("Map:", current_sheet, " ggplot:", plot_num)
@@ -210,10 +215,6 @@ plot(zoom_3, col = grays)
 # via ggplot
 #################################################
 
-# set map number
-current_sheet <- "4-5-6"
-# set ggplot counter
-current_ggplot <- 0
 
 
 # zoom 1 as ggplot
@@ -254,8 +255,8 @@ zoom_2_plot <- ggplot() +
     scale_fill_viridis_c() +
   scale_alpha(range = c(0.05, 0.5), guide="none") +
 #  geom_spatvector(data=campus_extent) +
-  theme_dark()+
   coord_sf(crs=campus_crs)+
+  theme(axis.title.x=element_blank(), axis.title.y=element_blank(), legend.position="none") +
   ggtitle(gg_labelmaker(current_ggplot+1), subtitle = "Zoom 2: Bite of California")
 
 zoom_2_plot
@@ -277,13 +278,13 @@ colnames(zoom_3_df)
 
 zoom_3_plot <- ggplot()+
   geom_raster(data = zoom_3_df,
-              aes(x=x, y=y, fill=greatercampusDEM_1_1), show.legend = FALSE) +
+              aes(x=x, y=y, fill=greatercampusDEM_1_1)) +
   geom_raster(data=zoom_3_hillshade_df, 
               aes(x=x, y=y, alpha=hillshade))+
   scale_fill_viridis_c() +
-  scale_alpha(range = c(0.15, 0.65), guide="none")+
-  theme_dark() +
+  scale_alpha(range = c(0.15, 0.65))+
   coord_sf(crs=campus_crs) +
+  theme(axis.title.x=element_blank(), axis.title.y=element_blank(), legend.position="none") +
   ggtitle(gg_labelmaker(current_ggplot+1), subtitle="Zoom 3: UCSB and vicinity")
 
 zoom_3_plot
@@ -340,6 +341,7 @@ zoom_2_plot <- ggplot() +
   scale_alpha(range = c(0.15, 0.65), guide="none") +
   geom_spatvector(data=campus_extent) +
   geom_spatvector(data=places, fill=NA) +
+  theme(axis.title.x=element_blank(), axis.title.y=element_blank(), legend.position="none") +
   ggtitle(gg_labelmaker(current_ggplot+1), subtitle = "Bite of California")
 
   
@@ -347,7 +349,7 @@ zoom_1_plot
 zoom_2_plot
 zoom_3_plot
 
-ggsave("images/map4.png", width = 16, height = 9, plot=zoom_1_plot)
-ggsave("images/map5.png", width = 16, height = 9, plot=zoom_2_plot)
-ggsave("images/map6.png", width = 16, height = 9, plot=zoom_3_plot)
+ggsave("images/map4.png", width = 3, height = 4, plot=zoom_1_plot)
+ggsave("images/map5.png", width = 3, height = 4, plot=zoom_2_plot)
+ggsave("images/map6.png", width = 4, height = 3, plot=zoom_3_plot)
 

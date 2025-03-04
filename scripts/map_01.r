@@ -329,7 +329,7 @@ ggplot() +
 gg_title_string <- gg_labelmaker(current_ggplot)
 gg_title_string
 # #  
-ggplot() +
+final_ggplot <- ggplot() +
   geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
   geom_raster(data = campus_hillshade_df, aes(x=x, y=y, alpha = campus_hillshade)) +
   geom_raster(data = campus_bath_df, aes(x=x, y=y, fill = bathymetry)) +
@@ -343,4 +343,5 @@ ggplot() +
   theme(axis.title.x=element_blank(), axis.title.y=element_blank(), legend.position="none") +
     coord_sf()
 
-ggsave("images/map1.11.png", width = 16, height = 9, plot=last_plot())
+final_ggplot
+ggsave("images/map1.11.png", width = 16, height = 9, plot=final_ggplot)
