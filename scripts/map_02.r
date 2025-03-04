@@ -307,7 +307,7 @@ map2_gg4
 ggsave(
   "images/map2_TreeHeight.png",
   plot = map2_gg4,
-  width = 10, height = 7,
+  width = 16, height = 9,
   dpi = 500,
   units = 'in'
 )
@@ -367,7 +367,7 @@ map2_gg5
 ggsave(
   "images/map2_TreeSpecies.png",
   plot = map2_gg5,
-  width = 10, height = 7,
+  width = 16, height = 9,
   dpi = 500,
   units = 'in'
 )

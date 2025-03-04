@@ -343,4 +343,4 @@ ggplot() +
   theme(axis.title.x=element_blank(), axis.title.y=element_blank())+
     coord_sf()
 
-ggsave("images/map1.9.png", plot=last_plot())
+ggsave("images/map1.11.png", width = 16, height = 9, plot=last_plot())
