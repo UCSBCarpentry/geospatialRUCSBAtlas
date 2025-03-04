@@ -347,3 +347,7 @@ zoom_1_plot
 zoom_2_plot
 zoom_3_plot
 
+ggsave("images/map4.png", width = 16, height = 9, plot=zoom_1_plot)
+ggsave("images/map5.png", width = 16, height = 9, plot=zoom_2_plot)
+ggsave("images/map6.png", width = 16, height = 9, plot=zoom_3_plot)
+
