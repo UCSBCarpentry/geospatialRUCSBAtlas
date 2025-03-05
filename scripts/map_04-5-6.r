@@ -40,26 +40,30 @@ gg_labelmaker <- function(plot_num){
   return(plot_text)
 }
 
-
-
-# ###########################
-# Map 6
-# Zoom 3: campus
-
+# set up a local CRD to use throughout
 campus_DEM <- rast("source_data/campus_DEM.tif") 
-
-# we are going to reuse this CRS throughout
 campus_crs = crs(campus_DEM)
 str(campus_crs)
-plot(campus_DEM)
 
-# we'll need a polygon that's the extent
-# of campus
-campus_extent <- ext(campus_DEM)
-campus_extent <- vect(campus_extent, crs=campus_crs)
-plot(campus_extent)
-campus_extent <- project(campus_extent, campus_crs)
-plot(campus_extent)
+
+
+# #####################
+# Map 4
+# Zoom 1: west US overview
+# this one arrived as a hillshade.
+world <- rast("source_data/global_raster/GRAY_HR_SR_OB.tif")
+plot(world)
+
+# clip first
+# using an AOI we defined in Planet
+zoom_1_extent <- geojson_sf("source_data/cali_overview.geojson")
+zoom_1_extent <- vect(zoom_1_extent)
+zoom_1_extent <- project(zoom_1_extent, crs(world))
+
+zoom_1 <- crop(x=world, y=zoom_1_extent)
+
+plot(zoom_1)
+
 
 
 # ############################
@@ -70,128 +74,94 @@ plot(campus_extent)
 # Crop western region DEM to local area defined by 
 # socal_aoi.geojson
 zoom_2 <- rast("source_data/dem90_hf/dem90_hf.tif")
-
+plot(zoom_2)
 
 # this geojson is the extent we want to crop to
 # extent geojson came from planet
-zoom_2_extent <- geojson_sf("source_data/socal_aoi.geojson")
-zoom_2_extent <- vect(zoom_2_extent)
+zoom_2_crop_extent <- geojson_sf("source_data/socal_aoi.geojson")
+zoom_2_crop_extent <- vect(zoom_2_crop_extent)
+
+crs(zoom_2_crop_extent) == crs(zoom_2)
 
 # project it to match west_us
-zoom_2_extent <- project(zoom_2_extent, crs(zoom_2))
-crs(zoom_2_extent)
+zoom_2_crop_extent <- project(zoom_2_crop_extent, crs(zoom_2))
+crs(zoom_2_crop_extent) == crs(zoom_2)
 
 # now you can plot them together
 # to confirm that's the correct extent
 # that you want to crop to
 plot(zoom_2)
-polys(zoom_2_extent)
+polys(zoom_2_crop_extent)
 
-# and crop to that extent
-# is this slow? --not at all on JJ's mac
-zoom_2_cropped <- crop(x=zoom_2, y=zoom_2_extent)
+# now crop to that extent
+zoom_2_cropped <- crop(x=zoom_2, y=zoom_2_crop_extent)
 plot(zoom_2_cropped)
+crs(zoom_2_cropped)
 
-# put the extent back into the default projection
-zoom_2_extent <- project(zoom_2_extent, campus_crs)
+# we can start to use the extent of the campus_DEM
+zoom_3_extent <- ext(campus_DEM)
+zoom_3_extent <- vect(zoom_3_extent)
+crs(zoom_3_extent)
 
-# project --cali_zoom_2-- into my standard crs
-# downsample before projecting:
-#zoom_2_downsample <- aggregate(zoom_2_cropped, fact=2,
-#                                    fun=mean)
+set.crs(zoom_3_extent, crs(campus_DEM))
+plot(zoom_3_extent)
 
-# now project and test the overlay:
-zoom_3_fake_aoi <- vect("source_data/socal_aoi.geojson")
+crs(zoom_3_extent) == crs(zoom_2_cropped)
 
-# need make the projections match
-# the above didn't work because the crs's don't match:
-crs(zoom_2_cropped) == crs(zoom_3_fake_aoi)
+zoom_3_extent <- project(zoom_3_extent, crs(zoom_2_cropped))
 
-zoom_3_fake_aoi <- project(zoom_3_fake_aoi, crs(campus_crs))
-zoom_2_cropped <- project(zoom_2_cropped, campus_crs)
-
-# aesthetically, at this point
-# we can start to use the extent of campus
-plot(zoom_2_cropped, col=grays)
-polys(campus_extent, border="red", lwd=4)
+plot(zoom_2_cropped)
+polys(zoom_3_extent, border="red", lwd=4)
 
 
-# #####################
-# Map 4
-# Zoom 1
-# overview
-# this one arrived as a hillshade.
-# maybe this should actually be made from the west_us?
-
-
-world <- rast("source_data/global_raster/GRAY_HR_SR_OB.tif")
-plot(world)
-
-# world <- project(world, campus_crs)
-# clip first instead
-zoom_1_extent <- geojson_sf("source_data/cali_overview.geojson")
-zoom_1_extent <- vect(zoom_1_extent)
-zoom_1_extent <- project(zoom_1_extent, crs(world))
-
-plot(world)
-polys(zoom_1_extent)
-
-zoom_1 <- crop(x=world, y=zoom_1_extent)
-
-zoom_1_extent <- project(zoom_1_extent, campus_crs)
-zoom_1 <- project(zoom_1, campus_crs)
-
-plot(zoom_1)
-polys(zoom_3_fake_aoi, border="red", lwd=4)
-
-
-plot(zoom_1, col=grays)
-polys(zoom_3_fake_aoi,  border="red", lwd=4)
-
-plot(zoom_2_cropped, col=grays)
-polys(campus_extent,  border="red", lwd=4)
+# ###########################
+# Map 6
+# Zoom 3: UCSB & Environs
 
 plot(campus_DEM)
 
 
-plot(zoom_1, col=grays)
-polys(zoom_3_fake_aoi, col="red")
-
-plot(zoom_2_cropped, col=grays)
-polys(campus_extent, col="red")
-
-plot(campus_DEM, col=grays)
 
 
 ####################################
-# we need to make zoom 2 into a hillshade
-# zoom 1 came as a hillshade
-# zoom 3 hillshade gets made in data_prep.r as hillshade.tiff
+# hillshades
+# # zoom 1 came as a hillshade
+plot(zoom_1)
 
+# # make zoom 2 into a hillshade
 # hillshades are made of slopes and aspects
 zoom_2_slope <- terrain(zoom_2_cropped, "slope", unit="radians")
 plot(zoom_2_slope)
 zoom_2_aspect <- terrain(zoom_2_cropped, "aspect", unit="radians")
 plot(zoom_2_aspect)
 zoom_2_hillshade <- shade(zoom_2_slope, zoom_2_aspect,
-                         angle = 15,
-                         direction = 270,
-                         normalize = TRUE)
-plot(zoom_2_hillshade, col=grays)
+                          angle = 15,
+                          direction = 270,
+                          normalize = TRUE)
+
+plot(zoom_2_hillshade)
+polys(zoom_3_extent, border="red", lwd=4)
 
 
-# Review
+# zoom 3 hillshade gets made in data_prep.r as hillshade.tiff ???
+
+
 # ##########################
 # add the AOI polygons
-# and output a tryptic of hillshades
+# to the hillshades
 
 # zoom 1: 
-plot(zoom_1, col = grays)
-polys(zoom_2_extent, border="red",lwd=5)
+zoom_1 <- project(zoom_1, campus_crs)
+campus_crs
+crs(zoom_2_crop_extent)
+zoom_2_crop_extent <- project(zoom_2_crop_extent, campus_crs)
 
-# zoom 2:# zoom 2:reduce()
+plot(zoom_1, col = grays)
+polys(zoom_2_crop_extent, border="red",lwd=5)
+
+# zoom 2:
 plot(zoom_2_hillshade, col = grays)
-polys(campus_extent, border="red", lwd=5)
+polys(zoom_3_extent, border="red", lwd=5)
 
 # zoom 3:
 zoom_3 <- rast("source_data/campus_hillshade.tif")
@@ -199,53 +169,62 @@ plot(zoom_3, col = grays)
 
 
 
-plot(zoom_1, col = grays)
-polys(zoom_2_extent, border="red",lwd=5)
-
-plot(zoom_2_hillshade, col = grays)
-polys(campus_extent, border="red", lwd=5)
-
-zoom_3 <- rast("source_data/campus_hillshade.tif")
-plot(zoom_3, col = grays)
-
-
-
-
 # now we do it all again with ggplot:
 # via ggplot
 #################################################
-
-
-
 # zoom 1 as ggplot
 str(zoom_1)
+plot(zoom_1)
+polys(zoom_2_crop_extent, border="red",lwd=5)
+
 zoom_1_df <- as.data.frame(zoom_1, xy=TRUE)
 colnames(zoom_1_df)
 
+# just the hillshade
 zoom_1_plot <- ggplot() +
   geom_raster(data = zoom_1_df,
-              aes(x=x, y=y, fill=GRAY_HR_SR_OB), show.legend = FALSE) +
-  geom_spatvector(data=zoom_2_extent, fill="NA") +
-    scale_fill_viridis_c() +
+              aes(x=x, y=y, fill=GRAY_HR_SR_OB)) +
   theme_dark() +
   coord_sf(crs=campus_crs) + 
   ggtitle(gg_labelmaker(current_ggplot+1), subtitle = "California")
 
 zoom_1_plot
 
+zoom_1_plot <- ggplot() +
+  geom_raster(data = zoom_1_df,
+              aes(x=x, y=y, fill=GRAY_HR_SR_OB)) +
+  geom_spatvector(data=zoom_2_crop_extent, color="red", fill=NA) +
+  theme(axis.title.x=element_blank(), axis.title.y=element_blank(), legend.position="none") +
+  coord_sf(crs=campus_crs) + 
+  ggtitle(gg_labelmaker(current_ggplot+1), subtitle = "California")
+  
+zoom_1_plot
+
+
 
 # zoom 2 as ggplot
+plot(zoom_2_hillshade)
+polys(zoom_3_extent, border="red", lwd=5)
 
 zoom_2_df <- as.data.frame(zoom_2_cropped, xy=TRUE)
 colnames(zoom_2_df)
 
-zoom_2_hillshade_df <- as.data.frame(zoom_2_hillshade, xy=TRUE)
+zoom_2_plot <- ggplot() +
+  geom_raster(data = zoom_2_df,
+              aes(x=x, y=y, fill=dem90_hf)) +
+  geom_spatvector(data=zoom_3_extent, color="red", fill=NA) +
+  theme(axis.title.x=element_blank(), axis.title.y=element_blank(), legend.position="none") +
+  coord_sf() + 
+  ggtitle(gg_labelmaker(current_ggplot+1), subtitle = "California")
+
+zoom_2_plot
+
 
 
 # this plot breaks if I try to style the extent box.
 # geom_sf(data=campus_extent, aes(stroke=3, fill=NA)) +
 # also, the crs throws an error = cannot transform sfc object with missing crs
-crs(campus_extent)
+crs(zoom3_extent)
 
 zoom_2_plot <- ggplot() +
     geom_raster(data = zoom_2_df,
@@ -339,7 +318,7 @@ zoom_2_plot <- ggplot() +
                   aes(x=x, y=y, fill=hillshade)) +
   scale_fill_viridis_c() +
   scale_alpha(range = c(0.15, 0.65), guide="none") +
-  geom_spatvector(data=campus_extent) +
+  geom_spatvector(data=zoom3_extent, color="red") +
   geom_spatvector(data=places, fill=NA) +
   theme(axis.title.x=element_blank(), axis.title.y=element_blank(), legend.position="none") +
   ggtitle(gg_labelmaker(current_ggplot+1), subtitle = "Bite of California")
