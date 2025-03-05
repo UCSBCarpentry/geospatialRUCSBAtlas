@@ -206,7 +206,7 @@ zoom_1_plot
 plot(zoom_2_hillshade)
 polys(zoom_3_extent, border="red", lwd=5)
 
-zoom_2_df <- as.data.frame(zoom_2_cropped, xy=TRUE)
+zoom_2_df <- as.data.frame(zoom_2_hillshade, xy=TRUE)
 colnames(zoom_2_df)
 
 zoom_2_plot <- ggplot() +
@@ -224,7 +224,7 @@ zoom_2_plot
 # this plot breaks if I try to style the extent box.
 # geom_sf(data=campus_extent, aes(stroke=3, fill=NA)) +
 # also, the crs throws an error = cannot transform sfc object with missing crs
-crs(zoom3_extent)
+crs(zoom_3_extent)
 
 zoom_2_plot <- ggplot() +
     geom_raster(data = zoom_2_df,
