@@ -2,6 +2,10 @@
 # zooming in to campus
 # the zoom to Cali locator sheet
 
+# the 3 maps are an alpha hillshade
+# over a DEM, just as in the overlay
+# episode of the canonical episode
+
 # we crop the rasters before reprojecting them.
 # because that's faster
 
@@ -40,7 +44,7 @@ gg_labelmaker <- function(plot_num){
   return(plot_text)
 }
 
-# set up a local CRD to use throughout
+# set up a local CRS to use throughout
 campus_DEM <- rast("source_data/campus_DEM.tif") 
 campus_crs = crs(campus_DEM)
 str(campus_crs)
@@ -172,15 +176,14 @@ plot(zoom_3, col = grays)
 # now we do it all again with ggplot:
 # via ggplot
 #################################################
-# zoom 1 as ggplot
+# zoom 1 hillshade as ggplot
 str(zoom_1)
 plot(zoom_1)
-polys(zoom_2_crop_extent, border="red",lwd=5)
+polys(zoom_2_crop_extent, border="red",lwd=4)
 
 zoom_1_df <- as.data.frame(zoom_1, xy=TRUE)
 colnames(zoom_1_df)
 
-# just the hillshade
 zoom_1_plot <- ggplot() +
   geom_raster(data = zoom_1_df,
               aes(x=x, y=y, fill=GRAY_HR_SR_OB)) +
@@ -196,64 +199,80 @@ zoom_1_plot <- ggplot() +
   geom_spatvector(data=zoom_2_crop_extent, color="red", fill=NA) +
   theme(axis.title.x=element_blank(), axis.title.y=element_blank(), legend.position="none") +
   coord_sf(crs=campus_crs) + 
-  ggtitle(gg_labelmaker(current_ggplot+1), subtitle = "California")
-  
+  ggtitle(gg_labelmaker(current_ggplot+1), subtitle = "Zoom 1: California")
+
 zoom_1_plot
 
-
-
-# zoom 2 as ggplot
+#################################################
+# zoom 2 hillshade as ggplot
 plot(zoom_2_hillshade)
-polys(zoom_3_extent, border="red", lwd=5)
+polys(zoom_3_extent, border="red", lwd=2)
 
-zoom_2_df <- as.data.frame(zoom_2_cropped, xy=TRUE)
+zoom_2_df <- as.data.frame(zoom_2_hillshade, xy=TRUE)
 colnames(zoom_2_df)
 
 zoom_2_plot <- ggplot() +
   geom_raster(data = zoom_2_df,
-              aes(x=x, y=y, fill=dem90_hf)) +
+              aes(x=x, y=y, fill=hillshade)) +
   geom_spatvector(data=zoom_3_extent, color="red", fill=NA) +
   theme(axis.title.x=element_blank(), axis.title.y=element_blank(), legend.position="none") +
   coord_sf() + 
-  ggtitle(gg_labelmaker(current_ggplot+1), subtitle = "California")
-
-zoom_2_plot
-
-
-
-# this plot breaks if I try to style the extent box.
-# geom_sf(data=campus_extent, aes(stroke=3, fill=NA)) +
-# also, the crs throws an error = cannot transform sfc object with missing crs
-crs(zoom3_extent)
-
-zoom_2_plot <- ggplot() +
-    geom_raster(data = zoom_2_df,
-              aes(x=x, y=y, fill=dem90_hf), show.legend = FALSE) +
-  geom_raster(data=zoom_2_hillshade_df, 
-              aes(x=x, y=y, alpha=hillshade)) +
-    scale_fill_viridis_c() +
-  scale_alpha(range = c(0.05, 0.5), guide="none") +
-#  geom_spatvector(data=campus_extent) +
-  coord_sf(crs=campus_crs)+
-  theme(axis.title.x=element_blank(), axis.title.y=element_blank(), legend.position="none") +
   ggtitle(gg_labelmaker(current_ggplot+1), subtitle = "Zoom 2: Bite of California")
 
 zoom_2_plot
 
-# later on we will want to use the zoom_2 as an extent
-zoom_2_extent <- ext(zoom_2) %>% as.polygons()
-writeVector(zoom_2_extent, "output_data/zoom_2_extent.shp", overwrite=TRUE)
-
-# zoom3
-# figure out the layer names
-zoom_3_df <- as.data.frame(campus_DEM, xy=TRUE)
-
-
+#################################################
+# zoom3 as ggplot
+# this one isn't a hillshade
+# but we have a hillshade available
 
 campus_hillshade <- rast("source_data/campus_hillshade.tif") 
 zoom_3_hillshade_df <- as.data.frame(campus_hillshade, xy=TRUE)
 
-colnames(zoom_3_df)
+colnames(zoom_3_hillshade_df)
+
+zoom_3_plot <- ggplot()+
+  geom_raster(data = zoom_3_hillshade_df,
+              aes(x=x, y=y, fill=hillshade)) +
+  coord_sf() +
+  theme(axis.title.x=element_blank(), axis.title.y=element_blank(), legend.position="none") +
+  ggtitle(gg_labelmaker(current_ggplot+1), subtitle="Zoom 3: UCSB and vicinity")
+
+
+# maybe this premade hillshade, the sun isn't at the best angle
+zoom_3_plot
+
+
+# #######################################################
+# back to start of zoom 
+# the next goal is alpha hillshade on dem
+# but these don't look the same yet
+zoom_1_plot
+zoom_2_plot
+zoom_3_plot
+
+#################################
+# let's overlay anyway
+
+str(zoom_1_df)
+
+zoom_1_alpha_plot <- ggplot()+
+  geom_raster(data = zoom_1_df,
+              aes(x=x, y=y, fill=greatercampusDEM_1_1)) +
+  geom_raster(data=zoom_1_hillshade_df, 
+              aes(x=x, y=y, alpha=hillshade))+
+  scale_fill_viridis_c() +
+  scale_alpha(range = c(0.15, 0.65))+
+  coord_sf(crs=campus_crs) +
+  theme(axis.title.x=element_blank(), axis.title.y=element_blank(), legend.position="none") +
+  ggtitle(gg_labelmaker(current_ggplot+1), subtitle="Zoom 1: with alpha")
+
+zoom_3_plot
+
+
+zoom_2_alpha_plot <- ggplot()+
+zoom_3_alpha_plot <- ggplot()+
+  
 
 zoom_3_plot <- ggplot()+
   geom_raster(data = zoom_3_df,
@@ -270,9 +289,46 @@ zoom_3_plot
 
 
 
-# now load 
+str(zoom_2_df)
+crs(zoom_3_extent) == crs(zoom_2_hillshade)
+
+zoom_2_plot <- ggplot() +
+  geom_raster(data = zoom_2_df,
+              aes(x=x, y=y, alpha=hillshade)) +
+  scale_alpha(range = c(0.05, 0.5), guide="none") +
+  coord_sf() +
+  theme(axis.title.x=element_blank(), axis.title.y=element_blank(), legend.position="none") +
+  ggtitle(gg_labelmaker(current_ggplot+1), subtitle = "Zoom 2: Bite of California")
+
+zoom_2_plot
+# later on we will want to use the zoom_2 as an extent
+zoom_2_extent <- ext(zoom_2) %>% as.polygons()
+writeVector(zoom_2_extent, "output_data/zoom_2_extent.shp", overwrite=TRUE)
+
+
+zoom_3_plot <- ggplot()+
+  geom_raster(data = zoom_3_df,
+              aes(x=x, y=y, fill=greatercampusDEM_1_1)) +
+  geom_raster(data=zoom_3_hillshade_df, 
+              aes(x=x, y=y, alpha=hillshade))+
+  scale_fill_viridis_c() +
+  scale_alpha(range = c(0.15, 0.65))+
+  coord_sf(crs=campus_crs) +
+  theme(axis.title.x=element_blank(), axis.title.y=element_blank(), legend.position="none") +
+  ggtitle(gg_labelmaker(current_ggplot+1), subtitle="Zoom 3: UCSB and vicinity")
+
+
+# now let's visualize things up 
 # 'california populated places'
-# which is census data. Use these for some placename labels and
+# which is census data. 
+# overlay this on top of zoom 1 and zoom 2 hillshades
+
+zoom_1_plot
+zoom_2_plot
+zoom_3_plot
+
+
+# Use these for some placename labels and
 # visual polygons styled similar to the IV building outlines
 # on map 1.
 places <- vect("source_data/tl_2023_06_place/tl_2023_06_place.shp")
@@ -282,48 +338,14 @@ ggplot() +
   geom_spatvector(data=places) +
   ggtitle(gg_labelmaker(current_ggplot+1))
 
+#######################################################################################
+
 # overlay 
 # geom_raster and geom_spatraster
-colnames(zoom_2_hillshade_df)
 colnames(places)
 
 
-ggplot() +
-  geom_spatraster(data = zoom_2_hillshade,
-                  aes(fill=hillshade)) +
-geom_spatvector(data = places, fill=NA)+ 
-ggtitle(gg_labelmaker(current_ggplot+1))
-  
-#######################
-# is the alpha doing anything here?
-ggplot() +
-  geom_spatraster(data = zoom_2_hillshade,
-              aes(fill=hillshade)) +
-    scale_fill_viridis_c() +
-  scale_alpha(range = c(0.15, 0.65), guide="none")+
-  geom_spatvector(data=places, fill=NA) +
-  ggtitle(gg_labelmaker(current_ggplot+1), subtitle = "What is alpha doing?")
 
-
-ggplot() +
-  geom_spatraster(data = zoom_2_hillshade,
-                  aes(fill=hillshade))+
-      scale_fill_viridis_c() +
-  scale_alpha(range = c(0.15, 0.65), guide="none") +
-geom_spatvector(data=places, fill=NA) +
-  ggtitle(gg_labelmaker(current_ggplot+1))
-
-zoom_2_plot <- ggplot() +
-  geom_raster(data = zoom_2_hillshade,
-                  aes(x=x, y=y, fill=hillshade)) +
-  scale_fill_viridis_c() +
-  scale_alpha(range = c(0.15, 0.65), guide="none") +
-  geom_spatvector(data=zoom3_extent, color="red") +
-  geom_spatvector(data=places, fill=NA) +
-  theme(axis.title.x=element_blank(), axis.title.y=element_blank(), legend.position="none") +
-  ggtitle(gg_labelmaker(current_ggplot+1), subtitle = "Bite of California")
-
-  
 zoom_1_plot
 zoom_2_plot
 zoom_3_plot
