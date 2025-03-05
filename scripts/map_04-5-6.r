@@ -1,9 +1,10 @@
 # map 4-5-6 is a tryptic,
+# that runs across the top of map 3
 # zooming in to campus
 # the zoom to Cali locator sheet
 
-# the 3 maps are an alpha hillshade
-# over a DEM, just as in the overlay
+# the 3 maps are a grayscale alpha hillshades
+# over DEMs, just as in the overlay
 # episode of the canonical episode
 
 # we crop the rasters before reprojecting them.
@@ -18,8 +19,6 @@ library(sf)
 library(ggplot2)
 library(tidyterra)
 library(dplyr)
-# needed to lay out multiple baseplots with par()?
-library(cowplot)
 library(ggpubr)
 library(raster)
 
@@ -55,6 +54,7 @@ str(campus_crs)
 # Map 4
 # Zoom 1: west US overview
 # this one arrived as a hillshade.
+# we will also need a DEM to match
 world <- rast("source_data/global_raster/GRAY_HR_SR_OB.tif")
 plot(world)
 
@@ -75,7 +75,7 @@ plot(zoom_1)
 # Zoom 2
 # Bite of California
 
-# Crop western region DEM to local area defined by 
+# Crop western region hillshade to our local region defined by 
 # socal_aoi.geojson
 zoom_2 <- rast("source_data/dem90_hf/dem90_hf.tif")
 plot(zoom_2)
@@ -102,7 +102,8 @@ zoom_2_cropped <- crop(x=zoom_2, y=zoom_2_crop_extent)
 plot(zoom_2_cropped)
 crs(zoom_2_cropped)
 
-# we can start to use the extent of the campus_DEM
+# now we can start to use the extent of the campus_DEM
+# for our closest zoom indicator
 zoom_3_extent <- ext(campus_DEM)
 zoom_3_extent <- vect(zoom_3_extent)
 crs(zoom_3_extent)
@@ -113,26 +114,14 @@ plot(zoom_3_extent)
 crs(zoom_3_extent) == crs(zoom_2_cropped)
 
 zoom_3_extent <- project(zoom_3_extent, crs(zoom_2_cropped))
+crs(zoom_3_extent) == crs(zoom_2_cropped)
 
 plot(zoom_2_cropped)
 polys(zoom_3_extent, border="red", lwd=4)
 
 
-# ###########################
-# Map 6
-# Zoom 3: UCSB & Environs
-
-plot(campus_DEM)
-
-
-
-
-####################################
-# hillshades
-# # zoom 1 came as a hillshade
-plot(zoom_1)
-
-# # make zoom 2 into a hillshade
+# we now need a hillshade of the area to match:
+# make zoom 2 into a hillshade
 # hillshades are made of slopes and aspects
 zoom_2_slope <- terrain(zoom_2_cropped, "slope", unit="radians")
 plot(zoom_2_slope)
@@ -146,13 +135,21 @@ zoom_2_hillshade <- shade(zoom_2_slope, zoom_2_aspect,
 plot(zoom_2_hillshade)
 polys(zoom_3_extent, border="red", lwd=4)
 
+# ###########################
+# Map 6
+# Zoom 3: UCSB & Environs
 
-# zoom 3 hillshade gets made in data_prep.r as hillshade.tiff ???
+plot(campus_DEM)
+
+zoom_3 <- rast("source_data/campus_hillshade.tif")
+plot(zoom_3, col = grays)
+
 
 
 # ##########################
-# add the AOI polygons
-# to the hillshades
+# do all the AOI polygons work with 
+# the hillshades?
+# make sure everything is in campus_CRS
 
 # zoom 1: 
 zoom_1 <- project(zoom_1, campus_crs)
@@ -168,31 +165,29 @@ plot(zoom_2_hillshade, col = grays)
 polys(zoom_3_extent, border="red", lwd=5)
 
 # zoom 3:
-zoom_3 <- rast("source_data/campus_hillshade.tif")
-plot(zoom_3, col = grays)
+# doesn't have a locator
 
 
-
-# now we do it all again with ggplot:
-# via ggplot
+# now we do it all again with ggplot
+# and alphas
 #################################################
+
 # zoom 1 hillshade as ggplot
 str(zoom_1)
-plot(zoom_1)
-polys(zoom_2_crop_extent, border="red",lwd=4)
-
 zoom_1_df <- as.data.frame(zoom_1, xy=TRUE)
 colnames(zoom_1_df)
 
 zoom_1_plot <- ggplot() +
   geom_raster(data = zoom_1_df,
               aes(x=x, y=y, fill=GRAY_HR_SR_OB)) +
+  scale_fill_continuous() +
   theme_dark() +
   coord_sf(crs=campus_crs) + 
   ggtitle(gg_labelmaker(current_ggplot+1), subtitle = "California")
 
 zoom_1_plot
 
+# overlay the AOI
 zoom_1_plot <- ggplot() +
   geom_raster(data = zoom_1_df,
               aes(x=x, y=y, fill=GRAY_HR_SR_OB)) +
@@ -203,45 +198,60 @@ zoom_1_plot <- ggplot() +
 
 zoom_1_plot
 
+# next you'll add the DEM
+# we may not keep the blue color scheme
+
+
 #################################################
-# zoom 2 hillshade as ggplot
+# zoom 2 as ggplot
 plot(zoom_2_hillshade)
 polys(zoom_3_extent, border="red", lwd=2)
 
-zoom_2_df <- as.data.frame(zoom_2_hillshade, xy=TRUE)
-colnames(zoom_2_df)
+zoom_2_DEM_df <- as.data.frame(zoom_2_cropped, xy=TRUE)
+colnames(zoom_2_DEM_df)
 
+zoom_2_hillshade_df <- as.data.frame(zoom_2_hillshade, xy=TRUE)
+colnames(zoom_2_hillshade_df)
+
+
+# ggplot the hillshade
 zoom_2_plot <- ggplot() +
-  geom_raster(data = zoom_2_df,
-              aes(x=x, y=y, fill=hillshade)) +
+  geom_raster(data = zoom_2_hillshade_df,
+              aes(x=x, y=y, alpha=hillshade)) +
+    scale_alpha(range = c(0.05, 0.5), guide="none") +
+    geom_spatvector(data=zoom_3_extent, color="red", fill=NA) +
+  theme(axis.title.x=element_blank(), axis.title.y=element_blank(), legend.position="none") +
+  coord_sf() + 
+  ggtitle(gg_labelmaker(current_ggplot+1), subtitle = "Bite of California hillshade")
+zoom_2_plot
+
+# ggplot the DEM
+zoom_2_plot <- ggplot() +
+  geom_raster(data = zoom_2_DEM_df,
+              aes(x=x, y=y, fill=dem90_hf)) +
+  scale_fill_viridis_c() +
   geom_spatvector(data=zoom_3_extent, color="red", fill=NA) +
   theme(axis.title.x=element_blank(), axis.title.y=element_blank(), legend.position="none") +
   coord_sf() + 
-<<<<<<< HEAD
-  ggtitle(gg_labelmaker(current_ggplot+1), subtitle = "California")
-
+  ggtitle(gg_labelmaker(current_ggplot+1), subtitle = "Bite of California w DEM")
 zoom_2_plot
 
 
-
-# this plot breaks if I try to style the extent box.
-# geom_sf(data=campus_extent, aes(stroke=3, fill=NA)) +
-# also, the crs throws an error = cannot transform sfc object with missing crs
-crs(zoom_3_extent)
-
+# now overlay
 zoom_2_plot <- ggplot() +
-    geom_raster(data = zoom_2_df,
-              aes(x=x, y=y, fill=dem90_hf), show.legend = FALSE) +
-  geom_raster(data=zoom_2_hillshade_df, 
+  geom_raster(data = zoom_2_DEM_df,
+              aes(x=x, y=y, fill=dem90_hf)) +
+  scale_fill_viridis_c() +
+  geom_raster(data = zoom_2_hillshade_df,
               aes(x=x, y=y, alpha=hillshade)) +
-    scale_fill_viridis_c() +
   scale_alpha(range = c(0.05, 0.5), guide="none") +
-#  geom_spatvector(data=campus_extent) +
-  coord_sf(crs=campus_crs)+
+  geom_spatvector(data=zoom_3_extent, color="red", fill=NA) +
   theme(axis.title.x=element_blank(), axis.title.y=element_blank(), legend.position="none") +
-  ggtitle(gg_labelmaker(current_ggplot+1), subtitle = "Zoom 2: Bite of California")
-
+  coord_sf() + 
+  ggtitle(gg_labelmaker(current_ggplot+1), subtitle = "Bite of California w DEM")
 zoom_2_plot
+
+
 
 #################################################
 # zoom3 as ggplot
@@ -250,125 +260,152 @@ zoom_2_plot
 
 campus_hillshade <- rast("source_data/campus_hillshade.tif") 
 zoom_3_hillshade_df <- as.data.frame(campus_hillshade, xy=TRUE)
-
 colnames(zoom_3_hillshade_df)
 
-zoom_3_plot <- ggplot()+
+# ggplot the hillshade
+zoom_3_plot <- ggplot() +
   geom_raster(data = zoom_3_hillshade_df,
-              aes(x=x, y=y, fill=hillshade)) +
-  coord_sf() +
+              aes(x=x, y=y, alpha=hillshade)) +
+  scale_alpha(range = c(0.05, 0.5), guide="none") +
   theme(axis.title.x=element_blank(), axis.title.y=element_blank(), legend.position="none") +
-  ggtitle(gg_labelmaker(current_ggplot+1), subtitle="Zoom 3: UCSB and vicinity")
-
-
-# maybe this premade hillshade, the sun isn't at the best angle
+  coord_sf() + 
+  ggtitle(gg_labelmaker(current_ggplot+1), subtitle = "Campus hillshade")
 zoom_3_plot
+
+# ggplot the DEM
+zoom_3_DEM_df <- as.data.frame(campus_DEM, xy=TRUE)
+str(zoom_3_DEM_df)
+
+zoom_3_plot <- ggplot() +
+  geom_raster(data = zoom_3_DEM_df,
+              aes(x=x, y=y, fill=greatercampusDEM_1_1)) +
+  scale_fill_viridis_c() +
+  theme(axis.title.x=element_blank(), axis.title.y=element_blank(), legend.position="none") +
+  coord_sf() + 
+  ggtitle(gg_labelmaker(current_ggplot+1), subtitle = "UCSB DEM")
+zoom_3_plot
+
+# now overlay
+crs(zoom_3_extent) == campus_crs
+zoom_3_extent <- project(zoom_3_extent, campus_crs)
+crs(zoom_3_extent) == campus_crs
+
+zoom_3_plot <- ggplot() +
+  geom_raster(data = zoom_3_DEM_df,
+              aes(x=x, y=y, fill=greatercampusDEM_1_1)) +
+  scale_fill_viridis_c() +
+  geom_raster(data = zoom_3_hillshade_df,
+              aes(x=x, y=y, alpha=hillshade)) +
+  scale_alpha(range = c(0.05, 0.5), guide="none") +
+  theme(axis.title.x=element_blank(), axis.title.y=element_blank(), legend.position="none") +
+  coord_sf() + 
+  ggtitle(gg_labelmaker(current_ggplot+1), subtitle = "UCSB & Surroundings")
+zoom_3_plot
+
 
 
 # #######################################################
 # back to start of zoom 
-# the next goal is alpha hillshade on dem
-# but these don't look the same yet
+# do these all look the same yet?
+
+# zoom 1 needs a DEM
 zoom_1_plot
+# zoom 2 needs water
 zoom_2_plot
+# zoom 3 needs water, or should use topo_batho
 zoom_3_plot
 
-#################################
-# let's overlay anyway
-
-# zoom 1 arrived as a hillshade, so there isn't an overlay to do
-str(zoom_1_df)
-
-# zoom 2
-# zoom_2_alpha_plot <- ggplot()+
-  
-  
-str(zoom_2_df)
-crs(zoom_3_extent) == crs(zoom_2_hillshade)
-
-zoom_2_plot <- ggplot() +
-  geom_raster(data = zoom_2_df,
-              aes(x=x, y=y, alpha=hillshade)) +
-  scale_alpha(range = c(0.05, 0.5), guide="none") +
-  coord_sf() +
-  theme(axis.title.x=element_blank(), axis.title.y=element_blank(), legend.position="none") +
-  ggtitle(gg_labelmaker(current_ggplot+1), subtitle = "Zoom 2: Bite of California")
-
-zoom_2_plot
-# later on we will want to use the zoom_2 as an extent
-zoom_2_extent <- ext(zoom_2) %>% as.polygons()
-writeVector(zoom_2_extent, "output_data/zoom_2_extent.shp", overwrite=TRUE)  
-  
-  
-  
-# zoom 3
-
-zoom_3_DEM_df <- as.data.frame(campus_DEM, xy=TRUE)   
-str(zoom_3_DEM_df  )
-
-# zoom_3_alpha_plot <- ggplot()+
-  
-
-zoom_3_plot <- ggplot()+
-  geom_raster(data = zoom_3_DEM_df,
-              aes(x=x, y=y, fill=greatercampusDEM_1_1)) +
-  geom_raster(data=zoom_3_hillshade_df, 
-              aes(x=x, y=y, alpha=hillshade))+
-  scale_fill_viridis_c() +
-  scale_alpha(range = c(0.15, 0.65))+
-  coord_sf(crs=campus_crs) +
-  theme(axis.title.x=element_blank(), axis.title.y=element_blank(), legend.position="none") +
-  ggtitle(gg_labelmaker(current_ggplot+1), subtitle="Zoom 3: UCSB and vicinity")
-
-zoom_3_plot
-
-
-
-
-
-
-zoom_3_plot <- ggplot()+
-  geom_raster(data = zoom_3_df,
-              aes(x=x, y=y, fill=greatercampusDEM_1_1)) +
-  geom_raster(data=zoom_3_hillshade_df, 
-              aes(x=x, y=y, alpha=hillshade))+
-  scale_fill_viridis_c() +
-  scale_alpha(range = c(0.15, 0.65))+
-  coord_sf(crs=campus_crs) +
-  theme(axis.title.x=element_blank(), axis.title.y=element_blank(), legend.position="none") +
-  ggtitle(gg_labelmaker(current_ggplot+1), subtitle="Zoom 3: UCSB and vicinity")
 
 
 # now let's visualize things up 
 # 'california populated places'
 # which is census data. 
-# overlay this on top of zoom 1 and zoom 2 hillshades
-
-zoom_1_plot
-zoom_2_plot
-zoom_3_plot
-
-
-# Use these for some placename labels and
-# visual polygons styled similar to the IV building outlines
-# on map 1.
 places <- vect("source_data/tl_2023_06_place/tl_2023_06_place.shp")
 plot(places)
+# overlay this on top of zoom 1 and zoom 2
 
-ggplot() + 
-  geom_spatvector(data=places) +
-  ggtitle(gg_labelmaker(current_ggplot+1))
+zoom_1_plot <- ggplot() +
+  geom_raster(data = zoom_1_df,
+              aes(x=x, y=y, fill=GRAY_HR_SR_OB)) +
+  geom_spatvector(data=places, fill="gray") +
+  geom_spatvector(data=zoom_2_crop_extent, color="red", fill=NA) +
+  theme(axis.title.x=element_blank(), axis.title.y=element_blank(), legend.position="none") +
+  coord_sf(crs=campus_crs) + 
+  ggtitle(gg_labelmaker(current_ggplot+1), subtitle = "Zoom 1: California w/places")
+
+zoom_1_plot
+
+
+# this is another CRS error
+zoom_2_plot <- ggplot() +
+  geom_raster(data = zoom_2_DEM_df,
+              aes(x=x, y=y, fill=dem90_hf)) +
+  scale_fill_viridis_c() +
+  geom_raster(data = zoom_2_hillshade_df,
+              aes(x=x, y=y, alpha=hillshade)) +
+  scale_alpha(range = c(0.05, 0.5), guide="none") +
+  geom_spatvector(data=places, fill="gray") +
+  geom_spatvector(data=zoom_3_extent, color="red", fill=NA) +
+  theme(axis.title.x=element_blank(), axis.title.y=element_blank(), legend.position="none") +
+  coord_sf() + 
+  ggtitle(gg_labelmaker(current_ggplot+1), subtitle = "Bite of California w DEM")
+zoom_2_plot
+
+# test and reproject as necessary
+crs(zoom_3_extent) == campus_crs
+crs(zoom_2_cropped) == campus_crs
+crs(zoom_2_hillshade) == campus_crs
+crs(places) == campus_crs
+
+zoom_2_cropped <- project(zoom_2_cropped, campus_crs)
+zoom_2_hillshade <- project(zoom_2_cropped, campus_crs)
+places <- project(places, campus_crs)
+crs(zoom_2_cropped) == campus_crs
+crs(zoom_2_hillshade) == campus_crs
+crs(places) == campus_crs
+
+# remake dataframes
+zoom_2_DEM_df <- as.data.frame(zoom_2_cropped, xy=TRUE)
+zoom_2_hillshade_df <- as.data.frame(zoom_2_hillshade, xy=TRUE)
+str(zoom_2_hillshade_df)
+
+# try again:
+# nope, you are gonna need to crop places
+zoom_2_plot <- ggplot() +
+  geom_raster(data = zoom_2_DEM_df,
+              aes(x=x, y=y, fill=dem90_hf)) +
+  scale_fill_viridis_c() +
+  geom_raster(data = zoom_2_hillshade_df,
+              aes(x=x, y=y, alpha=dem90_hf)) +
+  scale_alpha(range = c(0.05, 0.5), guide="none") +
+  geom_spatvector(data=places, fill="gray") +
+  geom_spatvector(data=zoom_3_extent, color="red", fill=NA) +
+  theme(axis.title.x=element_blank(), axis.title.y=element_blank(), legend.position="none") +
+  coord_sf() + 
+  ggtitle(gg_labelmaker(current_ggplot+1), subtitle = "Bite of California w DEM")
+zoom_2_plot
+
+zoom_2_places <- crop(places, zoom_2_cropped)
+
+zoom_2_plot <- ggplot() +
+  geom_raster(data = zoom_2_DEM_df,
+              aes(x=x, y=y, fill=dem90_hf)) +
+  scale_fill_viridis_c() +
+  geom_raster(data = zoom_2_hillshade_df,
+              aes(x=x, y=y, alpha=dem90_hf)) +
+  scale_alpha(range = c(0.05, 0.5), guide="none") +
+  geom_spatvector(data=zoom_2_places, fill="NA", color="gray") +
+  geom_spatvector(data=zoom_3_extent, color="red", fill=NA) +
+  theme(axis.title.x=element_blank(), axis.title.y=element_blank(), legend.position="none") +
+  coord_sf() + 
+  ggtitle(gg_labelmaker(current_ggplot+1), subtitle = "Bite of California w DEM")
+zoom_2_plot
+
+
+
 
 #######################################################################################
 
-# next:
-# overlay 
-# geom_raster and geom_spatraster
-
-
-zoom_1_plot
-zoom_2_plot
-zoom_3_plot
 
 ggsave("images/map4.png", width = 3, height = 4, plot=zoom_1_plot)
 ggsave("images/map5.png", width = 3, height = 4, plot=zoom_2_plot)
