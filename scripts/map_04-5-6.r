@@ -254,41 +254,13 @@ zoom_3_plot
 #################################
 # let's overlay anyway
 
+# zoom 1 arrived as a hillshade, so there isn't an overlay to do
 str(zoom_1_df)
 
-zoom_1_alpha_plot <- ggplot()+
-  geom_raster(data = zoom_1_df,
-              aes(x=x, y=y, fill=greatercampusDEM_1_1)) +
-  geom_raster(data=zoom_1_hillshade_df, 
-              aes(x=x, y=y, alpha=hillshade))+
-  scale_fill_viridis_c() +
-  scale_alpha(range = c(0.15, 0.65))+
-  coord_sf(crs=campus_crs) +
-  theme(axis.title.x=element_blank(), axis.title.y=element_blank(), legend.position="none") +
-  ggtitle(gg_labelmaker(current_ggplot+1), subtitle="Zoom 1: with alpha")
-
-zoom_3_plot
-
-
-zoom_2_alpha_plot <- ggplot()+
-zoom_3_alpha_plot <- ggplot()+
+# zoom 2
+# zoom_2_alpha_plot <- ggplot()+
   
-
-zoom_3_plot <- ggplot()+
-  geom_raster(data = zoom_3_df,
-              aes(x=x, y=y, fill=greatercampusDEM_1_1)) +
-  geom_raster(data=zoom_3_hillshade_df, 
-              aes(x=x, y=y, alpha=hillshade))+
-  scale_fill_viridis_c() +
-  scale_alpha(range = c(0.15, 0.65))+
-  coord_sf(crs=campus_crs) +
-  theme(axis.title.x=element_blank(), axis.title.y=element_blank(), legend.position="none") +
-  ggtitle(gg_labelmaker(current_ggplot+1), subtitle="Zoom 3: UCSB and vicinity")
-
-zoom_3_plot
-
-
-
+  
 str(zoom_2_df)
 crs(zoom_3_extent) == crs(zoom_2_hillshade)
 
@@ -303,7 +275,34 @@ zoom_2_plot <- ggplot() +
 zoom_2_plot
 # later on we will want to use the zoom_2 as an extent
 zoom_2_extent <- ext(zoom_2) %>% as.polygons()
-writeVector(zoom_2_extent, "output_data/zoom_2_extent.shp", overwrite=TRUE)
+writeVector(zoom_2_extent, "output_data/zoom_2_extent.shp", overwrite=TRUE)  
+  
+  
+  
+# zoom 3
+
+zoom_3_DEM_df <- as.data.frame(campus_DEM, xy=TRUE)   
+str(zoom_3_DEM_df  )
+
+# zoom_3_alpha_plot <- ggplot()+
+  
+
+zoom_3_plot <- ggplot()+
+  geom_raster(data = zoom_3_DEM_df,
+              aes(x=x, y=y, fill=greatercampusDEM_1_1)) +
+  geom_raster(data=zoom_3_hillshade_df, 
+              aes(x=x, y=y, alpha=hillshade))+
+  scale_fill_viridis_c() +
+  scale_alpha(range = c(0.15, 0.65))+
+  coord_sf(crs=campus_crs) +
+  theme(axis.title.x=element_blank(), axis.title.y=element_blank(), legend.position="none") +
+  ggtitle(gg_labelmaker(current_ggplot+1), subtitle="Zoom 3: UCSB and vicinity")
+
+zoom_3_plot
+
+
+
+
 
 
 zoom_3_plot <- ggplot()+
@@ -340,10 +339,9 @@ ggplot() +
 
 #######################################################################################
 
+# next:
 # overlay 
 # geom_raster and geom_spatraster
-colnames(places)
-
 
 
 zoom_1_plot
