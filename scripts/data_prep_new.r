@@ -19,7 +19,7 @@ dir.create("downloaded_data", showWarnings = FALSE)
 # there should be a more graceful way to open the connection
 
 
-drive_download("https://drive.google.com/open?id=1Cc5unRGtrmCpkRT_iAMdESD5M9XgFB0T&usp=drive_fs", 
+drive_download("https://drive.google.com/file/d/1Cc5unRGtrmCpkRT_iAMdESD5M9XgFB0T/view?usp=drive_link", 
                "downloaded_data/data.zip", overwrite = TRUE)
 
 unzip("downloaded_data/data.zip", exdir = "source_data", overwrite = TRUE)
