@@ -1,0 +1,21 @@
+<PAMDataset>
+  <GeoTransform>  2.3496544023979869e+05,  2.0331771345547263e+00, -5.6627816501283172e-02,  3.8220430728887045e+06, -5.7568225113775899e-02, -2.0382948294891698e+00</GeoTransform>
+  <GCPList Projection="PROJCS[&quot;NAD27 / UTM zone 11N&quot;,GEOGCS[&quot;NAD27&quot;,DATUM[&quot;North_American_Datum_1927&quot;,SPHEROID[&quot;Clarke 1866&quot;,6378206.4,294.978698213898,AUTHORITY[&quot;EPSG&quot;,&quot;7008&quot;]],AUTHORITY[&quot;EPSG&quot;,&quot;6267&quot;]],PRIMEM[&quot;Greenwich&quot;,0],UNIT[&quot;Degree&quot;,0.0174532925199433]],PROJECTION[&quot;Transverse_Mercator&quot;],PARAMETER[&quot;latitude_of_origin&quot;,0],PARAMETER[&quot;central_meridian&quot;,-117],PARAMETER[&quot;scale_factor&quot;,0.9996],PARAMETER[&quot;false_easting&quot;,500000],PARAMETER[&quot;false_northing&quot;,0],UNIT[&quot;metre&quot;,1,AUTHORITY[&quot;EPSG&quot;,&quot;9001&quot;]],AXIS[&quot;Easting&quot;,EAST],AXIS[&quot;Northing&quot;,NORTH]]" dataAxisToSRSAxisMapping="1,2">
+    <GCP Id="" Pixel="1.7600" Line="7.9100" X="2.356258096878E+05" Y="3.807287727069E+06" />
+    <GCP Id="" Pixel="8.0400" Line="7.9167" X="2.394584685698E+05" Y="3.807179840855E+06" />
+    <GCP Id="" Pixel="14.3167" Line="7.9233" X="2.432910771693E+05" Y="3.807073533592E+06" />
+    <GCP Id="" Pixel="20.5967" Line="7.9300" X="2.471236362233E+05" Y="3.806968805106E+06" />
+    <GCP Id="" Pixel="1.7600" Line="15.4733" X="2.357569419765E+05" Y="3.811909933103E+06" />
+    <GCP Id="" Pixel="8.0400" Line="15.4767" X="2.395876955316E+05" Y="3.811801985918E+06" />
+    <GCP Id="" Pixel="14.3167" Line="15.4800" X="2.434183990172E+05" Y="3.811695618572E+06" />
+    <GCP Id="" Pixel="20.5967" Line="15.4867" X="2.472490531670E+05" Y="3.811590830890E+06" />
+    <GCP Id="" Pixel="1.7600" Line="23.0333" X="2.358882142035E+05" Y="3.816532163096E+06" />
+    <GCP Id="" Pixel="8.0400" Line="23.0367" X="2.397170604048E+05" Y="3.816424155169E+06" />
+    <GCP Id="" Pixel="14.3167" Line="23.0400" X="2.435458567496E+05" Y="3.816317727965E+06" />
+    <GCP Id="" Pixel="20.5967" Line="23.0400" X="2.473746039684E+05" Y="3.816212881308E+06" />
+    <GCP Id="" Pixel="1.7600" Line="30.5967" X="2.360196263011E+05" Y="3.821154417061E+06" />
+    <GCP Id="" Pixel="8.0400" Line="30.5967" X="2.398465631229E+05" Y="3.821046348620E+06" />
+    <GCP Id="" Pixel="14.3167" Line="30.5967" X="2.436734503009E+05" Y="3.820939861782E+06" />
+    <GCP Id="" Pixel="20.5967" Line="30.5967" X="2.475002885627E+05" Y="3.820834956373E+06" />
+  </GCPList>
+</PAMDataset>
