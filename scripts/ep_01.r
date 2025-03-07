@@ -7,7 +7,6 @@
 
 library(tidyverse)
 library(terra)
-library(RColorBrewer)
 
 # setwd("C:/users/your_file_path")
 
@@ -175,8 +174,13 @@ ggplot() +
 # that's not helpful.
 
 # Challenge:
-# Explore metadata of the hillshade raster
+# Explore metadata of the hillshade raster (campus_hillshade.tif)
+describe("source_data/campus_hillshade.tif")
 
+campus_hillshade <- rast("source_data/campus_hillshade.tif")
+campus_hillshade_df <- as.data.frame(campus_hillshade)
 
+str(campus_hillshade)
+str(campus_hillshade_df)
 
 

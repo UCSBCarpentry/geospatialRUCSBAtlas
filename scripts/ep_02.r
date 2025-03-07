@@ -8,6 +8,9 @@
 # automagically when we overlay 
 # elevation with hillshade
 
+library(tidyverse)
+library(terra)
+
 
 # clean the environment and hidden objects
 rm(list=ls())
@@ -125,18 +128,12 @@ ggplot() +
   ggtitle("Last manual title?", subtitle="Can't see red")+
   coord_quickmap()
 
-sum(campus_DEM_df$elevation < 0)
+summary(campus_DEM_df$elevation)
 
 
 
-# hillshade layer
-# ok we have to do something here to make a hillshade
-# since one doesn't exist
-
-# insert script from map 7 here.
-
+# add in the hillshade layer
 describe("source_data/campus_hillshade.tif")
-
 
 campus_hillshade_df <- 
   rast("source_data/campus_hillshade.tif") %>% 
@@ -146,19 +143,15 @@ campus_hillshade_df
 str(campus_hillshade_df)
 
 # plot the hillshade
-
-
 ggplot() + 
   geom_raster(data = campus_hillshade_df, 
               aes(x=x, y=y, fill = hillshade)) +
   ggtitle("Hillshade")+
   coord_quickmap()
 
-# overlay
-# not sure if this is displaying as desired
 
-
-
+# #############
+# now plot the hillshade on top of the DEM:
 
 # here is the first time the lesson uses
 # a ggtitle. So here is the first time we will insert our function:
@@ -179,27 +172,11 @@ gg_labelmaker <- function(plot_num){
 # end automagic ggtitle           #######
 
 
-
-
 ggplot() + 
   geom_raster(data=campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
-  geom_raster(data = campus_hillshade_df, 
-              aes(x=x, y=y, alpha = hillshade)) +
+  geom_raster(data = campus_hillshade_df, aes(x=x, y=y, alpha = hillshade)) +
+  scale_alpha(range = c(0.05, 0.3), guide="none") +
   scale_fill_viridis_c() + 
-  ggtitle(gg_labelmaker(current_ggplot+1)) +
-  coord_quickmap()
-
-# I'm not sure this graph does anything for us anymore
-# it would if it displayed the red. 
-
-ggplot() +
-  geom_raster(data = campus_DEM_df, aes(x=x, y=y, fill = elevation)) +
-  scale_fill_gradient2(na.value = "lightgray", 
-                       low="red", 
-                       mid="white", 
-                       high="cornsilk3",
-                       guide = "colourbar",
-                       midpoint = 3.12, aesthetics = "fill") +
   ggtitle(gg_labelmaker(current_ggplot+1)) +
   coord_quickmap()
 
@@ -209,20 +186,22 @@ summary(campus_DEM_df)
 
 # this attempts to find only negative elevations,
 # but it doesn't work.
-# has.neg <- apply(campus_DEM_df, 1, function(campus_DEM_df) any(campus_DEM_df$elevation < 0))
+#has.neg <- apply(campus_DEM_df, 1, function(campus_DEM_df) any(campus_DEM_df$elevation < 0))
+
 
 # challenge:
 # how many pixels are below 3.1 feet (1 m)?
 below_3 <- apply(campus_DEM_df, 1, function(campus_DEM_df) any(campus_DEM_df < 3.12))
-
-pixel_count <- nrow(campus_DEM_df) 
-pixel_count
-
-length(which(below_3))
+below_0 <- apply(campus_DEM_df, 1, function(campus_DEM_df) any(campus_DEM_df < 0))
 
 # that's the same number. we must have done something wrong. 
+pixel_count <- nrow(campus_DEM_df) 
+pixel_count
+length(below_0)
+length(which(below_3))
+
 #
-#negative_only <- filter()
+# negative_only <- filter()
 # we still need to count the negatives.
 
 
@@ -238,10 +217,9 @@ campus_DEM_df %>%
 
 str(campus_DEM_df)
 
-# that's still too many? It's very few on Feb 4. this is part
-# of why bins are handy
-# ggplot(campus_DEM_df) +
-#  geom_histogram(aes(binned_DEM))
+# still can't see them
+ ggplot(campus_DEM_df) +
+  geom_bar(aes(binned_DEM))
 
 
 
