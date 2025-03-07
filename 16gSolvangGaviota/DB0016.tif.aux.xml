@@ -1,77 +1,21 @@
-<?xml version="1.0"?>
-<GeodataXform xsi:type="typens:PolynomialXform" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:typens="http://www.esri.com/schemas/ArcGIS/9.3">
-  <PolynomialOrder>2</PolynomialOrder>
-  <SpatialReference xsi:type="typens:ProjectedCoordinateSystem">
-    <WKT>PROJCS["NAD_1927_UTM_Zone_10N",GEOGCS["GCS_North_American_1927",DATUM["D_North_American_1927",SPHEROID["Clarke_1866",6378206.4,294.9786982138982]],PRIMEM["Greenwich",0],UNIT["Degree",0.017453292519943295]],PROJECTION["Transverse_Mercator"],PARAMETER["latitude_of_origin",0],PARAMETER["central_meridian",-123],PARAMETER["scale_factor",0.9996],PARAMETER["false_easting",500000],PARAMETER["false_northing",0],UNIT["Meter",1]]</WKT>
-    <HighPrecision>true</HighPrecision>
-    <WKID>26710</WKID>
-  </SpatialReference>
-  <SourceGCPs xsi:type="typens:ArrayOfDouble">
-    <Double>1.82666666666667</Double>
-    <Double>20.7866666666667</Double>
-    <Double>8.10333333333333</Double>
-    <Double>20.7866666666667</Double>
-    <Double>14.3833333333333</Double>
-    <Double>20.7833333333333</Double>
-    <Double>20.66</Double>
-    <Double>20.78</Double>
-    <Double>1.82666666666667</Double>
-    <Double>28.3266666666667</Double>
-    <Double>8.11333333333333</Double>
-    <Double>28.32</Double>
-    <Double>14.3866666666667</Double>
-    <Double>28.32</Double>
-    <Double>20.66</Double>
-    <Double>28.3233333333333</Double>
-    <Double>1.82666666666667</Double>
-    <Double>35.87</Double>
-    <Double>8.10333333333333</Double>
-    <Double>35.8666666666667</Double>
-    <Double>14.3933333333333</Double>
-    <Double>35.8633333333333</Double>
-    <Double>20.66</Double>
-    <Double>35.8666666666667</Double>
-    <Double>1.82666666666667</Double>
-    <Double>43.41</Double>
-    <Double>8.10333333333333</Double>
-    <Double>43.41</Double>
-    <Double>14.3833333333333</Double>
-    <Double>43.41</Double>
-    <Double>20.66</Double>
-    <Double>43.41</Double>
-  </SourceGCPs>
-  <TargetGCPs xsi:type="typens:ArrayOfDouble">
-    <Double>752499.711437306</Double>
-    <Double>3820834.95637263</Double>
-    <Double>756326.549699133</Double>
-    <Double>3820939.86178229</Double>
-    <Double>760153.436877146</Double>
-    <Double>3821046.34862003</Double>
-    <Double>763980.37369892</Double>
-    <Double>3821154.41706076</Double>
-    <Double>752373.893114685</Double>
-    <Double>3825457.05609886</Double>
-    <Double>756198.820394591</Double>
-    <Double>3825562.02003962</Double>
-    <Double>760023.796381022</Double>
-    <Double>3825668.5662856</Double>
-    <Double>763848.821798407</Double>
-    <Double>3825776.69501157</Double>
-    <Double>752247.941128494</Double>
-    <Double>3830079.18050055</Double>
-    <Double>756070.955402546</Double>
-    <Double>3830184.2027505</Double>
-    <Double>759894.018173517</Double>
-    <Double>3830290.80817944</Double>
-    <Double>763717.130162697</Double>
-    <Double>3830398.99696202</Double>
-    <Double>752121.855543545</Double>
-    <Double>3834701.32959171</Double>
-    <Double>755942.95478881</Double>
-    <Double>3834806.4099288</Double>
-    <Double>759764.102321447</Double>
-    <Double>3834913.07431531</Double>
-    <Double>763585.298859606</Double>
-    <Double>3835021.32292575</Double>
-  </TargetGCPs>
-</GeodataXform>
+<PAMDataset>
+  <GeoTransform>  7.5097747270896612e+05,  2.0303424149364027e+00,  5.6911468238584229e-02,  3.8356372168526258e+06,  5.6965942494220503e-02, -2.0428320293850653e+00</GeoTransform>
+  <GCPList Projection="PROJCS[&quot;NAD27 / UTM zone 10N&quot;,GEOGCS[&quot;NAD27&quot;,DATUM[&quot;North_American_Datum_1927&quot;,SPHEROID[&quot;Clarke 1866&quot;,6378206.4,294.978698213898,AUTHORITY[&quot;EPSG&quot;,&quot;7008&quot;]],AUTHORITY[&quot;EPSG&quot;,&quot;6267&quot;]],PRIMEM[&quot;Greenwich&quot;,0],UNIT[&quot;Degree&quot;,0.0174532925199433]],PROJECTION[&quot;Transverse_Mercator&quot;],PARAMETER[&quot;latitude_of_origin&quot;,0],PARAMETER[&quot;central_meridian&quot;,-123],PARAMETER[&quot;scale_factor&quot;,0.9996],PARAMETER[&quot;false_easting&quot;,500000],PARAMETER[&quot;false_northing&quot;,0],UNIT[&quot;metre&quot;,1,AUTHORITY[&quot;EPSG&quot;,&quot;9001&quot;]],AXIS[&quot;Easting&quot;,EAST],AXIS[&quot;Northing&quot;,NORTH]]" dataAxisToSRSAxisMapping="1,2">
+    <GCP Id="" Pixel="1.8267" Line="20.7867" X="7.524997114373E+05" Y="3.820834956373E+06" />
+    <GCP Id="" Pixel="8.1033" Line="20.7867" X="7.563265496991E+05" Y="3.820939861782E+06" />
+    <GCP Id="" Pixel="14.3833" Line="20.7833" X="7.601534368771E+05" Y="3.821046348620E+06" />
+    <GCP Id="" Pixel="20.6600" Line="20.7800" X="7.639803736989E+05" Y="3.821154417061E+06" />
+    <GCP Id="" Pixel="1.8267" Line="28.3267" X="7.523738931147E+05" Y="3.825457056099E+06" />
+    <GCP Id="" Pixel="8.1133" Line="28.3200" X="7.561988203946E+05" Y="3.825562020040E+06" />
+    <GCP Id="" Pixel="14.3867" Line="28.3200" X="7.600237963810E+05" Y="3.825668566286E+06" />
+    <GCP Id="" Pixel="20.6600" Line="28.3233" X="7.638488217984E+05" Y="3.825776695012E+06" />
+    <GCP Id="" Pixel="1.8267" Line="35.8700" X="7.522479411285E+05" Y="3.830079180501E+06" />
+    <GCP Id="" Pixel="8.1033" Line="35.8667" X="7.560709554025E+05" Y="3.830184202750E+06" />
+    <GCP Id="" Pixel="14.3933" Line="35.8633" X="7.598940181735E+05" Y="3.830290808179E+06" />
+    <GCP Id="" Pixel="20.6600" Line="35.8667" X="7.637171301627E+05" Y="3.830398996962E+06" />
+    <GCP Id="" Pixel="1.8267" Line="43.4100" X="7.521218555435E+05" Y="3.834701329592E+06" />
+    <GCP Id="" Pixel="8.1033" Line="43.4100" X="7.559429547888E+05" Y="3.834806409929E+06" />
+    <GCP Id="" Pixel="14.3833" Line="43.4100" X="7.597641023214E+05" Y="3.834913074315E+06" />
+    <GCP Id="" Pixel="20.6600" Line="43.4100" X="7.635852988596E+05" Y="3.835021322926E+06" />
+  </GCPList>
+</PAMDataset>

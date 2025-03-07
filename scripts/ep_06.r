@@ -89,7 +89,7 @@ ggplot() +
 
 # POLYGONS
 # buildings shapefile
-buildings <- st_read("source_data/Campus_Buildings/Campus_Buildings.shp")
+buildings <- st_read("source_data/campus_buildings/Campus_Buildings.shp")
 
 ggplot() +
   geom_sf(data=buildings, color = "red") +
