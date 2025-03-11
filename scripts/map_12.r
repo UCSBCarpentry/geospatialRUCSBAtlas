@@ -277,25 +277,30 @@ ggplot() +
 
 
 # fix those facet labels!
+# this is what it should look like:
 str(ndvi_series_df)
 year_month_label <- substr(ndvi_series_df$variable, 3,10)
 year_month_label
 
-# add a mutate here
+# now that we've tested, mutate here to add the new column:
+ndvi_series_w_dates_df <- mutate(ndvi_series_df, yyyymmdd = substr(ndvi_series_df$variable, 3,10))
+ndvi_series_w_dates_df
+str(ndvi_series_w_dates_df)
 
 ggplot() +
-  geom_raster(data = ndvi_series_df , aes(x = x, y = y, fill = value)) +
+  geom_raster(data = ndvi_series_w_dates_df , aes(x = x, y = y, fill = value)) +
   scale_fill_distiller(palette = "RdYlBu", direction = 1) +
-  facet_wrap(~ variable) +
+  facet_wrap(~ yyyymmdd) +
   theme_minimal() +
-  xlab("YY-MM") +
   ggtitle(gg_labelmaker(current_ggplot+1))
 
 
+# maybe you were attempting to add the column here?
+#ndvi_series_df$variable <- year_month_label
+#ndvi_series_df$variable
+#str(ndvi_series_df)
 
-ndvi_series_df$variable <- year_month_label
-ndvi_series_df$variable
-str(ndvi_series_df)
+
 
 
 # attempted as.date(format = '%Y-%m-%d) but....
