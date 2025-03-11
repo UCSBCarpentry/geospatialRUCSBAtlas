@@ -240,6 +240,7 @@ ggsave("images/ndvi_series_stack.png", plot=last_plot())
 ndvi_series_df <- as.data.frame(ndvi_series_stack, xy=TRUE) %>% 
   pivot_longer(-(x:y), names_to = "image_date", values_to= "NDVI_value")
 
+# the format of image_date is not what we want here.
 str(ndvi_series_df)
 summary(ndvi_series_df)
 
@@ -261,12 +262,13 @@ ndvi_series_df <- as.data.frame(ndvi_series_stack, xy=TRUE, na.rm=FALSE) %>%
 str(ndvi_series_df)
 
 # this output should be pretty speedy
-# scales are correct!!!!
+# the scales of NDVI values are correct!!!!
 ggplot() +
   geom_raster(data = ndvi_series_df , aes(x = x, y = y, fill = NDVI_value)) +
   facet_wrap(~ image_date)
 
 # we need a diverging color scheme
+# to make it look more like a proper ndvi
 ggplot() +
   geom_raster(data = ndvi_series_df , aes(x = x, y = y, fill = NDVI_value)) +
   scale_fill_distiller(palette = "RdYlBu", direction = 1) +
@@ -294,16 +296,14 @@ ggplot() +
   ggtitle(gg_labelmaker(current_ggplot+1))
 
 
+
+# we need to arrange these by 
+# Julian dates. Converting to Julian dates is in the lesson
+
+# challenge: mutate on another column that is julian date.
 str(ndvi_series_w_dates_df)
 
-# repeat the above ggplot label each facet
-# with only the first 8 characters of the variable
-ggplot() +
-  geom_raster(data = ndvi_series_w_dates_df, aes(x = x, y = y, fill = NDVI_value)) +
-  scale_fill_distiller(palette = "RdYlBu", direction = 1) +
-  facet_wrap(~yyyymmdd) +
-  theme_minimal() +
-  ggtitle(gg_labelmaker(current_ggplot+1))
+
 
 
 
@@ -394,11 +394,6 @@ str(avg_NDVI_df)
 ggplot(avg_NDVI_df, mapping = aes(Month, MeanNDVI)) +
   geom_point()
 
-
-
-# we need to arrange these by month to show change.
-# Julian dates: that's in the lesson, mean()# Jugeom_point()# Julian dates: that's in the lesson, mean()# Julian dates: that's in the lesson, but ours uses calendar dates
-# challenge: change object names to Julian dates
 
 
 
