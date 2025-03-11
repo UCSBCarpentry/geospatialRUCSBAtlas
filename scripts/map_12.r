@@ -288,6 +288,11 @@ year_month_label
 ndvi_series_df$variable <- year_month_label
 ndvi_series_df$variable
 
+#mutate into year month day columns?
+#use tidyr separate to split ymd into sep columns? 
+#no delimiter so use positions? 
+
+
 # attempted as.date(format = '%Y-%m-%d) but....
 # also realized jd is not part of the metadata?
 
