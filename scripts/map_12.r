@@ -192,6 +192,7 @@ str(ndvi_series_names)
 valid_tiff <- c(554,885,1)
 str(valid_tiff)
 
+#kristi boo boo here
 dim(ndvi_tiff) == valid_tiff
 test <- rast(ndvi_series_names[1])
 str(test)
