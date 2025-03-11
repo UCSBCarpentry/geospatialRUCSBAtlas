@@ -89,6 +89,11 @@ zoom_2_extent <- vect("source_data/socal_aoi.geojson")
 # loooooong plot
 plot(streams)
 
+ggplot() +
+  geom_sf(data=streams, color="lightblue") +
+  coord_sf()
+
+
 # these are different
 crs(zoom_2_extent) == crs(streams)
 
@@ -122,10 +127,10 @@ crs(streams_zoom_2)
 ext(streams_zoom_2)
 
 # this doesn't work this time around
-plot(streams_zoom_2$geometry)
+# plot(streams_zoom_2$geometry)
 
 ggplot() +
-  geom_sf(data=streams_zoom_2) +
+  geom_sf(data=streams_zoom_2, color="lightblue") +
   coord_sf()
 
 # look at our other vectors
