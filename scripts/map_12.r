@@ -175,10 +175,9 @@ for (images in scene_paths) {
 
 # # get a list of the new files:
 ndvi_series_names <- list.files("output_data/ndvi")
-ndvi_series_names <- paste("output_data/ndvi/", ndvi_series_names, sep="")
-
 ndvi_series_names
 
+<<<<<<< HEAD
 # take a look at the first one. the range of values looks realistic
 ls("output_data/ndvi")
 
@@ -188,8 +187,13 @@ testraster <- rast("output_data/ndvi/20230912_175450_00_243.tif")
 summary(values(testraster))
 
 # try this:
+=======
+# take a look at one. range of values looks realistic
+>>>>>>> 64a3196e0e4ae4e0abf266fb7c2ea464fdd76bfb
 list.files("output_data/ndvi")
-# it shows you are a digit off. 
+
+testraster <- rast("output_data/ndvi/20230912_175450_00_2439.tif")
+summary(values(testraster))
 
 
 # check the files's resolutions and 
@@ -200,6 +204,7 @@ str(ndvi_series_names)
 valid_tiff <- c(554,885,1)
 str(valid_tiff)
 
+#kristi boo boo here
 dim(ndvi_tiff) == valid_tiff
 test <- rast(ndvi_series_names[1])
 str(test)
