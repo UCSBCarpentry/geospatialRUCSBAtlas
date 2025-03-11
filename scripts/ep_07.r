@@ -35,7 +35,7 @@ gg_labelmaker <- function(plot_num){
 
 
 # remake our objects
-buildings <- st_read("source_data/Campus_Buildings/Campus_Buildings.shp")
+buildings <- st_read("source_data/campus_buildings/Campus_Buildings.shp")
 birds <- st_read("source_data/NCOS_Bird_Survey_Data_20190724shp/NCOS_Bird_Survey_Data_20190724_web.shp")
 bikes <- st_read("source_data/icm_bikes/bike_paths/bikelanescollapsedv8.shp")
 

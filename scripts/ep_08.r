@@ -14,7 +14,7 @@ campus_DEM <- raster("source_data/campus_DEM.tif")
 campus_DEM_df <- as.data.frame(campus_DEM, xy=TRUE)
 
 habitat <- st_read("source_data/NCOS_Shorebird_Foraging_Habitat/NCOS_Shorebird_Foraging_Habitat.shp")
-buildings <- st_read("source_data/Campus_Buildings/Campus_Buildings.shp")
+buildings <- st_read("source_data/campus_buildings/Campus_Buildings.shp")
 
 
 
