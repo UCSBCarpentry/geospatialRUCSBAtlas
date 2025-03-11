@@ -296,34 +296,13 @@ ggplot() +
 
 str(ndvi_series_w_dates_df)
 
-
-# maybe you were attempting to add the column here?
-#ndvi_series_df$variable <- year_month_label
-#ndvi_series_df$variable
-#str(ndvi_series_df)
-
-
-
-
-#mutate into year month day columns?
-#use tidyr separate to split ymd into sep columns? 
-#no delimiter so use positions? 
-# suggestion: use lubridate? 
-
-# attempted as.date(format = '%Y-%m-%d) but....
-# also realized jd is not part of the metadata?
-
-ndvi_names <- names(ndvi_series_df)
-ndvi_names
-
 # repeat the above ggplot label each facet
 # with only the first 8 characters of the variable
 ggplot() +
-  geom_raster(data = ndvi_series_df , aes(x = x, y = y, fill = value)) +
+  geom_raster(data = ndvi_series_w_dates_df, aes(x = x, y = y, fill = NDVI_value)) +
   scale_fill_distiller(palette = "RdYlBu", direction = 1) +
-  facet_wrap(~ variable) +
+  facet_wrap(~yyyymmdd) +
   theme_minimal() +
-  xlab("YY-MM") +
   ggtitle(gg_labelmaker(current_ggplot+1))
 
 
