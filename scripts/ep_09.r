@@ -70,27 +70,44 @@ campus_border <- st_read("output_data/ep_3_campus_borderline.shp")
 crs(places)
 crs(coast)
 
+# even though they are 2 different CRSs, they plot
+# happily on top of each other:
+# look at our other vectors
+ggplot() +
+  geom_sf(data=places, color = "red") +
+  geom_sf(data=coast, color = "blue") +
+  ggtitle(gg_labelmaker(current_ggplot+1)) +
+  coord_sf() 
+
 
 # deal with streams
+# we know the statewide file is way too large, so we will crop
+# to a previously defined SoCal area of interest:
 streams <- vect("source_data/california_streams/California_Streams.shp")
 zoom_2_extent <- vect("source_data/socal_aoi.geojson")
 
+# loooooong plot
+plot(streams)
 
-crs(zoom_2_extent)
-crs(streams)
+# these are different
+crs(zoom_2_extent) == crs(streams)
 
+# these are different units of measurement
 ext(zoom_2_extent)
 ext(streams)
 
 zoom_2_extent_4_streams <- project(zoom_2_extent, streams)
 
-crs(zoom_2_extent_4_streams)
-crs(streams)
+# now the CRSs match
+crs(zoom_2_extent_4_streams) == crs(streams)
 
+# and the extents are both in meters
 ext(zoom_2_extent_4_streams)
 ext(streams)
 
+# now we do our crop
 # `intersect` would also work here
+# feels like coder fires off an extra plot here
 streams_zoom_2 <- crop(streams, ext(zoom_2_extent_4_streams))
 streams_zoom_2
 
@@ -98,11 +115,17 @@ str(streams_zoom_2)
 summary(streams_zoom_2)
 plot(streams_zoom_2)
 
-campus_projection == crs(streams_zoom_2)
-
 # make a ggplot of streams_zoom_2
+# why won't it map?
+# it has a crs and map
+crs(streams_zoom_2)
+ext(streams_zoom_2)
+
+# this doesn't work this time around
+plot(streams_zoom_2$geometry)
+
 ggplot() +
-  geom_sf(data=streams_zoom_2, mapping=aes(color="blue")) +
+  geom_sf(data=streams_zoom_2) +
   coord_sf()
 
 # look at our other vectors

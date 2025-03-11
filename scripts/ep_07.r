@@ -120,6 +120,14 @@ ggplot() +
   ggtitle(gg_labelmaker(current_ggplot+1), subtitle="Campus Buildings, by age") +
   coord_sf()
 
+# lines example ggplot: bikes
+str(bikes)
+
+ggplot() +
+  geom_sf(data = bikes, aes(size = 1.5)) +
+  ggtitle(gg_labelmaker(current_ggplot+1), subtitle="Campus Buildings, by age") +
+  coord_sf()
+
 
 # We will want to bin that somehow, just like we
 # binned the campus elevation dataset
