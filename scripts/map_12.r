@@ -175,21 +175,13 @@ for (images in scene_paths) {
 
 # # get a list of the new files:
 ndvi_series_names <- list.files("output_data/ndvi")
-ndvi_series_names <- paste("output_data/ndvi/", ndvi_series_names, sep="")
-
 ndvi_series_names
 
 # take a look at one. range of values looks realistic
-ls("output_data/ndvi")
-
-# these two lines are throwing an error that they dont exist 
-
-testraster <- rast("output_data/ndvi/20230912_175450_00_243.tif")
-summary(values(testraster))
-
-# try this:
 list.files("output_data/ndvi")
-# it shows you are a digit off. 
+
+testraster <- rast("output_data/ndvi/20230912_175450_00_2439.tif")
+summary(values(testraster))
 
 
 # check the files's resolutions and 
