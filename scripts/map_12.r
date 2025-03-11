@@ -179,7 +179,7 @@ ndvi_series_names <- paste("output_data/ndvi/", ndvi_series_names, sep="")
 
 ndvi_series_names
 
-# take a look at one. range of values looks realistic
+# take a look at the first one. the range of values looks realistic
 ls("output_data/ndvi")
 
 # these two lines are throwing an error that they dont exist 
@@ -305,6 +305,9 @@ ggplot() +
   ggtitle(gg_labelmaker(current_ggplot+1))
 
 
+str(ndvi_series_w_dates_df)
+
+
 # maybe you were attempting to add the column here?
 #ndvi_series_df$variable <- year_month_label
 #ndvi_series_df$variable
@@ -316,13 +319,13 @@ ggplot() +
 #mutate into year month day columns?
 #use tidyr separate to split ymd into sep columns? 
 #no delimiter so use positions? 
-
+# suggestion: use lubridate? 
 
 # attempted as.date(format = '%Y-%m-%d) but....
 # also realized jd is not part of the metadata?
 
 ndvi_names <- names(ndvi_series_df)
-ndvi_names <- gsub("")
+ndvi_names
 
 # repeat the above ggplot label each facet
 # with only the first 8 characters of the variable
