@@ -180,6 +180,7 @@ ndvi_series_names <- paste("output_data/ndvi/", ndvi_series_names, sep="")
 ndvi_series_names
 
 # take a loos at one. range of values looks realistic
+# these two lines are throwing an error that they dont exist 
 testraster <- rast("output_data/ndvi/20230912_175450_00_243.tif")
 summary(values(testraster))
 
@@ -239,8 +240,9 @@ plot(ndvi_series_stack)
 
 # pivot
 # comes from the lesson
+# kristi changed the names of the columns here - bye variable
 ndvi_series_df <- as.data.frame(ndvi_series_stack, xy=TRUE) %>% 
-  pivot_longer(-(x:y), names_to = "variable", values_to= "value")
+  pivot_longer(-(x:y), names_to = "image_date", values_to= "NDVI_value")
 
 str(ndvi_series_df)
 summary(ndvi_series_df)
@@ -257,21 +259,22 @@ ncos_extent <- project(ncos_extent, ndvi_series_stack)
 ndvi_series_stack <- crop(ndvi_series_stack, ncos_extent)
 
 
+# kristi changed names here too
 ndvi_series_df <- as.data.frame(ndvi_series_stack, xy=TRUE, na.rm=FALSE) %>% 
-  pivot_longer(-(x:y), names_to = "variable", values_to= "value")
+  pivot_longer(-(x:y), names_to = "image_date", values_to= "NDVI_value")
 str(ndvi_series_df)
 
 # this output should be pretty speedy
 # scales are correct!!!!
 ggplot() +
-  geom_raster(data = ndvi_series_df , aes(x = x, y = y, fill = value)) +
-  facet_wrap(~ variable)
+  geom_raster(data = ndvi_series_df , aes(x = x, y = y, fill = NDVI_value)) +
+  facet_wrap(~ image_date)
 
 # we need a diverging color scheme
 ggplot() +
-  geom_raster(data = ndvi_series_df , aes(x = x, y = y, fill = value)) +
+  geom_raster(data = ndvi_series_df , aes(x = x, y = y, fill = NDVI_value)) +
   scale_fill_distiller(palette = "RdYlBu", direction = 1) +
-  facet_wrap(~ variable) +
+  facet_wrap(~ image_date) +
   theme_minimal() +
   ggtitle(gg_labelmaker(current_ggplot+1))
 
@@ -279,16 +282,16 @@ ggplot() +
 # fix those facet labels!
 # this is what it should look like:
 str(ndvi_series_df)
-year_month_label <- substr(ndvi_series_df$variable, 3,10)
+year_month_label <- substr(ndvi_series_df$image_date, 2,9)
 year_month_label
 
 # now that we've tested, mutate here to add the new column:
-ndvi_series_w_dates_df <- mutate(ndvi_series_df, yyyymmdd = substr(ndvi_series_df$variable, 3,10))
+ndvi_series_w_dates_df <- mutate(ndvi_series_df, yyyymmdd = substr(ndvi_series_df$image_date, 2,9))
 ndvi_series_w_dates_df
 str(ndvi_series_w_dates_df)
 
 ggplot() +
-  geom_raster(data = ndvi_series_w_dates_df , aes(x = x, y = y, fill = value)) +
+  geom_raster(data = ndvi_series_w_dates_df , aes(x = x, y = y, fill = NDVI_value)) +
   scale_fill_distiller(palette = "RdYlBu", direction = 1) +
   facet_wrap(~ yyyymmdd) +
   theme_minimal() +
