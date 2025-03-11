@@ -128,7 +128,6 @@ ndvi_tiff_df <- as.data.frame(ndvi_tiff, xy=TRUE) %>%
 
 str(ndvi_tiff_df)
 
-
 ggplot() +
   geom_raster(data = ndvi_tiff_df , aes(x = x, y = y, fill = value)) 
 
@@ -179,7 +178,9 @@ ndvi_series_names <- list.files("output_data/ndvi")
 ndvi_series_names <- paste("output_data/ndvi/", ndvi_series_names, sep="")
 
 ndvi_series_names
-testraster <- rast("output_data/ndvi/20230912_175450_00_2439.tif")
+
+# take a loos at one. range of values looks realistic
+testraster <- rast("output_data/ndvi/20230912_175450_00_243.tif")
 summary(values(testraster))
 
 
@@ -221,11 +222,11 @@ summary(ndvi_series_stack[,1])
 # whooo hoooo! no errors 
 str(ndvi_series_stack)
 nlyr(ndvi_series_stack)
-# but summary means nothing in this context
 summary(values(ndvi_series_stack))
 
 # they plot!:
-#plot(ndvi_series_stack)
+# 20230427 still looks suspicious
+plot(ndvi_series_stack)
 
 #ggsave("images/ndvi_series_stack.png", plot=last_plot())
 
@@ -255,9 +256,6 @@ ncos_extent <- project(ncos_extent, ndvi_series_stack)
 
 ndvi_series_stack <- crop(ndvi_series_stack, ncos_extent)
 
-# make the files 4x smaller:
-# let's not anymore, because I downsampled in the loop
-# ndvi_series_stack <- aggregate(ndvi_series_stack, fact=4, fun="mean")
 
 ndvi_series_df <- as.data.frame(ndvi_series_stack, xy=TRUE, na.rm=FALSE) %>% 
   pivot_longer(-(x:y), names_to = "variable", values_to= "value")
@@ -275,18 +273,35 @@ ggplot() +
   scale_fill_distiller(palette = "RdYlBu", direction = 1) +
   facet_wrap(~ variable) +
   theme_minimal() +
-  xlab("YY-MM") +
   ggtitle(gg_labelmaker(current_ggplot+1))
 
 
-# fix those labels!
+# fix those facet labels!
+# this is what it should look like:
 str(ndvi_series_df)
-year_month_label <- substr(ndvi_series_df$variable, 2,9)
+year_month_label <- substr(ndvi_series_df$variable, 3,10)
 year_month_label
 
+# now that we've tested, mutate here to add the new column:
+ndvi_series_w_dates_df <- mutate(ndvi_series_df, yyyymmdd = substr(ndvi_series_df$variable, 3,10))
+ndvi_series_w_dates_df
+str(ndvi_series_w_dates_df)
 
-ndvi_series_df$variable <- year_month_label
-ndvi_series_df$variable
+ggplot() +
+  geom_raster(data = ndvi_series_w_dates_df , aes(x = x, y = y, fill = value)) +
+  scale_fill_distiller(palette = "RdYlBu", direction = 1) +
+  facet_wrap(~ yyyymmdd) +
+  theme_minimal() +
+  ggtitle(gg_labelmaker(current_ggplot+1))
+
+
+# maybe you were attempting to add the column here?
+#ndvi_series_df$variable <- year_month_label
+#ndvi_series_df$variable
+#str(ndvi_series_df)
+
+
+
 
 #mutate into year month day columns?
 #use tidyr separate to split ymd into sep columns? 
