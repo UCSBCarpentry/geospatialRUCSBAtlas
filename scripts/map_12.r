@@ -177,22 +177,11 @@ for (images in scene_paths) {
 ndvi_series_names <- list.files("output_data/ndvi")
 ndvi_series_names
 
-# take a look at the first one. the range of values looks realistic
-ls("output_data/ndvi")
-
-testraster <- rast("output_data/ndvi/20230912_175450_00_243.tif")
-summary(values(testraster))
-
-# try this:
-# take a look at one. range of values looks realistic
-list.files("output_data/ndvi")
-
 testraster <- rast("output_data/ndvi/20230912_175450_00_2439.tif")
 summary(values(testraster))
 
-
 # check the files's resolutions and 
-# keep only the 2217x3541 ones.
+# keep only the
 # 554 x 885 now that we are downsampled
 length(ndvi_series_names)
 str(ndvi_series_names)
@@ -200,19 +189,19 @@ valid_tiff <- c(554,885,1)
 str(valid_tiff)
 
 #kristi boo boo here
-dim(ndvi_tiff) == valid_tiff
-test <- rast(ndvi_series_names[1])
-str(test)
-str(dim(test))
+#dim(ndvi_tiff) == valid_tiff
+#test <- rast(ndvi_series_names[1])
+#str(test)
+#str(dim(test))
 
 # delete any files that aren't the standard 
 # resolution
 for (image in ndvi_series_names) {
-  test_size <- rast(image)
+  test_size <- rast(paste("output_data/ndvi/", image, sep = ""))
   # length 1 qualifier 
    test_result <- (dim(test_size) == valid_tiff)
    print(test_result)  
-  ifelse((dim(test_size) == valid_tiff), print("A match!!!"), file.remove(image))
+  ifelse((dim(test_size) == valid_tiff), print("A match!!!"), file.remove(paste("output_data/ndvi/", image, sep = "")))
 }
 
 # reload the names
@@ -236,7 +225,7 @@ summary(values(ndvi_series_stack))
 # 20230427 still looks suspicious
 plot(ndvi_series_stack)
 
-#ggsave("images/ndvi_series_stack.png", plot=last_plot())
+ggsave("images/ndvi_series_stack.png", plot=last_plot())
 
 
 
@@ -255,7 +244,7 @@ str(ndvi_series_df)
 summary(ndvi_series_df)
 
 str(ndvi_series_df)
-unique(ndvi_series_df$variable)
+unique(ndvi_series_df$image_date)
 
 
 ### let's crop this and remake the dataframe so that the ggplot 
