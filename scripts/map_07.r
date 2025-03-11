@@ -104,6 +104,6 @@ ggplot() +
   labs(title="Map 7", subtitle="Version 1") +
   coord_sf()
 
-ggsave("images/map7.0.png", plot=last_plot())
+ggsave("images/map7.0.png", width = 12, height = 4, plot=last_plot())
 object_test_abb <- ls()
 
