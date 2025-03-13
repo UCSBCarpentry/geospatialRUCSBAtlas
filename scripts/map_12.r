@@ -30,6 +30,7 @@ library(ggplot2)
 library(terra)
 library(geojsonsf) # to handle geojson
 # library(sf) #<- to handle geojson (not geojsonsf? -KL)
+library(lubridate)
 
 
 # NDVIs were premade in the Carpentries lesson, but
@@ -297,60 +298,60 @@ ggplot() +
 
 
 
-# we need to arrange these by 
+# we need to arrange and clearly these by date.
 # Julian dates. Converting to Julian dates is in the lesson
 
 # challenge: mutate on another column that is julian date.
 str(ndvi_series_w_dates_df)
 
-
-
-
+ndvi_series_dates_as_dates_df <- mutate(ndvi_series_w_dates_df, date = as_date(yyyymmdd))
+str(ndvi_series_dates_as_dates_df)
+ndvi_series_dates_as_dates_df$date
 
 # visually there's nothing going on
 # does my 'feature' about combining layers actually
 # add values together as they are stacking up?
 # visually these are subtle, so to find
 # the 'greenest' months here, we can make
-# histograms
-# make bins
+# histograms, make bins
 # OR figure the mean NDVI for each image as in ep 14.
 
 # this default one shows us what?
 # looks like April 2024 is the greenest:
 
-ggplot(ndvi_series_df) +
-  geom_histogram(aes(value)) + 
-  facet_wrap(~variable) +
+str(ndvi_series_dates_as_dates_df)
+ggplot(ndvi_series_dates_as_dates_df) +
+  geom_histogram(aes(NDVI_value)) + 
+  facet_wrap(~date) +
   ggtitle(gg_labelmaker(current_ggplot+1))
 
 
 
-# display the binned histograms of the NDVIs
-# we can use cut to make 10 bins
+# maybe we want some custom bins at common NDVI break points
+summary(ndvi_series_dates_as_dates_df)
 
-ndvi_series_binned_df <-  ndvi_series_df %>% 
-  mutate(bins = cut(value, breaks=10)) 
+local_ndvi_breaks <- c(-1, 0, .001, .01, .1, .11, .115, .2, .4, 1)
 
-ggplot(ndvi_series_binned_df) +
-  geom_bar(aes(bins)) + 
-  facet_wrap(~variable) +
-  ggtitle(gg_labelmaker(current_ggplot+1))
+ndvi_series_custom_binned_df <-  ndvi_series_dates_as_dates_df %>% 
+  mutate(bins = cut(NDVI_value, breaks=local_ndvi_breaks)) 
 
-
-# that's better. And shows us where we can make custom bins
-summary(ndvi_series_binned_df)
-
-local_ndvi_breaks <- c(-1, 0, .001, .01, .1, .11, .115, .2, 1)
-
-ndvi_series_custom_binned_df <-  ndvi_series_df %>% 
-  mutate(bins = cut(value, breaks=local_ndvi_breaks)) 
-
+str(ndvi_series_custom_binned_df)
+# this is still a visual judgement call, but April and June look pretty green
+# and we can't read the x axis
 ggplot(ndvi_series_custom_binned_df, aes(x=bins)) +
   geom_bar() + 
-  facet_wrap(~variable) +
+  facet_wrap(~date) +
   ggtitle(gg_labelmaker(current_ggplot+1))
-# this is still a visual judgement call.
+
+
+# how about on a map?
+str(ndvi_series_custom_binned_df)
+ggplot() +
+  geom_raster(data = ndvi_series_custom_binned_df, aes(x = x, y = y, fill = NDVI_value)) +
+  scale_fill_distiller(palette = "RdYlBu", direction = 1) +
+  facet_wrap(~ date) +
+  theme_minimal() +
+  ggtitle(gg_labelmaker(current_ggplot+1))
 
 
 # this is the OR from above.
@@ -358,9 +359,15 @@ ggplot(ndvi_series_custom_binned_df, aes(x=bins)) +
 # let's make a dataframe of average NDVI
 # and plot them
 # this is from ep. 14:
-avg_NDVI <- global(ndvi_series_stack, mean, na.rm=TRUE)
-## that passes the smell test! April and September(?)
 
+str(ndvi_series_custom_binned_df)
+
+# this ep 14 tidbit isn't working.
+# maybe we need to work on spatrasters.
+#avg_NDVI <- global(ndvi_series_custom_binned_df, mean, na.rm=TRUE)
+
+
+avg_NDVI
 str(avg_NDVI)
 ncol(avg_NDVI)
 
@@ -386,11 +393,7 @@ plot(avg_NDVI$MeanNDVI)
 avg_NDVI_df <- as.data.frame(avg_NDVI, rm.na=FALSE)
 str(avg_NDVI_df)
 
-# we want the dates. or the
-# 5th and 6th character of the dates
-
-
-# thi# thi# this plot less so:
+# this plot less so:
 ggplot(avg_NDVI_df, mapping = aes(Month, MeanNDVI)) +
   geom_point()
 

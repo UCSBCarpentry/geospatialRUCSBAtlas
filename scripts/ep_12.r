@@ -13,7 +13,8 @@ current_episode <- 12
 getwd()
 
 # make a list of all your tiffs
-# NDVI data gets calculated by map 12. 
+# NDVI data gets calculated by map 12.
+#    --make sure you have run map 12 
 ndvi_series_path <- list.files("output_data/ndvi", full.names = TRUE)
 
 # build a raster stack
