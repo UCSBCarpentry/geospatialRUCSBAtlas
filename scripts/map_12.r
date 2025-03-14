@@ -66,11 +66,6 @@ summary(values(ndvi_tiff))
 str(ndvi_tiff)
 class(ndvi_tiff)
 str(ndvi_tiff$nir)
-values(ndvi_tiff)
-
-# convert to integer for speed
-# this doesn't work
-# ndvi_tiff <- as.integer(ndvi_tiff)
 
 
 # not sure how the columns get named "NIR" 
@@ -118,7 +113,7 @@ set.ext(ndvi_tiff, ext(ucsb_extent))
 # now they are exactly the same extent
 ext(ucsb_extent) == ext(ndvi_tiff)
 
-#plot(ndvi_tiff)
+plot(ndvi_tiff)
 dim(ndvi_tiff)
 str(ndvi_tiff)
 names(ndvi_tiff)
@@ -130,12 +125,13 @@ ndvi_tiff_df <- as.data.frame(ndvi_tiff, xy=TRUE) %>%
 str(ndvi_tiff_df)
 
 ggplot() +
-  geom_raster(data = ndvi_tiff_df , aes(x = x, y = y, fill = value)) 
+  geom_raster(data = ndvi_tiff_df , aes(x = x, y = y, fill = value)) +
+  ggtitle(gg_labelmaker(current_ggplot+1))
 
 
 
 
-# load 23-24 8-band rasters
+# now let's load the 2023-24 8-band rasters
 # loop over the files and build a raster stack
 
 # get a file list
@@ -143,6 +139,7 @@ ggplot() +
 scene_paths <- list.files("source_data/planet/planet/20232024_UCSB_campus_PlanetScope/PSScene/",
                           full.names = TRUE,
                           pattern = "8b_clip.tif")
+scene_paths
 
 # someplace to put our images
 dir.create("output_data/ndvi", showWarnings = FALSE)
@@ -171,7 +168,7 @@ for (images in scene_paths) {
 
 # 3 or 4 of the resulting tiffs are wonky
 # their dimensions are wildly off.
-# but almost all of them are 2217 x 3541 pixels
+# but almost all of them are 554 x 885 pixels
 # let's get rid of the ones that aren't:
 
 # # get a list of the new files:
@@ -189,11 +186,6 @@ str(ndvi_series_names)
 valid_tiff <- c(554,885,1)
 str(valid_tiff)
 
-#kristi boo boo here
-#dim(ndvi_tiff) == valid_tiff
-#test <- rast(ndvi_series_names[1])
-#str(test)
-#str(dim(test))
 
 # delete any files that aren't the standard 
 # resolution
@@ -208,16 +200,15 @@ for (image in ndvi_series_names) {
 # reload the names
 ndvi_series_names <- list.files("output_data/ndvi")
 ndvi_series_paths <- paste("output_data/ndvi/", ndvi_series_names, sep="")
+ndvi_series_paths
 
 # now we can see there are 4 fewer tiffs.
 length(ndvi_series_names)
 
-# now we can build a raster stack with no errors
+# now we can build a more standard raster stack with no errors
 ndvi_series_stack <- rast(ndvi_series_paths)
 
 summary(ndvi_series_stack[,1])
-
-# whooo hoooo! no errors 
 str(ndvi_series_stack)
 nlyr(ndvi_series_stack)
 summary(values(ndvi_series_stack))
@@ -228,51 +219,36 @@ plot(ndvi_series_stack)
 
 ggsave("images/ndvi_series_stack.png", plot=last_plot())
 
-
-
-# duplicate column names / dates can be made
+# there are duplicate column names / dates 
 # this turns out to be a feature!
 # need to put it back in later
 
-
-# pivot
-# comes from the lesson
-# kristi changed the names of the columns here - bye variable
-ndvi_series_df <- as.data.frame(ndvi_series_stack, xy=TRUE) %>% 
-  pivot_longer(-(x:y), names_to = "image_date", values_to= "NDVI_value")
-
-# the format of image_date is not what we want here.
-str(ndvi_series_df)
-summary(ndvi_series_df)
-
-str(ndvi_series_df)
-unique(ndvi_series_df$image_date)
-
-
-### let's crop this and remake the dataframe so that the ggplot 
-# facet_wrap runs in a reasonable amount of time.
+### let's crop the stack to the NCOS area to make a 
+#   more relevant map for campus.
+#   and make this plotting even faster
 ncos_extent <- vect("source_data/planet/planet/ncos_aoi.geojson")
 ncos_extent <- project(ncos_extent, ndvi_series_stack)
 
 ndvi_series_stack <- crop(ndvi_series_stack, ncos_extent)
+ndvi_series_stack
+# 15 panels
+plot(ndvi_series_stack)
 
-
-# kristi changed names here too
 ndvi_series_df <- as.data.frame(ndvi_series_stack, xy=TRUE, na.rm=FALSE) %>% 
   pivot_longer(-(x:y), names_to = "image_date", values_to= "NDVI_value")
 str(ndvi_series_df)
 
-# this output should be pretty speedy
 # the scales of NDVI values are correct!!!!
 ggplot() +
   geom_raster(data = ndvi_series_df , aes(x = x, y = y, fill = NDVI_value)) +
-  facet_wrap(~ image_date)
+  facet_wrap(~ image_date)  +
+  ggtitle(gg_labelmaker(current_ggplot+1))
 
 # we need a diverging color scheme
-# to make it look more like a proper ndvi
+# to make it look more like a proper ndvi (episode 13, except I choose an even better one)
 ggplot() +
   geom_raster(data = ndvi_series_df , aes(x = x, y = y, fill = NDVI_value)) +
-  scale_fill_distiller(palette = "RdYlBu", direction = 1) +
+  scale_fill_distiller(palette = "RdYlGn", direction = 1) +
   facet_wrap(~ image_date) +
   theme_minimal() +
   ggtitle(gg_labelmaker(current_ggplot+1))
@@ -289,6 +265,8 @@ ndvi_series_w_dates_df <- mutate(ndvi_series_df, yyyymmdd = substr(ndvi_series_d
 ndvi_series_w_dates_df
 str(ndvi_series_w_dates_df)
 
+# now we only have 11 panels because there were some duplicate dates.
+# but voila: now we don't have any empty areas:
 ggplot() +
   geom_raster(data = ndvi_series_w_dates_df , aes(x = x, y = y, fill = NDVI_value)) +
   scale_fill_distiller(palette = "RdYlBu", direction = 1) +
@@ -297,9 +275,8 @@ ggplot() +
   ggtitle(gg_labelmaker(current_ggplot+1))
 
 
-
 # we need to arrange and clearly these by date.
-# Julian dates. Converting to Julian dates is in the lesson
+# Julian dates. Converting to Julian dates is episode 13
 
 # challenge: mutate on another column that is julian date.
 str(ndvi_series_w_dates_df)
@@ -308,11 +285,23 @@ ndvi_series_dates_as_dates_df <- mutate(ndvi_series_w_dates_df, date = as_date(y
 str(ndvi_series_dates_as_dates_df)
 ndvi_series_dates_as_dates_df$date
 
-# visually there's nothing going on
+ndvi_series_julian_dates_df <- mutate(ndvi_series_dates_as_dates_df, julian_date = yday(date))
+
+str(ndvi_series_julian_dates_df)
+
+ggplot() +
+  geom_raster(data = ndvi_series_julian_dates_df, aes(x = x, y = y, fill = NDVI_value)) +
+  scale_fill_distiller(palette = "RdYlBu", direction = 1) +
+  facet_wrap(~ julian_date) +
+  theme_minimal() +
+  ggtitle(gg_labelmaker(current_ggplot+1))
+
 # does my 'feature' about combining layers actually
 # add values together as they are stacking up?
-# visually these are subtle, so to find
-# the 'greenest' months here, we can make
+# there's only 11 panels in my plot here.
+
+
+# to find the 'greenest' months,  here, we can make
 # histograms, make bins
 # OR figure the mean NDVI for each image as in ep 14.
 
@@ -402,7 +391,6 @@ ggplot(avg_NDVI_df, mapping = aes(Month, MeanNDVI)) +
 
 
 
-# What month was the Greenest?
 
 # we'll need weather data to mimic the lesson.
 # or use our brains and eyes to define 

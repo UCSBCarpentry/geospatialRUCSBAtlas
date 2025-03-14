@@ -30,3 +30,4 @@ toc()
 # I would think there's a tidy solution
 station_inventory$countryTidy=""
 cbind(station_inventory, substring(station_inventory$countryTidy, 1,2))
+station_inventory
