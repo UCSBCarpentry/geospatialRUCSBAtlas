@@ -1,4 +1,5 @@
-
+# NOTE: repo inactive. 
+Archiving as of 3/18/2025
 
 # geospatialRUCSBAtlas
 
