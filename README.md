@@ -1,5 +1,5 @@
-# NOTE: repo inactive. 
-Archiving as of 3/18/2025
+> [!note]
+> We've moved our work to a new repo: https://github.com/UCSBCarpentry/ucsb-ratlas
 
 # geospatialRUCSBAtlas
 
